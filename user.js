@@ -83,18 +83,18 @@
 （function() {
     'use strict';
     
-    function iqxinstart(){
-        var rules=[
-            {name:"Google",
-                enabled:true,
-                url:
-                engineList:"web",
-                style:"\
-                    margin-left:142px;\
-                    z-index:100;\
-                    margin-top:5px;\
-                    ",
-                // 插入文档,相关
+  function iqxinstart(){
+    var rules=[
+      {name:"Google",
+        enabled:true,
+        url:
+        engineList:"web",
+        style:"\
+          margin-left:142px;\
+          z-index:100;\
+          margin-top:5px;\
+          ",
+        // 插入文档,相关
 				// target 将引擎跳转工具栏插入到文档的某个元素
 				// (请使用xpath匹配,比如: '//*[@id="subform_ctrl"]'  或者 css匹配(请加上 'css;' 的前缀),比如: 'css;#subform_ctrl' );
 				// keyword 使用 xpath 或者 css选中一个form input元素 或者 该项是一个函数，使用返回值
@@ -103,17 +103,17 @@
 				// 'afterBegin'(作为给定元素的第一个子元素) ; 
 				// 'beforeEnd' (作为给定元素的最后一个子元素) ; 
 				// 'afterEnd'(插入到给定元素的后面);    
-                insertIntoDoc:{
-                    target: 'css;#appbar',
+        insertIntoDoc:{
+          target: 'css;#appbar',
 					// keyword: function () {
 					// var input = document.getElementById('lst-ib');
 					// if (input) return input.value;
 					// },
-					keyword: '//input[@name="q"]',
-					where: 'beforeBegin',
-                },
-            },
-        ]
+          keyword: '//input[@name="q"]',
+          where: 'beforeBegin',
+          },
+        },
+      ]
     },
 	
 	
