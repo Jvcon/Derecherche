@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name           searchEngineJump ËÑË÷ÒıÇæ¿ì½İÌø×ª
-// @author         NLF&Èñ¾­(ĞŞ¸Ä) & iqxin(ÔÙĞŞ¸Ä)
+// @name           searchEngineJump æœç´¢å¼•æ“å¿«æ·è·³è½¬
+// @author         NLF&é”ç»(ä¿®æ”¹) & iqxin(å†ä¿®æ”¹)
 // @contributor    iqxin
-// @description    ·½±ãµÄÔÚ¸÷¸öËÑË÷ÒıÇæÖ®¼äÌø×ª,Ôö¼Ó¿ÉÊÓ»¯ÉèÖÃ²Ëµ¥£¬ÄÜ¸üÓÑºÃµÄ×Ô¶¨ÒåÉèÖÃ£¬ĞŞ¸´°Ù¶ÈËÑË÷ÑùÊ½¶ªÊ§µÄÎÊÌâ
+// @description    æ–¹ä¾¿çš„åœ¨å„ä¸ªæœç´¢å¼•æ“ä¹‹é—´è·³è½¬,å¢åŠ å¯è§†åŒ–è®¾ç½®èœå•ï¼Œèƒ½æ›´å‹å¥½çš„è‡ªå®šä¹‰è®¾ç½®ï¼Œä¿®å¤ç™¾åº¦æœç´¢æ ·å¼ä¸¢å¤±çš„é—®é¢˜
 // @version        5.12.1
 // @created        2011-7-2
 // @lastUpdated    2017-08-27
@@ -85,26 +85,33 @@
     'use strict';
     
     function iqxinstart(){ 
-        // ¸ù¾İ¹æÔò°ÑËÑË÷ÒıÇæÁĞ±í²åÈëµ½Ö¸¶¨ÍøÕ¾
+        // æ ¹æ®è§„åˆ™æŠŠæœç´¢å¼•æ“åˆ—è¡¨æ’å…¥åˆ°æŒ‡å®šç½‘ç«™
         var rules = [
-            {name: "google",
+            // ç½‘é¡µæœç´¢/////////////ç¬¬ä¸€ä¸ªå¯ä»¥å½“æ¨¡æ¿çœ‹
+            {name: "googleç½‘é¡µæœç´¢",// ä½ è¦åŠ è½½çš„ç½‘ç«™çš„åå­—(æ–¹ä¾¿è‡ªå·±æŸ¥æ‰¾)
+                // æ˜¯å¦å¯ç”¨.
                 enabled: true,
+                // åœ¨å“ªä¸ªç½‘ç«™ä¸ŠåŠ è½½,æ­£åˆ™.
                 url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^?]+\?(?:&?q=|(?:[^#](?!&tbm=))+?&q=)(?:.(?!&tbm=))*$/,
+                // åŠ è½½å“ªä¸ªç±»å‹çš„åˆ—è¡¨:
+                // ['web'|'music'|'video'|'image'|'download'|'shopping'|'translate'|'knowledge'|'sociality']
                 engineList: 'web',
+                // ç»™å¼•æ“åˆ—è¡¨çš„æ ·å¼
                 style: '\
                     margin-left: 142px;\
                     z-index: 100;\
                     margin-top:5px;\
                 ',
-                // ²åÈëÎÄµµ,Ïà¹Ø
-                // target ½«ÒıÇæÌø×ª¹¤¾ßÀ¸²åÈëµ½ÎÄµµµÄÄ³¸öÔªËØ
-                    // (ÇëÊ¹ÓÃxpathÆ¥Åä,±ÈÈç: '//*[@id="subform_ctrl"]'  »òÕß cssÆ¥Åä(Çë¼ÓÉÏ 'css;' µÄÇ°×º),±ÈÈç: 'css;#subform_ctrl' );
-                // keyword Ê¹ÓÃ xpath »òÕß cssÑ¡ÖĞÒ»¸öform inputÔªËØ »òÕß ¸ÃÏîÊÇÒ»¸öº¯Êı£¬Ê¹ÓÃ·µ»ØÖµ
-                // where ËÄÖÖ:
-                    // 'beforeBegin'(²åÈëµ½¸ø¶¨ÔªËØµÄÇ°Ãæ) ; 
-                    // 'afterBegin'(×÷Îª¸ø¶¨ÔªËØµÄµÚÒ»¸ö×ÓÔªËØ) ; 
-                    // 'beforeEnd' (×÷Îª¸ø¶¨ÔªËØµÄ×îºóÒ»¸ö×ÓÔªËØ) ; 
-                    // 'afterEnd'(²åÈëµ½¸ø¶¨ÔªËØµÄºóÃæ);.
+
+                // æ’å…¥æ–‡æ¡£,ç›¸å…³
+                // target å°†å¼•æ“è·³è½¬å·¥å…·æ æ’å…¥åˆ°æ–‡æ¡£çš„æŸä¸ªå…ƒç´ 
+                    // (è¯·ä½¿ç”¨xpathåŒ¹é…,æ¯”å¦‚: '//*[@id="subform_ctrl"]'  æˆ–è€… cssåŒ¹é…(è¯·åŠ ä¸Š 'css;' çš„å‰ç¼€),æ¯”å¦‚: 'css;#subform_ctrl' );
+                // keyword ä½¿ç”¨ xpath æˆ–è€… cssé€‰ä¸­ä¸€ä¸ªform inputå…ƒç´  æˆ–è€… è¯¥é¡¹æ˜¯ä¸€ä¸ªå‡½æ•°ï¼Œä½¿ç”¨è¿”å›å€¼
+                // where å››ç§:
+                    // 'beforeBegin'(æ’å…¥åˆ°ç»™å®šå…ƒç´ çš„å‰é¢) ; 
+                    // 'afterBegin'(ä½œä¸ºç»™å®šå…ƒç´ çš„ç¬¬ä¸€ä¸ªå­å…ƒç´ ) ; 
+                    // 'beforeEnd' (ä½œä¸ºç»™å®šå…ƒç´ çš„æœ€åä¸€ä¸ªå­å…ƒç´ ) ; 
+                    // 'afterEnd'(æ’å…¥åˆ°ç»™å®šå…ƒç´ çš„åé¢);.
                 insertIntoDoc: {
                     target: 'css;#appbar',
                     // keyword: function () {
@@ -116,7 +123,7 @@
                 },
                 stylish: 'body.vasq #hdtbMenus.hdtb-td-o{top:100px !important}'
             },
-            {name: "google-hash-query",// ²»Ë¢ĞÂÒ³ÃæÏÔÊ¾ËÑË÷½á¹ûµÄgoogle
+            {name: "google-hash-query",// ä¸åˆ·æ–°é¡µé¢æ˜¾ç¤ºæœç´¢ç»“æœçš„google
                 enabled: true,
                 url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^#]*#(?:&?q=|.+?&q=).+/,
                 engineList: 'web',
@@ -135,31 +142,33 @@
                 },
                 stylish: 'body.vasq #hdtbMenus.hdtb-td-o{top:100px !important}'
             },
-            {name: "Baidu",
+            {name: "ç™¾åº¦ç½‘é¡µæœç´¢",
                 url: /^https?:\/\/www\.baidu\.com\/(?:s|baidu)/,
                 enabled: true,
                 engineList: "web",
                 fixedTop:56,
-                style: "\
-					margin-left: 113px;\
-					margin-top:8px;\
+                style: '\
+                    margin-top:8px;\
                     margin-bottom: -5px;\
                     z-index: 99;\
-					",
+                    margin-left: 113px;\
+                ',
                 insertIntoDoc: {
                     keyword: 'css;input#kw',
                     target: 'css;#s_tab',
                     where: 'afterEnd',
                 },
             },
-            {name: "Bing",
+            {name: "å¿…åº”ç½‘é¡µæœç´¢",
                 url: /^https?:\/\/[^.]*\.bing\.com\/search/,
                 enabled: true,
                 engineList: "web",
-                style: "\
-                    padding-left:100px;\
-                    margin-top:3px;\
-                	",
+                style: '\
+                    padding-left:15px;\
+                    margin-top:10px;\
+                    margin-left: 100px;\
+                    margin-bottom:-20px;\
+                ',
                 insertIntoDoc: {
                     keyword: 'css;#sb_form_q',
                     target: 'css;#b_content',
@@ -167,7 +176,7 @@
                 },
             },
             {name: "DDG",
-                url: /^https?:\/\/duckduckgo\.com\/[^.]*/i,
+                url: /^https?:\/\/duckduckgo\.com\/*/i,
                 enabled: true,
                 engineList: "web",
                 style: '\
@@ -180,7 +189,7 @@
                     where: 'afterEnd',
                 },
             },
-            {name:"Yahoo",
+            {name:"é›…è™ç½‘é¡µæœç´¢",
                 url:/^https?:\/\/search\.yahoo\.com\/search/i,
                 engineList:"web",
                 enabled:true,
@@ -196,7 +205,7 @@
                     where:'afterBegin',
                 },
             },
-            {name:"Yahoo-tw",
+            {name:"å°æ¹¾é›…è™ç½‘é¡µæœç´¢",
                 url:/^https?:\/\/tw\.search\.yahoo\.com\/search/i,
                 engineList:"web",
                 enabled:true,
@@ -225,8 +234,8 @@
                     where:'beforeBegin',
                 },
             },
-            {name: "Sogou",
-	            url: /^https?:\/\/www\.sogou\.com\/web\?/,
+            {name: "æœç‹—",
+	            url: /^https?:\/\/www\.sogou\.com\/sogou\?/,
 	            enabled: true,
 	            engineList: "web",
                 fixedTop:60,
@@ -240,8 +249,8 @@
 
 
 
-            // ÖªÊ¶               
-            {name: "°Ù¶È°Ù¿Æ´ÊÌõ",
+            // çŸ¥è¯†               
+            {name: "ç™¾åº¦ç™¾ç§‘è¯æ¡",
                 url: /^https?:\/\/baike\.baidu\.com\/(?:sub)?view\//,
                 engineList: "knowledge",
                 enabled: true,
@@ -258,7 +267,7 @@
                     where: 'beforeBegin',
                 },
             },
-            {name: "°Ù¶È°Ù¿ÆËÑË÷",
+            {name: "ç™¾åº¦ç™¾ç§‘æœç´¢",
                 url: /^https?:\/\/baike\.baidu\.com\/search\?word/i,
                 engineList: "knowledge",
                 enabled: true,
@@ -275,7 +284,7 @@
                     where: 'afterEnd',
                 },
             },
-            {name: "°Ù¶ÈÎÄ¿â",
+            {name: "ç™¾åº¦æ–‡åº“",
                 url: /^https?:\/\/wenku\.baidu\.com\/search/i,
                 engineList: "knowledge",
                 enabled: true,
@@ -291,7 +300,7 @@
                     where: 'afterEnd',
                 },
             },
-            {name: "°Ù¶ÈÖªµÀ",
+            {name: "ç™¾åº¦çŸ¥é“",
                 url: /^https?:\/\/zhidao\.baidu\.com\/search/i,
                 engineList: "knowledge",
                 enabled: true,
@@ -307,7 +316,7 @@
                     where: 'afterEnd',
                 },
             },
-            {name: "Î¬»ù°Ù¿Æ",
+            {name: "ç»´åŸºç™¾ç§‘",
                 url: /^https?:\/\/\D{2,5}\.wikipedia\.org\/wiki/i,
                 engineList: "knowledge",
                 enabled: true,
@@ -324,7 +333,7 @@
                     where: 'afterBegin',
                 },
             },
-            {name: "Öªºõ",
+            {name: "çŸ¥ä¹",
                 url: /^https?:\/\/www\.zhihu\.com\/search\?/i,
                 engineList: "knowledge",
                 enabled: true,
@@ -341,7 +350,7 @@
                 },
                 stylish:".zu-main:padding-top:0px;!important",
             },
-            {name: "»¥¶¯°Ù¿ÆËÑË÷Ò³",
+            {name: "äº’åŠ¨ç™¾ç§‘æœç´¢é¡µ",
                 url: /^https?:\/\/so\.baike\.com\/doc/i,
                 engineList: "knowledge",
                 enabled: true,
@@ -357,7 +366,7 @@
                     where: 'afterEnd',
                 },
             },
-            {name: "»¥¶¯°Ù¿Æ´ÊÌõÒ³",
+            {name: "äº’åŠ¨ç™¾ç§‘è¯æ¡é¡µ",
                 url: /^https?:\/\/www\.baike\.com\/wiki/i,
                 engineList: "knowledge",
                 enabled: true,
@@ -373,7 +382,7 @@
                     where: 'afterEnd',
                 },
             },
-            {name: "¶¹¶¡ÎÄµµ",
+            {name: "è±†ä¸æ–‡æ¡£",
                 url: /^https?:\/\/www\.docin\.com\/search\.do/,
                 engineList: "knowledge",
                 enabled: true,
@@ -390,7 +399,7 @@
                     where: 'afterEnd',
                 },
             },
-            {name: "Öªºõ(ËÑ¹·)",
+            {name: "çŸ¥ä¹(æœç‹—)",
                    url: /^https?:\/\/zhihu\.sogou\.com\/zhihu/,
                    enabled: true,
                    engineList: 'web',
@@ -407,7 +416,7 @@
                    },
                    stylish: '.header{ margin-bottom: 5px; }'
             },
-            {name: "Î¢ĞÅËÑ¹·",
+            {name: "å¾®ä¿¡æœç‹—",
 	            url: /^https?:\/\/weixin\.sogou\.com\/weixin\?/,
 	            enabled: true,
 	            engineList: "web",
@@ -422,8 +431,8 @@
             
             
             
-            // ÊÓÆµÍøÕ¾
-            {name: "ÓÅ¿á",
+            // è§†é¢‘ç½‘ç«™
+            {name: "ä¼˜é…·",
                 url: /^https?:\/\/www\.soku\.com\/v\?/,
                 engineList: "video",
                 enabled: true,
@@ -439,7 +448,7 @@
                     where: 'beforeBegin',
                 },
             },
-            {name: "ÍÁ¶¹",
+            {name: "åœŸè±†",
                 url: /^https?:\/\/www\.soku\.com\/t\/nisearch\//,
                 enabled: true,
                 engineList: "video",
@@ -535,7 +544,7 @@
                     where: 'afterEnd'
                  },
             },
-            {name: "ÌÚÑ¶ÊÓÆµ",
+            {name: "è…¾è®¯è§†é¢‘",
                     url: /^https?:\/\/v\.qq\.com\/x\/search/i,
                     engineList: "video",
                     enabled: true,
@@ -549,8 +558,8 @@
             },
 
         
-            // ÒôÀÖ
-            {name: "°Ù¶ÈÒôÀÖ",
+            // éŸ³ä¹
+            {name: "ç™¾åº¦éŸ³ä¹",
                 url: /^https?:\/\/music\.baidu\.com\/search/,
                 enabled: true,
                 engineList: "music",
@@ -564,7 +573,7 @@
                     where: 'beforeBegin',
                 },
             },
-            {name: "Ò»ÌıÒôÀÖ",
+            {name: "ä¸€å¬éŸ³ä¹",
                 url: /^https?:\/\/so\.1ting\.com\/all\.do/,
                 enabled: true,
                 engineList: "music",
@@ -593,7 +602,7 @@
                     where: 'beforeBegin',
                 },
             },
-            {name: 'QQÒôÀÖ',
+            {name: 'QQéŸ³ä¹',
                 url: /^https?:\/\/s\.music\.qq\.com/i,
                 enabled: true,
                 engineList: 'music',
@@ -608,7 +617,7 @@
                     where: 'afterEnd',
                 },
             },
-            {name: 'ÍøÒ×ÔÆÒôÀÖ',
+            {name: 'ç½‘æ˜“äº‘éŸ³ä¹',
                 url: /^https?:\/\/music\.163\.com\/.*?#\/search/i,
                 enabled: true,
                 engineList: 'music',
@@ -624,7 +633,7 @@
                     where: 'afterEnd',
                 },
             },      
-            {name: 'ÒôÔÃÌ¨',
+            {name: 'éŸ³æ‚¦å°',
                 url: /^https?:\/\/so\.yinyuetai\.com\/\?keyword/,
                 enabled: true,
                 engineList: 'music',
@@ -644,8 +653,8 @@
             },      
 
 
-            // Í¼Æ¬
-            {name: "°Ù¶ÈÍ¼Æ¬",
+            // å›¾ç‰‡
+            {name: "ç™¾åº¦å›¾ç‰‡",
                 url: /^https?:\/\/image\.baidu\.com\/search/i,
                 enabled: true,
                 engineList: "image",
@@ -659,7 +668,7 @@
                     where: 'afterEnd',
                 },
             },
-            {name: "¹È¸èÍ¼Æ¬",
+            {name: "è°·æ­Œå›¾ç‰‡",
                 url: /^https?:\/\/\w{2,10}\.google(?:\.\D{1,3}){1,2}\/[^?]+\?.*&tbm=isch/i,
                 enabled: true,
                 engineList: "image",
@@ -672,7 +681,7 @@
                     where: 'afterEnd',
                 },
             },
-            {name: "±ØÓ¦Í¼Æ¬",
+            {name: "å¿…åº”å›¾ç‰‡",
                 url: /^https?:\/\/.*\.bing\.com\/images\/search/i,
                 enabled: true,
                 engineList: "image",
@@ -722,7 +731,7 @@
                 style: '\
                     margin: 0 auto;\
                     text-align: center;\
-                    font-family: Î¢ÈíÑÅºÚ;\
+                    font-family: å¾®è½¯é›…é»‘;\
                    ',
                 insertIntoDoc: {
                     keyword: 'css;input[name=word]',
@@ -730,7 +739,7 @@
                     where: 'beforeBegin'
                 },
             },
-            {name: "»¨°ê",
+            {name: "èŠ±ç“£",
                 url: /^https?:\/\/huaban\.com\/search\/\?/,
                 engineList: "image",
                 enabled: true,
@@ -759,8 +768,8 @@
                 },
             },
 
-            // ×ÊÔ´ÏÂÔØ
-            {name: "ÈËÈËÓ°ÊÓ",
+            // èµ„æºä¸‹è½½
+            {name: "äººäººå½±è§†",
                 url: /^https?:\/\/www\.zimuzu\.tv\/search\//,
                 engineList: "download",
                 enabled: true,
@@ -774,7 +783,7 @@
                     where: 'afterEnd',
                 },
             },
-            {name: '°Ù¶ÈÍøÅÌ',
+            {name: 'ç™¾åº¦ç½‘ç›˜',
                 url: /^https?:\/\/so\.cqp\.cc\/search/i,
                 engineList: 'download',
                 enabled: true,
@@ -784,7 +793,7 @@
                     where: 'afterEnd',
                 },
             },
-            {name: "subHD×ÖÄ»",
+            {name: "subHDå­—å¹•",
                 url: /^https?:\/\/subhd\.com\/search/i,
                 engineList: "download",
                 enabled: true,
@@ -802,8 +811,8 @@
             },
                 
             
-            //·­Òë´Êµä
-            {name: "¹È¸è·­Òë",
+            //ç¿»è¯‘è¯å…¸
+            {name: "è°·æ­Œç¿»è¯‘",
                 url: /^https?:\/\/translate\.google(?:\.\D{1,4}){1,2}/i,
                 enabled: true,
                 engineList: "translate",
@@ -817,7 +826,7 @@
                     where: 'afterEnd',
                 },
             },  
-            {name: "°Ù¶È·­Òë",
+            {name: "ç™¾åº¦ç¿»è¯‘",
                 url: /^https?:\/\/fanyi\.baidu\.com/i,
                 enabled: true,
                 engineList: "translate",
@@ -835,7 +844,7 @@
                     where: 'afterEnd',
                 },
             },
-            {name: "±ØÓ¦·­Òë",
+            {name: "å¿…åº”ç¿»è¯‘",
                 url: /^https?:\/\/.*\.bing\.com\/dict\/search\?q\=/i,
                 enabled: true,
                 engineList: "translate",
@@ -849,7 +858,7 @@
                     where: 'beforeEnd',
                 },
             },
-            {name: "ÓĞµÀ·­Òë",
+            {name: "æœ‰é“ç¿»è¯‘",
                 url: /^https?:\/\/dict\.youdao\.com\/search/i,
                 enabled: true,
                 engineList: "translate",
@@ -864,7 +873,7 @@
                     where: 'beforeEnd',
                 },
             },  
-            {name: "ÓĞµÀ·­Òë",
+            {name: "æœ‰é“ç¿»è¯‘",
                 url: /^https?:\/\/dict\.youdao\.com\/w/i,
                 enabled: true,
                 engineList: "translate",
@@ -882,8 +891,8 @@
                 },
             },
                 
-            // ¹ºÎï
-            {name: "ÌÔ±¦ËÑË÷",
+            // è´­ç‰©
+            {name: "æ·˜å®æœç´¢",
                 url: /^https?:\/\/s\.taobao\.com\/search/,
                 enabled: true,
                 engineList: "shopping",
@@ -908,7 +917,7 @@
                     where: 'beforeBegin',
                 },
             },
-            {name: "ÌìÃ¨ËÑË÷",
+            {name: "å¤©çŒ«æœç´¢",
                 url: /^https?:\/\/list\.tmall\.com\/search_product\.htm/i,
                 enabled: true,
                 engineList: "shopping",
@@ -922,7 +931,7 @@
                     where: 'beforeBegin',
                 },
             },
-            {name: "¾©¶«",
+            {name: "äº¬ä¸œ",
                 url: /^https?:\/\/search\.jd\.com\/Search/,
                 enabled: true,
                 engineList: "shopping",
@@ -936,7 +945,7 @@
                     where: 'beforeBegin',
                 },
             },
-            {name: "ËÕÄş",
+            {name: "è‹å®",
                 url: /^https?:\/\/search\.suning\.com/i,
                 enabled: true,
                 engineList: "shopping",
@@ -951,7 +960,7 @@
                     where: 'afterEnd',
                 },
             },
-            {name: "1ºÅµê",
+            {name: "1å·åº—",
                 url: /^https?:\/\/search\.yhd\.com\/c0-0\/k/i,
                 enabled: true,
                 engineList: "shopping",
@@ -967,8 +976,8 @@
                 },
             },
             
-            //Éç½»
-            {name: "ĞÂÀËÎ¢²©",
+            //ç¤¾äº¤
+            {name: "æ–°æµªå¾®åš",
                 url: /^https?:\/\/s\.weibo\.com\/weibo\//i,
                 enabled: true,
                 engineList: "sociality",
@@ -983,7 +992,7 @@
                     where: 'afterEnd',
                 },
             },        
-            {name: "°Ù¶ÈÌù°É",
+            {name: "ç™¾åº¦è´´å§",
                 url: /^https?:\/\/tieba\.baidu\.com\/f\/search/i,
                 enabled: true,
                 engineList: "sociality",
@@ -999,7 +1008,7 @@
                     where: 'beforeBegin',
                 },
             },
-            {name: "¶¹°ê1",
+            {name: "è±†ç“£1",
                 url: /^https?:\/\/(movie|music|book)\.douban\.com\/subject_search?/,
                 enabled: true,
                 engineList: "sociality",
@@ -1015,7 +1024,7 @@
                     where: 'afterEnd'
                 },
             },
-            {name: "¶¹°ê2",
+            {name: "è±†ç“£2",
                 url: /^https?:\/\/www\.douban\.com\/search/i,
                 enabled: true,
                 engineList: "sociality",
@@ -1032,8 +1041,8 @@
                 },
             },
                                     
-            //Ñ§ÊõËÑË÷ÁĞ±í
-            {name: "°Ù¶ÈÑ§Êõ",
+            //å­¦æœ¯æœç´¢åˆ—è¡¨
+            {name: "ç™¾åº¦å­¦æœ¯",
                 url: /^https?:\/\/xueshu\.baidu\.com\/(?:s|baidu)/,
                 enabled: true,
                 engineList: "scholar",
@@ -1051,7 +1060,7 @@
                     where: 'afterEnd',
                 },
             },
-            {name: "¹È¸èÑ§Êõ",
+            {name: "è°·æ­Œå­¦æœ¯",
                 enabled: true,
                 url: /^https?:\/\/scholar\.google(?:\.\D{1,3}){1,2}\/scholar\?/,
                 engineList: "scholar",
@@ -1083,7 +1092,7 @@
                     where:'afterBegin',
                 },
             },      
-            {name: "ÖªÍø",
+            {name: "çŸ¥ç½‘",
                 enabled: true,
                 url: /^http:\/\/epub\.cnki\.net\/kns\/brief\/default_result\.aspx/i,
                 engineList: "scholar",
@@ -1099,7 +1108,7 @@
                     where:'afterEnd',
                 }
             },
-            {name: "Íò·½",
+            {name: "ä¸‡æ–¹",
                 enabled: true,
                 url: /^https?:\/\/s\.g\.wanfangdata\.com\.cn\/Paper\.aspx/i,
                 engineList: "scholar",
@@ -1161,7 +1170,7 @@
                 }
             },
 
-            //html ÁĞ±í
+            //html åˆ—è¡¨
             {name: "w3c",
                 enabled:true,
                 url:/^https?:.*?runoob\.com\//i,
@@ -1221,7 +1230,7 @@
                }
             },
 
-            // »Ø¼ÒÃ»Íø£¬ÓÃ8090¶Ë¿ÚÀëÏß²âÊÔÊ¹ÓÃ¡£
+            // å›å®¶æ²¡ç½‘ï¼Œç”¨8090ç«¯å£ç¦»çº¿æµ‹è¯•ä½¿ç”¨ã€‚
             {
                 name:"test",
                 enabled:true,
@@ -1237,10 +1246,10 @@
             }
         ];
         
-        // ËÑË÷ÒıÇæÁĞ±í
+        // æœç´¢å¼•æ“åˆ—è¡¨
         var engineList = {};
         
-        // ÓĞĞ©Í¼±êĞèÒªÖØ¸´Ê¹ÓÃ
+        // æœ‰äº›å›¾æ ‡éœ€è¦é‡å¤ä½¿ç”¨
         // icon = {};
         var icon ={};
         icon = {
@@ -1251,30 +1260,30 @@
             del:"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAADAFBMVEUAAADsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVH///9VVVVWVlZXV1dYWFhZWVlaWlpbW1tcXFxdXV1eXl5fX19gYGBhYWFiYmJjY2NkZGRlZWVmZmZnZ2doaGhpaWlqampra2tsbGxtbW1ubm5vb29wcHBxcXFycnJzc3N0dHR1dXV2dnZ3d3d4eHh5eXl6enp7e3t8fHx9fX1+fn5/f3+AgICBgYGCgoKDg4OEhISFhYWGhoaHh4eIiIiJiYmKioqLi4uMjIyNjY2Ojo6Pj4+QkJCRkZGSkpKTk5OUlJSVlZWWlpaXl5eYmJiZmZmampqbm5ucnJydnZ2enp6fn5+goKChoaGioqKjo6OkpKSlpaWmpqanp6eoqKipqamqqqqrq6usrKytra2urq6vr6+wsLCxsbGysrKzs7O0tLS1tbW2tra3t7e4uLi5ubm6urq7u7u8vLy9vb2+vr6/v7/AwMDBwcHCwsLDw8PExMTFxcXGxsbHx8fIyMjJycnKysrLy8vMzMzNzc3Ozs7Pz8/Q0NDR0dHS0tLT09PU1NTV1dXW1tbX19fY2NjZ2dna2trb29vc3Nzd3d3e3t7f39/g4ODh4eHi4uLj4+Pk5OTl5eXm5ubn5+fo6Ojp6enq6urr6+vs7Ozt7e3u7u7v7+/w8PDx8fHy8vLz8/P09PT19fX29vb39/f4+Pj5+fn6+vr7+/v8/Pz9/f3+/v7///8dej9TAAAAU3RSTlMAAABm7P/sZgAAABPO////zhQAAB/i/////////+IfAAAe4fvk4AAAAAAd/+Q3GxwAFR85FQBjz+LPY+v////r6//////rZM/h4c9jABUdHRUAAP0EcPoAAAEuSURBVHic7ZRnc8IwDIbdEUZHGB0kDsMOMcOMttBBB93Qvcj//y9VjB0Czh13/dz3ixT5OVmSYyMktLK6tm74oYxEMpVGUW1sbm2bM8DMZHP5OWBnd2+/YNnYAWHbKhRL5cocQKjrWFWPuSDmVS3HpUQu1eoNQkiTM9xqd7oHoG6n3cKMNyHcqNfQ4VGPUsr7nh0FbK/PIdw7PkGnZwOZNrqF9AfnF+jyaigLixYp/eH1Dbq9u4eAHyOAHh5HaPz0DCnjANjm5fUNvX98QoGCxyo5Fjmh0K/vH2hzAi0KnqnymMgJrU6gzemQBM+DZpX1/XBYUyAYTTAuZTUg+Aw8Zf+BvwJLR730sPTjXgD0H2YB0BUClXKpGAeE1y+fy2ZMfX12gdOpZMLQAfkE/AL7e5vGZF+dOQAAAABJRU5ErkJggg==",
         };
 
-        // ÍøÒ³ËÑË÷ÁĞ±í
+        // ç½‘é¡µæœç´¢åˆ—è¡¨
         engineList.web = [];
             
-        // engineList.web[0] ÖĞ¼äµÄÊı×Ö±íÊ¾ÅÅĞò(Êı×Ö²»ÄÜÖØ¸´£¬·ñÔòºóÃæµÄ»á¸²¸ÇµôÇ°ÃæµÄ)£¬Ô½Ğ¡Êı×ÖÔ½¿¿Ç°£¬Ğ¡ÓÚ0¸ÃÒıÇæ²»»áÏÔÊ¾ÔÚÒ³ÃæÉÏ
+        // engineList.web[0] ä¸­é—´çš„æ•°å­—è¡¨ç¤ºæ’åº(æ•°å­—ä¸èƒ½é‡å¤ï¼Œå¦åˆ™åé¢çš„ä¼šè¦†ç›–æ‰å‰é¢çš„)ï¼Œè¶Šå°æ•°å­—è¶Šé å‰ï¼Œå°äº0è¯¥å¼•æ“ä¸ä¼šæ˜¾ç¤ºåœ¨é¡µé¢ä¸Š
         engineList.web[0] = {
-            // ËÑË÷ÒıÇæÃû³Æ
+            // æœç´¢å¼•æ“åç§°
             name: 'Google',
-            // ËÑË÷ÒıÇæµØÖ·£¬¹Ø¼ü×Ö±äÁ¿ÓÃ%s´úÌæ
+            // æœç´¢å¼•æ“åœ°å€ï¼Œå…³é”®å­—å˜é‡ç”¨%sä»£æ›¿
             url: 'https://www.google.com/search?q=%s&ie=utf-8&oe=utf-8',
-            // ËÑË÷ÒıÇæµÄÕ¾µãÍ¼±ê
+            // æœç´¢å¼•æ“çš„ç«™ç‚¹å›¾æ ‡
             // favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACyElEQVQ4jXWT72tTdxTGv4yN+cY/oMFGqQpD7ZjtsAF/oPEXGFhtbUEn4mSTatSJVua0UNNSEG/01UAH0m6dN1hdW5SbrE3sgkr1hb9lRTFW3Upqcy1NzE1yc/Prfvaia7dM+7w853keznM4R4h38aHdbt8gSZJbURSv3++/Jsuyp6GhwWm1Wsvew/8XNptteTAYvMEMiKjquMvlahVCzHpHXFdXV69pWhLAHHtNSm7nbdMhYo170U61kLkZnDZSFMUrhJg9La6qqrLpum4A6FcuM+5YReRTK5HyUiLlViJLSolULiB2eA+mFgdAlmWPEOIDIYT4aHBw8DaA3tODavuESMV8orvqSZ7/Af1XD/HW71HXVKKdbsPUU9OT1NTU1Aq73b4BgPhLJrYtY2zxQuKtxzATWlH+/MvnYJpFtUAgMCDcbvcZAHOkjXSHIH50LYW3iZn2WIRoNBoTiqJ4AfIPq8n1CwrDB4pIPw5kcP6k0+hJ0+hJ8+0vaU5eNdCzk30RCAQGAPL311PwCnjVXGSw+7zOvIMa5UcTVDQl+Ox4Aoc7yfg/QwpZlj0A5pNvML2Cp/d2FhmExgrceZHn0Z952q9nqGhKsONsCiMP2Ww2J5xO534A481V3N1lLL24md/Dd96b2dWdZfF3Gi29xqR5KDQsSkpK5kaj0ZhhFtgVbKOkfTUru7+kK+RjNKkSzyR4FgvRHOzn8+YJVrakefxXHgBJkk4LIYRwuVytAOHUG7b2H8basZr5netY2/sVm737WHZpC3M6VrDk3Aku3Jq8g9HR0TGLxWKdOsaPfT7fbwBaLsWZBx1svPI1i+RNlP28jsquLWz3H8E3cg0AwzAyDofji/+/w+zOzs4LU3mTZprHE8+4q/7BcGJkeg/hcPh1dXV1zYwfWVtbW9fX1+dXVXV8SpTL5fJDQ0NPJElyWyyW0v/y/wbuo60BpWkyAAAAAABJRU5ErkJggg==',
             favicon: icon.google,
-            // ËÑË÷ÒıÇæ±àÂë£¨Ä¬ÈÏutf-8£©Èç¹ûÌø×ªºóÂÒÂë¿ÉÒÔÌîĞ´ 'gbk'
+            // æœç´¢å¼•æ“ç¼–ç ï¼ˆé»˜è®¤utf-8ï¼‰å¦‚æœè·³è½¬åä¹±ç å¯ä»¥å¡«å†™ 'gbk'
             encoding: 'utf-8',
-            // ÊÇ·ñĞÂ½¨ÍøÒ³ËÑË÷,Ä¬ÈÏµ±Ç°Ò³,Èç¹ûĞèÒªÔÚĞÂµÄ±êÇ©Ò³´ò¿ª Ôö¼ÓÏÂÃæµÄÊôĞÔ
+            // æ˜¯å¦æ–°å»ºç½‘é¡µæœç´¢,é»˜è®¤å½“å‰é¡µ,å¦‚æœéœ€è¦åœ¨æ–°çš„æ ‡ç­¾é¡µæ‰“å¼€ å¢åŠ ä¸‹é¢çš„å±æ€§
             // blank:true,
         };  
         engineList.web[1] = {
-            name: '°Ù¶È',
+            name: 'ç™¾åº¦',
             url: 'https://www.baidu.com/s?wd=%s&ie=utf-8',
             favicon: icon.baidu,
         };
         engineList.web[2] = {
-            name: '±ØÓ¦',
+            name: 'å¿…åº”',
             url: 'https://cn.bing.com/search?q=%s',
             favicon: icon.bing,
         };
@@ -1292,13 +1301,13 @@
         };
         engineList.web[5] = {
             name: 'yahoo',
-            // https://tw.search.yahoo.com/search?&p=%s  // Ì¨Íå
+            // https://tw.search.yahoo.com/search?&p=%s  // å°æ¹¾
             url: 'https://search.yahoo.com/search;?p=%s',
             favicon: 'data:image/x-icon;base64,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',
             disable:true,
         };
 
-        // ÊÓÆµËÑË÷ÁĞ±í
+        // è§†é¢‘æœç´¢åˆ—è¡¨
         engineList.video = [];
         
         engineList.video[0] = {
@@ -1313,12 +1322,12 @@
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACTElEQVQ4jY2QMUsbcRjGH7n73z+m4g0OblkDpkOgRT/AKeRCYvwHzxDBBOLUzU/gF+gkjlLoKlTBxQvxCqe5u4iFkw6CATfddLPSCIWnU8/E1rYP/Jbnfd/f8ALPIqUsj4+Pe1LK8lCXBeAB8AzDeP38JokQ4u309PSP2dlZmqbZByANw8iZpvm1UCgwn88znU5/+pvgzcTExGB/f5+O4xDAewC5hYUFPj4+cn5+/huA+osCADAMw8lms8zlcpycnPySTqff2bbNVqtFALWX7kpSSk8I4aVSqVDXdY6NjdE0TU5NTVHXdQJgKpWKhBCelNLTNO0DAAkAlVar9T0MQ/Z6PYZhyDAMGUURgyBgt9tNul/96ekpd3d3mclkDqDrenR+fs7t7W0qpVitVhOUUgnD/fLyMm9ubri2tkYIIT73ej0Wi0Vubm7S930GQcBOp8N2u50w3M/MzNB1XTabTUII4UVRRKUUz87OuLOzQ8dxeH19zeFsbW1xZWWFd3d3rNVqPDw8ZKPReBJUq1WGYUilFAHw+Ph4RGBZFgEwjmPW63W6rjsqUEqx0+mw3+/T930OBoMRweXlJX3f5/39Pcvl8p8F7XY7OdjY2ODc3FzCxcVFMisUCr8LlpaW6Pt+shTH8cgTHx4eklmpVHr6ga7rQRzHrFQqzOfztG2btm3TcRzW6/WExcVF2rbNYrFI0zTZ7Xa5vr5OaJr2cW9vj1dXVzw6OqLruv/k5OSEt7e3tCxrAACvMpnMwerqKhuNxn/RbDZpWdZA07TKT3uI/eaBFtmBAAAAAElFTkSuQmCC',
         };
         engineList.video[2] = {
-            name: 'ÓÅ¿á',
+            name: 'ä¼˜é…·',
             url: 'http://www.soku.com/v?keyword=%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABnElEQVQ4jZ2Sv2vCUBDHv4OFYEAeRrFihjeYLl3eILRDhkcXKQg6tWAHs4W6WBAq2CWCFLe4CS7ZOhWyuHTK4uDmpKtD/4As3dOhOYk/SrGBg3fc+37u7vsCAOztPud/DXhEseoUN7cX6Qbi7/Yi3Vh1ihuqT+pZDwADAIyqzE2KKWatfEDiY/W5XVgCAGatfEBdm0K1mkK1+pI5NAF1jgWsKVSLIE2hWr92GFWZCwCUJ1ea24Xl14BHfckcAIDJFTmpZz0qUJhckX8CyINRlbnnDDw5kckVmVzB5Ip8vMo87ayw/wIUnz093AceMxkAWF8yh8z87Onh233Ov8yfCbpgckVSo7ldWMa7s1h+zjV77Gfunl0SKNcNS+t6AUqGUG8enuhMdc0e+5o99gEAqXJF6tN1pE/XEYkpz9Tajtb1AjoTgOqpckXuAJLiorsIUTLESYB9MQD8C5B/eV+SSScBNHvs70MIwFpD78CzkiEOTGStoZcEZmptZ5t3vaDoLkJ9uo4Krx+bn3lKhtjuTT9GDImfliWhW3Hs0Tdk6pGCP1WKswAAAABJRU5ErkJggg==',
         };
         engineList.video[3] = {
-            name: 'ÍÁ¶¹',
+            name: 'åœŸè±†',
             url: 'http://www.soku.com/t/nisearch/%s/',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABnElEQVQ4jZ2Sv2vCUBDHv4OFYEAeRrFihjeYLl3eILRDhkcXKQg6tWAHs4W6WBAq2CWCFLe4CS7ZOhWyuHTK4uDmpKtD/4As3dOhOYk/SrGBg3fc+37u7vsCAOztPud/DXhEseoUN7cX6Qbi7/Yi3Vh1ihuqT+pZDwADAIyqzE2KKWatfEDiY/W5XVgCAGatfEBdm0K1mkK1+pI5NAF1jgWsKVSLIE2hWr92GFWZCwCUJ1ea24Xl14BHfckcAIDJFTmpZz0qUJhckX8CyINRlbnnDDw5kckVmVzB5Ip8vMo87ayw/wIUnz093AceMxkAWF8yh8z87Onh233Ov8yfCbpgckVSo7ldWMa7s1h+zjV77Gfunl0SKNcNS+t6AUqGUG8enuhMdc0e+5o99gEAqXJF6tN1pE/XEYkpz9Tajtb1AjoTgOqpckXuAJLiorsIUTLESYB9MQD8C5B/eV+SSScBNHvs70MIwFpD78CzkiEOTGStoZcEZmptZ5t3vaDoLkJ9uo4Krx+bn3lKhtjuTT9GDImfliWhW3Hs0Tdk6pGCP1WKswAAAABJRU5ErkJggg==',
             disable:true,
@@ -1329,13 +1338,13 @@
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAADfElEQVQ4jX3MbUzUdQDA8b/1xrW1tlhrtmatF1qrVk5opajLUScgJtoIxXjQ1iobqzaV1MCWqZm2EumO8+C4Bw4OMsC8EGgeWkqi8vy/P8cBJ8cdTwccj/6u+4/79qLVy77b9+1Hcvb4Q2/oukS6SRZZ5YrItLpEpkUW71pkkVgRFO+b/xTZpjaRYXGLTKtLZJUrYpdZFhpdl6htHwpJSSVukkr7SDV5iNcqpJR5eK9S5hW74LjRyrcXCkmyTbKn0kuKsY94rUKa1cN2k4fXi3uRMiwusblYIafKS0FjgG0lCqvLwphs5/EVPk+sXZD9k4/kkl52mvspaAqwUddLvE4hy6IIKUHbKfKbAtwcmqfZO4dveoHnKiDb1EqbLpkXqyOsqoY1himGphZpH7mPdyrMSecIa87cEdLnlwbFF40BfmyZoEYOsQgMd15G+9UOFMMWhg3x1J3YSGdLHTfno/zcOcW/7atQhLTV0C2OXvHjUGbIKXcTBGZvFcEhCbX4SdA+AoclFp2HqFqE75tH/wMK6geFlGNTRFiNAnDs+hK3w9B2PgH13EOM6V5iTL+WvwofpjV/BUEV6obg+G/D2LtCHKsfFNIHdrcgusTcEuT5obPmBDN5EsEfnmBK/zKh4hcY18cy+tkDdBW9ybAKehe4/CEO/zIgpCyrIpx+ldnQGO1nXgXdMqKODSg6DSHtM8yeXo773AbUoBuqH6PxwxWw4CcgIMvqEtLRSx5xbQFqzPlwRCJ33TLWxq3nXscNVG0Mc2cfJSg3kLb3INt3ZhAtkGg8GYdjHs5e9QqpWRkXWj8cOfA23F3Jyth9SMtXoQYHWGo+yMwtI0QmiXn8aR6MWQfBWvK+/Jhv2iPc9k4KKc3YLVYXBflE7wChsL+ogafW5xIdbSI67UUdkWHOyabsU8Tt/RrCPnIvh3j2Ow/bDN1C2m2WRYK+l7fq70OfA3QfEf69HGabQa6CHjtMXyVyx86S9gD06Pm0IcBrF3ykl8n/AFvN99hT42f8j2oi1aeIdNcy0X+N8dZaxlouMqE4CSu/ol48zex1C/sdwySU+cgwuYSUWOom1eRmt9XDFtsomivzaCrHSDQMkGwLkGIbJbF0EI0tQGLDPBr7OO+YPaSX95OgdyPV3h0KbSrsEOkmWewwKiL1/y51iVSjItJNsthc1CFMN7yhvwH03PqrfJ8h8gAAAABJRU5ErkJggg==',
         };
         engineList.video[5] = {
-            name: 'ÀÖÊÓ',
+            name: 'ä¹è§†',
             url: 'http://so.letv.com/s?wd=%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABjElEQVQ4ja2SPS+DURTH/9yXPs/tc59WWxK9tfkCFgwiNLUIQWMhqhEsQopFRcTCwOAlIp2MEiFBwmcghobZ5i1I6iUm2zVoG1KetImT/HKm80v+5xzgq9xJZm2kXN6jEFCLUqsOtPlRKv1u1+hp7l4uWVAPGr6RQX0nlZ512ZslCxpAW6+zgiSz1v9LwBpA2yKER8OE9+SIEB5tIq4OAJajYIS6k49S6Vup9I0M5rmVQZ2RSi9yz7ajYIyKhYyt9F126DuvUukV5tn5VTDD5GouQgvh3T3EiHcSI9ZBjMEuYgxFiTHcTnifDfh+FcwxawsABUBKXuKVVa3PRFVmT/jTh8J3cSACl7l+IgLpUeqeBVBeIGgEjTxnl/UglX6WoQI+7Bp9LipfAXgKBAEgmHJVHB+LwMWO6T/bzePLc2D4TmPMnARQ5pSGF527iBKdxIgNMDPRz8zxPmZODDAzEWfmVC8xRiygynE6wa2llz/+4M0O6TXu3XcUxJk5dZ897c9PVPpJKj3/dW58AkPWtgVm+sp6AAAAAElFTkSuQmCC',
             blank:true,
         };
         engineList.video[6] = {
-            name: 'ËÑºü',
+            name: 'æœç‹',
             url: 'http://so.tv.sohu.com/mts?wd=%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACk0lEQVQ4jW2SXUhTYRjHf2furH1vns0tc+p01YbSaRRGFGmElRWhRVR0VzeBCUkRKRQUURFBUYtMsAsvwqSLboqKii76oOjLLsKwLBLOjsM+iBEiEk8XOtCDD7zwwvv//57/+7wvWEpX1WUXqud33U1XPn+2cuHgm4bk9xeNqc+Xl1f0eiFi1c8s+wHNd6gzWpxZ7XXtrHBQMx/itR413RYPdbysXzQ80qxPnFkay8zp3jXP1V7ncPS74BbQD6ywavbGQm25lrTcXJN4OOtgS5G6L4oyDogNRYDfpdCUBN0KaYp4t+da0nJcX3AeAB+EU9gmAFGnzH8B2xlcmTElJBk8N6yQW8vjT7Lblv7zQZj1FHUVzNOAdoBruHsNRRMzlJCPkUVja7E3FQBxB6nRzbqc0MsuosKwfdpcBJOAE+Aq7l4DTQybJmY0KWagUnpw3wb8AN8aUuMvG2uGscFPUMSOIgrkC10yBQCaGASksL+Cqw/gQ13C/LKhJo8Xfi7DLo6p+JOAfVaCGesxvo/VsBhgKJ3IDzWk/rAV9XMvPtmPUw7gEmC3FfCV4EQrjo5CuhgsNPWEPK2rHqQFNWOiyQBBGUOTbjw5gIu4rxtocg//W+sPvBMKvzKXJKSzouQsXoiMEJzMKSEx0OQXmjzA/zoJej32DdYnvGLz9GVLy2SktmoSCALQifOsYQtL1rlg+r5B+UQwfw53dzOOPZso2nEC16UBAjljXolkY+VysCR4bBa5B/dtMxCX0Qpdst6YGPinp188a5BZX1S6wlq/NRkAR3Ce+l6amvixrlnGVm2U0bIayXrLxVAjYqDJsFI83urwdMxpnlH+o3bv6UclVR8GwlXmO2fUvE/g/WGcJwG3VfwfeW39pYdUeeAAAAAASUVORK5CYII=',
             blank:true,
@@ -1347,21 +1356,21 @@
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAASUlEQVQ4jWNgoCYwMTH5b2Ji8p9ceZwKidZIsY2kYhQDSAW0MYAUg8h2AbJltA8DWGiTZQB6lJHlApK8QFFCghlCMMmSoZYgAAAvUMVwhox/egAAAABJRU5ErkJggg==',
         };
         engineList.video[8] = {
-            name: '°®ÆæÒÕ',
+            name: 'çˆ±å¥‡è‰º',
             url: 'http://so.iqiyi.com/so/q_%s',
             favicon: 'data:image/x-icon;base64,AAABAAEAEBAAAAAAIABLAQAAFgAAAIlQTkcNChoKAAAADUlIRFIAAAAQAAAAEAgGAAAAH/P/YQAAARJJREFUeJylk71KxFAQhb8bw7IKgbW0sxUuiPgA2ttsodhaLOwDiBDyALKNnYWBFJYiKttspUhaQRAh4GMoBDSkuRZOdHTDkrgHBs6dnzNT3ANzwkSJXQUOgPVuJ+gDFGVe29ztBEh9DDwD5z7wBPT+Nr5/5BOdW1oMdtSzL7Hly/Db8SBbbnN6lNhXYLvNTC1MGFsHHAJrwEDVJsA9cCKbUrWx4qmnBlYARsPMzFh4JPENX5Q2G1x7BewKv6uSnpzTBBeKn2mBX3DO1V4zGmbXdXxKoC2mBE5v9h/nUnx4udwLY+vC2N426TdRYh3//4k9UxH4MQsw0wvKbKkPbCBu5MsgFGWOt4A2D0WZ6wVjxI2fleZQvCOg+1AAAAAASUVORK5CYII=',
         };
         engineList.video[9] = {
-            name: 'ÌÚÑ¶ÊÓÆµ',
+            name: 'è…¾è®¯è§†é¢‘',
             url: 'https://v.qq.com/x/search/?q=%s',
             favicon: 'data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACNUlEQVR4nK2SS0iUYRSGn/P/42UcLCXDIoykaKhlSVCbGlu1MkgSJKE20saoyG2Q7QNpF0RIi6goXKQkLoIQhjBCNBAddFLGWw0q3ua/nxa/82eF0KID3+K7vC/Peb8DO+pKWi80p9W5mtbH/GPJzs3loUAFkOKp6GylbSR7UmLtZmDoAI06gE4P78+2nj7FvorPuB64HnieHF41tdD00c/sSqDvREHpPXF2zj24eAgRBBida2d4phORkCiEMu73peTh7wZvRQGeNJzbiu/JVYSC0EQERnIdfJm9HRmpqDN40SxHQp2BDTjgyHLcsn2aEkNcivfjOAa2E3Cytpu2M/WUmrPYruI6lKbe+0GqX4+GBM8MRaA7VYsI3Kqbj/BWvEle5htDIoGJpTbS2a5tOiHmm/UGFmBBwfax7AAliAyqY8e5eSBHmVeHZfkcqerBdn0sByxH2fDd0Rh2mJBl+wjClreKIWa4MBlf72Vxc4piNpZtIGj41aJPY1gCohTsAAE2/B+YlLDsZHk+3RKFZ3s1vB4ZRUTDFmAqc6PsTgw7jHtzrdqPlefNnonrLBbGoz5F4EPmBQtrKRDdNtQ3ufZ4M0AMJ+x374qxtVITVH5b/RoJx+Y7GVsozsI2NpLMd8QniznFsJnAkGTD0rLftzdARPg084ip/DUoCgFBX63fS7T8NYkAerdkMBuv+p5MZFqVkl8X4W3WtRLHeCDBn+LoSVRdGx4iZjggOqR+4vxuwv9WPwHg2/J5NFR2OgAAAABJRU5ErkJggg==',
         };
         
-        // ÒôÀÖËÑË÷ÁĞ±í
+        // éŸ³ä¹æœç´¢åˆ—è¡¨
         engineList.music = [];
         
         engineList.music[0] = {
-            name: 'ÍøÒ×ÒôÀÖ',
+            name: 'ç½‘æ˜“éŸ³ä¹',
             url: 'http://music.163.com/#/search/m/?s=%s',
             // favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB/UlEQVQ4jZ2TPUsjURSGhxm4ibGRaJcioEVKuwj2wcafICgIomJj61amENdqbeyMChIsFERBbVQsbMRGBKOdKAScL2M+djLJnftsMZglJsKyF251znnue895j6Zpmsjq+vqDYTimEPzLLRiGm9X1dU3ThLas67++TY7F+L2xgapWkc/PlGdn2+JLur6qdXu5ND5O/fCQ8vw8AP7pKc27O1SphBmNtvIeDMPR2op7e/FyOQCU41BbWQHASaUwo1GsgYEOlW2Az2JvawsrHqeazYYKjo8pT09j9fV9D3jPZACo5/OYQmAnk3w9wesrbjrdHVA/OEB5HnYigSkE/skJSIl/cYGqVPiYmCCwbZTrYg8OdgKCtzf883NMIbD6+0EpvJ0dKouLALxnMrijoyAlXi7XCUAp6nt7ofxEIuzF5ialsTEAynNzmELQuLoisKwuCopFGtfXrUDz9haaTZr39yAlzvBw+NX9fQiCToC3vQ1SYg8NYQqBk0qFjTNNylNTYUEkgiwUkE9PnQA3nYYgwD87w+zpCXvxZWwfk5MAVJeXu/ugtroajvLoCDuZbDNYZWEBfB/5+IgVj/8FtFk5EqG2tgZKoTwP+fJCPZ8nKBYBaN7ctMbcsnK3ZXJHRvB2d0NLuy6Ny0vKMzOYsVhb3g9d/6l9rnPBMNz/Wec//7qAp1Pb2H8AAAAASUVORK5CYII=',
             favicon: 'data:image/png;base64,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',
@@ -1369,49 +1378,49 @@
         };
         
         engineList.music[1] = {
-            name: 'Ò»Ìı',
+            name: 'ä¸€å¬',
             url: 'http://so.1ting.com/all.do?q=%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABfUlEQVQ4jZ2RTUsCURiF/SFton27qIgoQ9skidJSF5qu2gZRtGrVan6ABJGbIqiwDz9CLSINIceKcNOoV8MpxQ9EJ2uc62nTiJUj6gt3c7nnOec9V6VSGIZQ2GLCr8MQCqX3LRFDKKysAFNUgNrLY8qdwehJEqtsCSvPn8oQhlAsP9RhZQXog1lo3ElMul7o4mEcW4EkVTufsBHNw3xXqCsCxvcib/pgFjofgeaCYMyVwOZ1Gh5SARN9h9aTgtafgzlSFjtC1mJFwXCZxtwpRydcCcyfc9RDKqh+iZQXREiSRPEzhrM4/y+BMyvilq/iOFXBAVfG33ks1sEQCoOPK3RuPZzDbqbWcmo0RAoAktSgTQByyYod2MI52G9e8UGbLddwsYH7ktjbF8oAOYHsyBCKnRp6AwSyVcjiroJOAIZQHJHKYIB2SDtAvlvaduz3DLGwQmt3Y6iMoXWHt+8kFlbAwlUes/48RmZ09r7XkUHGUBnD01rTQAAZ0q3Qb/EHnAbFqFNRAAAAAElFTkSuQmCC',
         };
         engineList.music[2] = {
-            name: 'ÏºÃ×ÒôÀÖ',
+            name: 'è™¾ç±³éŸ³ä¹',
             url: 'http://www.xiami.com/search?key=%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAADKElEQVQ4jY3MTWyTBRzH8X/fni7GXdSYwAFCRFG3cNgOcvGiTjjonDPdWhgO1rGCQ7c5R6cTxjTRqTQDQxZEJTFcyKZMaTSQQOJhkBAdZoBjSEyskq17+ry0T1/Wpzzt18MWbxoPn/x//8tXROT+d56V9z5rkVPHX/7/Pm+RUzvrZI801UiIcReMrYoJfCAr+xOBj/7FmFAcdSHb66SLI27METfmsItMbC2F872Yh91kPt2IdbJ+xXgt1onN//zZsbVYIy4kuFnCjLoxhwT9DSFzbBPlzF/o/UJxOoajzuGo81TsLOWciqPOU07NY194EyMqSLBWwoy4SH+4hvzXXRSvHKWSUymcHyA/0YZ5uBq9z0tp/nsKF97G6PdiHlSwDnpID7lXApUBIT/VTaVoUfrt4sq99QOUy2RitWh7hNLcOfJnX0PrEowDQibqxox6kOATEi73Cfl4lOLPpzGGHsBZuI62X3AWrpM5uoVUh2DPTlK6cwkj+hDaPiH9lhej34sEN0m4vF/IfzuAPXMGc3g9zuJN9D4/zsJNMkeeIvWqULz6FZWcRjn9J9aJRsxuF0bPasDZK+SnBrGvfYNx6FGcxV/ReqtxkrdJf7wFNSTYs+fITfSQPR1h+cfjGBEXWrcXCW6UsNMpZL/cSWXZwlF/p3KviJO8TaWQxnz3cdSAYM/GyU8OoDYLqQ7B3OtDj/hWA/t8aJFq9GgN1sl2nNQfGMP1GNHHSO12o7YK9i9xchODLLUKqQ4fRqeCFlaQ4AYJOxE/aouQ3CYYB2pwknfQe9ZRnPkOY6iO5AuCfS1O7swgS68IqXYFY5eC1q4ggQ2ecCnkxhpvx75xCefuHBW7gHP3FmVjAXsmzuJWwb5xkdzEIZKNgrrDj97mJ7XDj7Su93TeC3kxh58h+8XrpN/fht77JFrnGlK7HiQTC7D0kov82VEyx9pYanShBv3oIT9a0I8E13m62H0fVrNgvShYTYLVLGQDbrIBD1aTkA1VkW3xkG31rexQFcvbq8iHqpCH/fLI1NO+qz89rySmG/7Dc57EdIMvMd2gJC43KImZrUpirN47+TcxcooW8TIPDAAAAABJRU5ErkJggg==',
         };
         engineList.music[3] = {
-            name: 'ÒôÔÃTai',
+            name: 'éŸ³æ‚¦Tai',
             // url: 'http://so.yinyuetai.com/mv?keyword=%s',
             url: 'http://so.yinyuetai.com/?keyword=%s',
             favicon: 'data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAC10lEQVR4nH2QX2iVdRjHP8/z/N73Pec929TZwmrdtEltOupCTGZ/bMbqIopVjGqQwSS7iBGBCV0EgTKsROiP2aIu+ne1AodFlOkKyiLUi63QrDCULoTcVs2d857znqeLMxdB+IXvxfOH5/l+v9w3mvqhM/t8YHeT75vc6qMfD/i9o0U/cnbM79kV+/YPev3dY8/4Ay+2+GdnXvX7X2j2h/e2+cHTL/nA7uYjYWRoD6aBdWv66O5cj4pRzTNEhMG7Ruho76Fay1jR0kYcEp4dfouFyjx5vUaeVzfJg3uW+bquzRw7eZgoRFSqFRTj5p5+vp3+lGpWpq31Gub+vkBPZy8nTn1JrZaxtmMDP5+bQs2MEz9NsjJtZ3jDGDde1Y8afP/j55gahUKJvy7OkpOxuriZ4fVjJMUSv/7+A6qKqgmrr+jl9W1TdHWsoee6tTy28TnMBF1kLhnvP3GBwb6nkFXfsOXOLcjS3IS7u0cAGP/6ZULs1HSOrF7BTDAT+jufpFBMmD1/EWoJhWKECo0nGhQRB0DFKOd/EiWw9Y4daFDMAo9u2gnA9oluTIQQFA2CBkXNFITGARUOHH+HuODEaY0srxCHlCQ1yvM5HmpEkRIixazBoGZcgoiSJAXipFEP3jLExtbG9/2Ht6GmWGzEkaFmjRCDKrooQU0Iqrx96A2SArSvWsbKK5vJsgpTMxMEVSwoFilBLzH8a0EENChJSFjekjJfhgU5y8lT50iiFIDIhMikkYEuZjD5234W5nKmZw4uedv70WuUSgl/2DhvTj+y1J+dmaeWgUUBM0VGxjvcWRJxWfzfXuhq76X72tv58OguBnufR0T45Pgr9N/0ON+dPsCtNzxENc9476sdDN02yvm5X1heupo4FBk/uhNtKrbi7sRRkTpVHKcQp7g7pUILKkrda4QQ4V4nTVZQsBT3OqqCPD1x/Re494n8V5y7c/me01QOyT8DBfBJpwjHJQAAAABJRU5ErkJggg==',
         };
         engineList.music[4] = {
-            name: 'QQÒôÀÖ',
+            name: 'QQéŸ³ä¹',
             url: 'https://y.qq.com/portal/search.html#page=1&searchid=1&remoteplace=txt.yqq.top&t=song&w=%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAADMklEQVQ4jY2TbVATdADG/3cBDgkNN2QyZWMhoKQwtLIyQ/DgaPvAAUVddUjU2UUdd3Z1vmR2B3VxUWhJqyBS0vAlDo7VImCWsPM4KcC0BtgYgzFjzcmY42Uovz7lnZ3n+Xx+fs+X53mEuDvJ1E+G7L5LrwjaqFmed6D8ibqaU6mdpd8s78ozLrny6M7FvUKIkDuSccrwRyy/Vg14ffUcdmt56aKcp87cR/a3S9C3rsHavcG2Pl6ScVtYs06ePePpmMXXQs/km1Q4tlDQJiOrPpw3GlR4/9JyfSwd34UH5rc8GPL0LXBoqFh11WmYXPC1sHC1lsnxfZRZNLzbloitL4fZoXwCl3TMDaXjP6/hsil6WhouEm8GfFyeU7vgbeaG+3OuT1Qwb99J9wUdr55O4FJvJtO/a/H3Z+HvS2OqW4PHFEPNW6GN//GLPMOHfPOuagLj+wmM7WFmoJhr/fkc6XmMyva1TJ3NwNuVxuSZzXg6NLgMSuwnlwaEEBFCtjQ4dW78IHP2t5m1ljBj3YH/z2K85ixGTI+zz6yh58dU3MZNuL5/iImmZJzHVYwfW4YySqQLdYxk2/TQbvyWHfgtz+MfLGDGVsKVjnRchof5uXUD77UmcPmUBufxZBxHkxitUzJaKyVJIfKFTBa80XtuO96eAqb6c7k2kIt/5FncYyX8NFDE4T+0lJoTaWuIY/TrNYzUxGOrXsXwp1JipGKbEEJI7E1b/f+0Z+ExZ+I9r8PhLmLM/xpn/36R0l+SeO6HFbx+MhLbF3EM69VYDyqwVETMCyGkQggh3i9eWe/Qr8ZaqeBcUwodzjw6HTmcHtFR99tm8uojyPwqlL4aJbYvVQx/puDQC2EtN2uUSIT6YlWsz/aRgoY6OYVGBbvaV3PAnMIHpiT2t8ZR0hzJ4LFYRo+qGNSvmI0IE+tuGVOqOiTXUrky0FUVRXbtYtKqF6HV38srJ+Tsao+m2RTLhDEBR+P9N9LWBxfeds7qqKCMznfk9u8+jOSZcglby4LY/kkYBoMSl2kt/UdUzmT1Pbo7HkoIIdkUH1xYWbTsRMteea+xLLqvujSyMT1F8rIQIuz/5n8BdBDOUVi5DnwAAAAASUVORK5CYII=',
             // encoding: 'gbk',
             blank:true,
         };
         engineList.music[5] = {
-            name: '°Ù¶ÈÒôÀÖ',
+            name: 'ç™¾åº¦éŸ³ä¹',
             url: 'http://music.baidu.com/search?ie=utf-8&oe=utf-8&key=%s',
             favicon: icon.baidu,
         };
         
-        // Í¼Æ¬ËÑË÷ÁĞ±í
+        // å›¾ç‰‡æœç´¢åˆ—è¡¨
         engineList.image = [];
         
         engineList.image[0] = {
-            name: '¹È¸èÍ¼Æ¬',
+            name: 'è°·æ­Œå›¾ç‰‡',
             url: 'https://www.google.com/search?q=%s&tbm=isch',
             favicon: icon.google,
         };
         engineList.image[1] = {
-            name: '°Ù¶ÈÍ¼Æ¬',
+            name: 'ç™¾åº¦å›¾ç‰‡',
             url: 'http://image.baidu.com/search/index?tn=baiduimage&ie=utf-8&word=%s',
             favicon: icon.baidu,
         };
         engineList.image[2] = {
-            name: '±ØÓ¦Í¼Æ¬',
+            name: 'å¿…åº”å›¾ç‰‡',
             url: 'https://www.bing.com/images/search?q=%s',
             favicon: icon.bing
         };      
@@ -1427,7 +1436,7 @@
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA+klEQVQ4jWNgGAUIIKBqwKCfUMSgGZXJwCklhy6twSCoW8BpUZTFaZIjz8CviCprXtbFkHX3PxynXPrGoBIQC5Ou57Fv/C/Z+B+Gf4jV/szgMs6EyMq7BqJoRjaEQ1zRmUXRFVkzsiEaDIK6DAwuE1ZgNSDr7n8Gvbj8Wfy+c7AZ8F+y8X8tl30dA4PrlNU4DdBPKFrCH7QUlwGNPE4tDAzqoclYNaff+MMgoGoQwaYdhcsAGxY5G0g4eExZh2GAUVY1LBCX8wevQNfcyevShRoTim4hDHZNMxls6yczSJjao0ejP5ta4Axe35mT+DwnO7MoupKfXoYfAABPvsL2GuU3QwAAAABJRU5ErkJggg==',
         };
         engineList.image[5] = {
-            name: '»¨°ê',
+            name: 'èŠ±ç“£',
             url: 'http://huaban.com/search/?q=%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAC1klEQVQ4jYXOyU+TeQDG8Z//gIkxXogxXky8TTIeRhMzcSEdoKW0SIFibYuJLFbZVGyxlLbQFoqoBEhEBSlbA4xxNwq9zMXMeTLO0b4vWOhGoSKBUfHrAZdEEZ/kOT6fPMJtNLVPelpD92yNobv1ttCd2vNTI5aqhx0lxpv6/ftNO3fs2LN7+/a95Qd/r75VZBgPGsyTE0ZzaMJ4MvTQXBYSU772v/nrOdx/zIeJe6wF/+Td4CjvAqOsdl/n3xNlqf+Kjellh4dVfycrrVdY8XWw2noFOnoQD5yuEE8mWQyOsxAYJdU3SKovQMJ/lZmSUiK5OiI5Bcg5BUQqqom7fcScXuJOL288lzcAAsMkr/UwXVyKpMxHyitEUuqQFBrCmbnMmMqIubzEXb4NgMEgqdtDRMqr10d5RV+BrHwkhYaXh3OYKa0g0dxG2uNHjDU0PvoCjIwT93Uga/TIGv33wB9awpkqXh5Rkqi5iORoeSM6LZbedWCCheExIpZzSOpiZE3JxoBCTfhwNvPHDIwbzCGhP3TItPb4GYtjd0jdHGDGVI6k0W8OZOaSVORxYd9vzSJj27Zd8sDwwsrdB8z33GBaX4qsPf7zBwUGBtX5j4QQQnRVWvp5OkWy6zrTRSbk/E2AI0qkbC3Js+d5cbomKYQQYndGxt7ZoZH0cm8/8o8AhYbwURWyupDZs+eIXbATr7UiPqcsW3Xmfd8QEZ0RSV2EpCokrDy23iwtsqqQV+YK5i46mLM6iNbZWKyzfQWEEMKr03WtNraQqKonUlnDq/IqIqdrma21ErO7ibl8RC+5mau3E62zkf4WEEJsadLrfcuBEd4ODJPq7iVxtZuE/xrxFj8xRwvRBuemgBBCiKxfftU+t7v++b+3n7c9N0i3dzLf3Ea8yUOswUm03k6szsbrHwGfsrX4wMGTwVOVT144XHPznnaWmttYcnp5bXezZG1izdrER/CEaFr9QFrRAAAAAElFTkSuQmCC',
         };
@@ -1443,156 +1452,156 @@
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACD0lEQVR4nO1WsW4UMRB9sxsECAmlpbrbRKwpKE4nk0i0/AQSogGlSInID/ABKegoEimioCC/kJYiySKCkE7aC8rtUdKgSClQyHlSBN95N/batyQVN5U9nnnvzazXNjCz/92oSVKWiPcAnlfcR3KQL16rgCwRHBKn1Ki7NPz+5coEhBJXTQ5yL350XeShubUKnQDMZ7Lo3zBdH4F4IRFntvC6TjgXsnb6B0Rz04CNcy3CXXluARWQW7fjmw97vVPXesSq0y0OvzpFUNySR70fVR7rHthPxK+qT5NnbbFhq1BRdGD6L1XMo6GNyyqAgHlzrsE+L6RPQHhpy9GWJWL8+7HCal2sU0DJmD9MhrRzMcCxHOTk+K4dPXg0zN+VxLXFrldAlqRb5lwW/WcAkLXSBxNfPj8OUPzKV8PYCEteAcz01Joc4a0dlN4EC7DCVvGA39ZIxje7ANy9UgEAts3Jbut+BwBk0V/7F6JgAbLIV8x5HEWTXQ1+7QM0N+Z+kp6UFhl7XgE20/83gdZNv+6Oywh0pySuyJeDBDDjp0vESMX3tG95eHgwyeFTs/rQSyz4KNYWchfsLYrHkcKnMtMURzFwUVEdietIzhLBl8gB2MiBBtex7sA074S6rtVuwmqiryvTknsFWADWnYENyIMEaCA5yIn+/h2+9is16oaQA02f5e10E0QvKu5Gz/KZzewcjEjYbJKZwQoAAAAASUVORK5CYII=',
         };
 
-        // ÏÂÔØ×ÊÔ´
+        // ä¸‹è½½èµ„æº
         engineList.download = [];
         
         engineList.download[0] = {
-            name: 'ÉäÊÖ×ÖÄ»',
+            name: 'å°„æ‰‹å­—å¹•',
             url: 'http://sub.makedie.me/sub/?searchword=%s',
             //favicon: 'http://sub.makedie.me/favicon.ico',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAADeklEQVQ4jW2TfUjUdxzH35xZlpJHNczZtRNhrdQSC64Nw9Ya9EdjS5K2gcGkNEZImUNDc8mYpTnLh3l6nmg171LcMsGWcUete8CH65azrOYoyWVat9Dp7uH3+36+n/2xLWj0/v/1/uv1Al6x2KiotYlRUe8mLVr0fhZgfBNIAxAGAK8BKa9iXuyT1NRD5Rs3Xq1OS7t2HPAYgblSwNuYnW23trfbuk+e7P88MtLyBvD2S2CyVpv+MVDfFB8/Oe1285TTyW3h4dwGcDPAnqNHmZl5yuHg76KjuQbwfajRFAMAEhYseMdrNv9xv7mZz61cGRzv61MURVGHSkqECaBGQB0oLlaCwaB6LTtbrQFCLYDsNRgYAJABVA2Xl7Pf7w94T5wQfZmZ4tmtW3R52zY2A2QG2FNaKolIOnJzpWXVKtkSHq78sGGDAADkATbb7t0UDASU52NjNGG302hDAxkBaQKkEZC/VFSwEIL+fPiQA7Oz5K2oUDvWrVMAADlA1+WtW2UwGFT6CwrEUFmZGK6slGcjI/l6VpZ80NHB80+fSlUISUTy+d278uquXaJ382YGAO0+4EKvwcBzPp9yz2ym4epqMX3zppx2uVgIQczMwZkZFkLI0YYGPrtsGTUD0rJ+vQ+vA28dAC5d3LRJnX38WB2urKQJu52eOByyx2Dgni1bZGdCAt8+fZqJSNr37JF1gGpdsYJy09K+gh5I/3Lx4qF7VmvoL59PjHd3S6Eo7Dl2TF5MSWFnTg5bdToeqapiIpKO/fulEZDnY2PnAUQgFfisbefO0fEbN+av791Lv9tsNDc5KX0jI9I/NcVEJEdra3nk1CkmIunOzycTwC1a7QyAMMQA7xUuXdpXm5Q08sTlkmNWKw0cOSKnBwbkYFGR7E1PZ0tMDN85c4aFEOTKzycjIJsSEh79pzf2AZaf6+v9E06n0rJkifQUFfH9tjbqP3iQf9y+nesAvv3PgXQXFqqNgCxZs+bSC41TgMzzq1f7mzSagBEITbrd4reuLtGu09HElSvy19ZWfubxsBCCBsvKgiaAv0lO/umlFg7rdO3f6/XcGhHBnsJCvlNTwyaAL8TF8YPOThaqyiIU4sGCAjYtXBhau3z5R/8PMfpwRsbXB+Ljv/0UMB8KC+s5DnjrtNpHHXFxPJCXxw07dri+SEy0fKDX5/7LaP4Gg4AFwSni4+YAAAAASUVORK5CYII=',
         };
         engineList.download[1] = {
-            name: 'ÈËÈËÓ°ÊÓ',
+            name: 'äººäººå½±è§†',
             url: 'http://www.zimuzu.tv/search/index?keyword=%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAADQUlEQVQ4jS2SS2hcdRTGDwW789FUNFCRihtB3YoLNy6mKGJFbBeCgtqdKKh1J4SK0NZFFxEVgiSahy1im2Zim0wSG/ImadBkknY6mZjHzGSm87xz79z3vf87PxeTxbf8ft855zsiZ893HR0u+C9Oabw3bzBfDii7EVVXkch7XNmwuZy0+G3boWAr8nbEbDXg5FjRl7Pnu0T+PPCfSWi8NaczV/apuBF1T5GsBQxkHAYzDomcR9VVVN2IDS3kgyWDFyY1jtw48OXorTqvTDe4U/IpO21zw4vQvYjlUsByKUD3I3Q/YrcZcilp8dGSwWvTDR4fqyNPJTRGiz5FJ6LiKhZLPgVLYQYtnLAtK2hRtBW/b7t8n7T4bKXJGzM6JxIaMpj32Lciio7ids6jL+0wlvVoeBFRq0XUaqH7EZN5j6GMw5VNm69WTU7P6Tw3oSFbpmLfUgzsuFxct+hNOyw+9LGCCBW1UK0WdtBeZ/AQ8OVdk7dndU5OaMgDM+RiyubjJYML/1qMHqabQYuaG1FzI6ygPcV4zuNS0uLTlSanZnQ6ExryyZrJS1MaZ+YNerYcKm77iAVLMZb1GM96FCyF7rer7cs4fLho8OqdBo/eriMyUqNzvM7X6xZ5S1E+TN03Q65uu/yadujfcvjPCKm4EQe24psNi+cnNY6M1hC5XuXNZYN0U5G1IzYbIQVbUXEjto2Q7ns2361ZfLtusa6F5OyIjKk4vdJEhmtIbEYnqYc8MBV/VwLemde5sGmRsxRFp/04X6yavL9gcGbBYLoSkDYVSSMkNqsjSS0gZYTEiz5PT2h0JjRentL4fM1kx1RkrYjFasDrszrPTmicmNQYKfqkjJBkI0BSDZ943qVjuIZcryIjNR75q85jY3XevdvkfjMkbSpulXyeHK8jw1U6btYYybukGgES32tyfHAf6c8jV0vIH5U2aLiK3KwRWzBI6iEpQxEv+HTcqCIDBTqGsozsmcix7lVffryH9GSQvj2k/wAZetiGXSsj18qcmtZINgJSekA853B8YBf5OcUTP/zji8TOdcnlJV+615Gf7iM9W8gvO0jvHtK331bvHrHxIsm6R0rziO8aHOte9SV2rut/2AZGwaMpOBUAAAAASUVORK5CYII=',
         };
 
-        // ¹ºÎïÁĞ±í
+        // è´­ç‰©åˆ—è¡¨
 
         engineList.shopping = [];
         engineList.shopping[0] = {
-            name: 'ÌÔ±¦',
+            name: 'æ·˜å®',
             url: 'http://s.taobao.com/search?q=%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAqUlEQVQ4jaWTsRGAIAxFs4Gj0DgGtTtQOIY7sAO1EzCOOxgLiCQRUfTf/TtE/zPBCAAAGAPiMvU5BgQRJjkj1zfe7JAguEw5tKfQPBYAX5NWn/YzpADmsQRWLyHcdP8C0IGa+H4TUGtFgy8AZ2Tp3RVwgH7b6wpaLfw6g8cWuGpnwStErHxG/aA2Vw4XQAxpLBtj2xxl+h82OwgQXd/5DGudpX0VOtMVPgBRELV9pv7F+wAAAABJRU5ErkJggg==',
         };
         engineList.shopping[1] = {
-            name: '¾©¶«',
+            name: 'äº¬ä¸œ',
             url: 'http://search.jd.com/Search?keyword=%s&enc=utf-8',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACoElEQVQ4jZWTW0iTYRjHdxcUfrPZtq+cm25LxaQSQ4tO2IkKO1yEQVEERWJFYUQJQQUZUWQG0QGKIgoCS4pVBlKapH6fztNsW+zQZnOW5GGyxFkQvy4+LbUguvjxvu//efjxXDyvqmCaUFymFitKBf1/U6YWK1TlgljVMzsNt96qoLPi1lqUc/w+zng21tsjpqEqFfQVbr0VWWv+CykKsxSkhGQkjUl5a824ddYJglkpyDoLrRm5dK7Kx25dSEdOHq5NBQqbt9OxZA3Nxnm/hJMEUkIyTeJcfPuPEKmuwb11B+ErN4j5Aww73jHc6eRrcyufb96hMy8fSWPCNUmgMdE0O5Wuk2f51tODd08R/bYqYv4AwZLT+IqK6Xv0hNFQNwPPXvJu7RacmpQ/BcGSM8QCQTy7C+mrtBF5VUd71jIapou0ZuYSLr/G974+ui+U41Qb/y0YelOPY+k6GuMSaZwh4li5gahsZ8D2Ak/aov8QqA1IGhOtmbn0V9oYfFWLPydvikCcS/DE6b8LBANSvJH27BUMVFUz+LIa34KlYwKdhUbBgKyzEDp/mdGPITw799FfaWOo9i0dS9bQMF1PY9wcvHsPEgt00Xv7Hu7EdFSlgrbifVIGbVnL8OwuJCrbGXY4cW7cRv/T50Rlu7IDi1fjP3SMaEsbI14/nl37ccablAm6Vm/iy8PHjHj9jPj8dJ06R0t6NpHqGn6MfiPyuo6hunpGvH6iTS0Ejp3Ebp6PS2tRBMHl6wmXXeXT9dv4DhylJS0bSZPMh8PH6b37gM+37tF75z6hsxdx5RfQbMxA1pgmbKLWjKQ2IAkGpPgk5IRkZK0ZKT4JKS5RyQWD0jPT+Kvu1llRXRLEqrCYiktr+c3Yr5uUTam5dVbC+lR+AkXUXUZHV2HdAAAAAElFTkSuQmCC',
         };
         engineList.shopping[2] = {
-            name: 'ËÕÄş',
+            name: 'è‹å®',
             url: 'http://search.suning.com/%s/',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABMUlEQVQ4ja1TQU7CQBR9xNWwpUTJNF0A4VCEhVvjBRo5AAR2pjHxAO0C40JMqXgDTfQE0mqiB8CFganxuTBtaKdFYvzJ28x/7/2Z/+cDJWFU0fBtzHwbgVFFo4xXGE0DndBBxAnICRg6iJoGOltFgy6GaxcqEZVh7UINuhhqBspD/Js4gfIQawa7ihNkxK062ptJy7I0Qf6sVUcbACAFzMUpwkLy9ICc7hcahA4iKWDi5gS3+Worr0I+nZH8Iklycc6VW9FudW3D1w0u9sj7Q2px1/vJbXB9GzNIATN08Jwm3q5IkpZlZUCSfL1MxZGDFylg6k38/EiLZsQkGb/rTdTG+HBEqqX+BLUkH4+Lx/gvH2nUw3gXE+UhHvUw3roXf1qmfNQEZNDHPOhjXhOQZbxvFy/H102X8MIAAAAASUVORK5CYII=',
         };
         engineList.shopping[3] = {
-            name: 'ÑÇÂíÑ·',
+            name: 'äºšé©¬é€Š',
             url: 'http://www.amazon.cn/s/ref=nb_sb_noss?field-keywords=%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACHklEQVQ4jY3QT0jTYRzH8a9d0m1M8rbMZklQbjRDOpSnHXSTjpFHvVgH0UODwShJWn8gGXXRi6Q1lIpfWYwCYZkQwWqHdhrYH/UwgxmzGU5sv7Hf3h3CJ3U5+sJzeL58ntfzfR4REbHZbPZgMHhL+8+ampp61Nvbe0lE9ondbj+SSqWW2VWRSIRAIED/wABjY2Osrq7ujhAOhyclFArd3d5cWFzE4XQiIjuWtbaWN3NzZYhMT08/39qUSiU6PB5EBLPFwp3hYYaGhqgxmRARvJ2d5YCmadrWxjAMfD4f7e3t3B8fVyG3242I4GppwTCMvYHtFYvFGBkd5bLPx2G7HRHhRHMzuq5XBpLJJGfb2tTbzRYLFqsVEaHZ4agM5PN5TrW2IiIcrK8nGo2ysbGB1+tFRHA4nZWBRCKhbvb7/Sp00uVSE1T8xA/xuAI6PB4ymQzjExOICFVVVVRXV/N6dnZvYD2X42hTk0JqzGZEhEMNDap3PXjzX0BJNeLxOG63mwN1dTQ2NnJ1cJB0Os2Fri4CgQCGnoO1edhcUcBT9Hn4dA8K6wrK/syhF4plb+b7W4hdhPc9CngGRfg8AjNnIHEF1j4Chb+HjCJsLsPSQ3h3HpK34cvoH6Cvr69fBX8kYO4cPDGBZoaXx+DVcXhRD5oVZk7DtwjoWeAX+XxeFxHZHw6HJ3fNCZnHsHQDFq7BygMwvu5IZLPZte7u7p7fLX31eStakCQAAAAASUVORK5CYII=',
         };
         engineList.shopping[4] = {
-            name: 'ÌìÃ¨',
+            name: 'å¤©çŒ«',
             url: 'http://list.tmall.com/search_product.htm?q=%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAQElEQVQ4jWNgYGBg2MzA8J8czADTvIOB4f9+EvEOmCGbydAMwxgGEAtoZwA6RtdA0AujBgxLA4hOyhRlJkqzMwCOOAUjv7eE+gAAAABJRU5ErkJggg==',
         };
         engineList.shopping[5] = {
-            name: '1ºÅµê',
+            name: '1å·åº—',
             url: 'http://search.yhd.com/c0-0/k%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA4UlEQVQ4jaWTMQqEMBBF03iAxcLCzspTCJ5B8AYWsnfYYi+gVxFyh1SKIKQTCw/gkiYWwt/KoCZmA/shTSbzBn7+kMUP0T8C42HEQ/8IIGmDdZ5OtcUPsfghiK15yDNI3gIAJG2M7zTAPnWuKxwlaaNqtwBGPHRpoqbu2oRwA1ynHjXX1T2AR7EySvIWmxAa4PN62wE8itWlCTAWpbsHJg155gYYi9II6NLEDXBnZJcmv3PAiAdJG615E+LkkTVI1wwA0GJsBazzpAEkb90Adz9gBezbyIgHUTydAWob/wV8ARTCpDZEwN5jAAAAAElFTkSuQmCC',
         };
         
-        //·­ÒëÁĞ±í
+        //ç¿»è¯‘åˆ—è¡¨
         engineList.translate = [];
         
         engineList.translate[0] = {
-            name: '¹È¸è·­Òë',
+            name: 'è°·æ­Œç¿»è¯‘',
             url: 'https://translate.google.com/?q=%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAC/UlEQVQ4jYWTT0ybdRyH34MH4wVjovG2ZIl60IMXNTgoDtlG/wAy49bt4r+8XSFm2SZGox6WWNnal45SbKAbygKbShAT38yMNC9LMGyQsS5OdGtpOwqNvNkLLbwv76+KJns8lES9jG/yXJ98kidf6bGn6vY42tWEo/2SVutXtZotHEcT2o5q33vSdlfbpk68OQSH4uCNw8F+ONAPhwbhlQ9mbkuS9NADBY72S1e8cXg9ItgfEbR2bxH5k5aw+PuRJ5994YGCGr+qeePQ2i1whQRuReAMCZq6BC0992k6+nVCfuetE7J8pEOW5Q6fz/e+LMsdbW1tH7pcrgNSjV/V3uiD5rAgNr7BzB2TyzdM3u63aThVxjcgSGcKCNvCtm0sy8I0TWzbZm1tDellv6o1RSE2bpGcX+fjbzcIjG1w+AvBvqDApQhGxlMsZNOsrhgY9+6h6zq6rmNZFlL1EVVr7oXrKZOOCzbeXpvLSZPxpIl81sYR+IPPLi6RufMr0aERpm/ewiwV0fXlyoJqn6p5eiBx02RgwmJfUBBSLQr6Ov4vbeo7NzkYXiZ6foxPzvQRHvyGyPAo/SM/kM0vVQTNUfCds5lNrzM5ZzKT+lfmCpVxKwLl/E9cvXaNxORVOuNDpLM5VovFimB/DPaeFnh7BSe/2+D4sE1jsFLDrQj2hjY53jdHOP4VysAFrkxNoy//TqlUQnrRp2qtMfB0CRqDgvrPBQ2dW0lDNq5QpYbcV+IjJc6xUz2kUmmWFhcxDAOp2p+YqgjKeLrKuJXKZNcWzpCNMyioD6wTvTjFqPojp88NM/fbbVYMA+kZd6C7JQaeHvBEwNN9H/d/cHZt0qiUcXT+RXB0maVcmu/HNSanr7OyYiBJkvTwozt27a7aufvVqp21/+Pxp+uddd6xhYZ3b7Dr8BRnBn8ml02zcDdHLpdF13W2fbbnX2o/W/faBJ8GJpi79QvpdIr5+XkymQzF4ur2gqonnttzUkmSSmXJ5++Szy9SKBQwDIPZ2eTaP/p6Y/2tPjpQAAAAAElFTkSuQmCC',
         };
         engineList.translate[1] = {
-            name: '°Ù¶È·­Òë',
+            name: 'ç™¾åº¦ç¿»è¯‘',
             url: 'http://fanyi.baidu.com/#auto/zh/%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAABGdBTUEAALGPC/xhBQAAAC1QTFRFT6b44O/+Uaf44fD+Uaf4T6b4U6j44fD+Uaf4GYr12+39F4n1Gov1////FIj1B6sNLAAAAAl0Uk5T50ThROTm5kPip4USNgAAAFZJREFUCNdVzbEJAmEQBeFtxR6sy9gOrEZL+Tt4i4mB3O1Xg8EhaDYMA1PXBfutLsCr1gFbGffkoegxFKQpad0UnZlWtHGYSfybJL/NwrB9p886L3ifPt+ucPSWYnodAAAAAElFTkSuQmCC',
         };
         engineList.translate[2] = {
-            name: 'ÓĞµÀ´Êµä',
+            name: 'æœ‰é“è¯å…¸',
             url: 'http://dict.youdao.com/search?q=%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA2ElEQVQ4jWNgGFQggps34Y2i2v83imr/78gpvZdgYFBgYGBg8OXkCUMWx2sITOEbRbX/MAMYGBgEkMVxahZiYJCBKTonLX+fkDgG0GNlNYIpnCQsOh8mbsjCYgkTXy8uvR+nAcgK0/gECmDifpw8oTDxMgGhBpwGOLKzu8MU7peSOW/BweFgyMJimc4rUAQT9+TiCiDKC7gwUsBiBezIzoUFGrKr8GnGBgSQDYjg5k3Aq7pFSKTfgoPDwYKDwyGNT6CAZNtx+RuqWYCgAXfklN6jayTo7AEHAIjTnaHLaQtfAAAAAElFTkSuQmCC',
             blank:true,
         };
         engineList.translate[3] = {
-            name: '±ØÓ¦·­Òë',
+            name: 'å¿…åº”ç¿»è¯‘',
             url: 'http://cn.bing.com/dict/search?q=%s',
             favicon: icon.bing
         }; 
         engineList.translate[4] = {
-            name: 'Forvo·¢Òô',
+            name: 'Forvoå‘éŸ³',
             url: 'https://zh.forvo.com/search/%s',
             // favicon: 'https://static00.forvo.com/_presentation/img/forvo_og.png',
             favicon: 'data:image/x-icon;base64,AAABAAEAEBAAAAAAIAAAAgAAFgAAAIlQTkcNChoKAAAADUlIRFIAAAAQAAAAEAgGAAAAH/P/YQAAAcdJREFUeJyFkk9rE1EUxX/3pZMJxtCRuim01k03IkKJCI0E9Bu4VgxxpZaKurf+ofEDqHUhFCKKuuwHUCiKBgRL24WloVZd1KIVTFprMQ2d6yKZzEsZ07u6575zzpw7XCGi+gula6AjIIMAKNO+7lz/djM7v5srNugbL10R4X6UaVB/67XUzzunNwNsgubog7k3oB3FAMmk99sbmRxoMxguLp7vTu3LHvCSqGrjRXVKIA3+GaAMEHMSVL7MQCz+tW2FTLGswaC6scXC1aG21QDSjz44S7Oz28ZxQRVFN9cn8imTKZbzNjFKDDBz8Xhd3K4hmgkF2Q9gVBkNafqi0/7r9y7M2dgbfZwzIqRbct8872TQZH1qdTBsVHUnGBjRw3vrORS0AltGkJeW4+09DUTiITBPjHFrZ8NHerJPF3r/p+2+PPnextWJ3Lx5e+5YJRjE410sf/612l8o5XaL+8ZLrxJe7wlVv5lW7zbXaNSpZ8u6uLRK3IkR3hI1EVwrP9t/KtQ21qg+zAtYp7z2/UePLW6sa4sb33VTB1vitgRh1HcfReRI1D9Q1bGVsZMFexZ5dQO3phO+415CGVShDrxeuZGZiuL+A2DYnV2Yre6zAAAAAElFTkSuQmCC',
             blank:true,
         };          
         engineList.translate[5] = {
-            name: 'CNKI·­Òë',
+            name: 'CNKIç¿»è¯‘',
             url: 'http://dict.cnki.net/dict_result.aspx?searchword=%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB3klEQVQ4jaXSMUhqURzH8YuBrSbiIIKIS4vo4ORQgyJCBg5Fuuqgsyh3tKFwUsjFycEIwq0lBMc7RLQFIl4RnLxXzqbe4Yp0v28I6vle+F70h99y4Hw45///S9SO+Ukkasf8XovFgkKhgCzLrFYrdtZXgBCCw8NDbDYbnU7n+4Cu67hcLlKpFEKI7wOPj4/Y7Xaen595eXmhUqmg6/r/AUIIQqEQBwcH5PN5HA4HTqcTVVW37mma9t6fP4GrqyskSfqIx+Oh1+sBsNlseHp6olwuE4lEuLy8/BsYj8fc3NwQCATw+/0Mh0NM0+Tu7o5Go0GhUKBerxMOh4nFYl/3wDAMms0mPp+P+/t7ptMpXq+XYrGIaZqs12vOzs5QFGUbGAwG9Pt9FEUhm80iSRJHR0dMJhNOTk6oVCoAtNttzs/P2Ww2n4CmabjdbhwOB7FYDL/fjyzLCCGwLItSqUQwGKRarbK3t0c6nWa5XH4Cs9mM09NTcrkco9GIWq3G7e0tlmUBMJ1OiUajxONxWq0Wqqry9va2/YXFYvExynQ6zfX1NZlMhvF4/HFuGMbuPdA0jWQySbVaRdd19vf3ubi4YL1e/3uRXl9fyefzJBIJ5vM5AN1ul4eHh/fn7gR+kF/ZQQ/WnEhepgAAAABJRU5ErkJggg==',
             disable:true,
         };
         engineList.translate[6] = {
-            name: 'ººµä',
+            name: 'æ±‰å…¸',
             url: 'http://www.zdic.net/sousuo/?q=%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABJElEQVQ4jY2TMWrEMBBFdQYJuU23BsM2gbQBFSl0AEsEs+CzxClETpALpEwbttjGJ9hiwXLh1uf4W81EcpRNBgTfo9HTeDQjlnmCk7q4xrbP1joErEPIfGJsezipsbWPt5eiTo0BJfOqwjJPAAAnNevUorE54Hw6ZoCSzmN2ENFY3jifjlkNurpBNDbTFAcAl/0DRFc3DEhrkeptNgRwUkNQ4H8BTurfAV5V6OoGz4/3nHZXN3BSIxrL+ibgryIWAVQY+r9bOo1nwOvB/6j+Vqc+ryrWwqsdtrbME74+3/l7HUKxkZzUEJf9U+ZMe2Eb7O9UBnJSf/fBMk/cLOntqa1DgJOaZ4NrQJNXSrMEoUszAL01vXc0FusQ+BCNL+1FYzG2Pa51VtKhEx+TOgAAAABJRU5ErkJggg==',
             disable:true,
         };
         
-        //ÖªÊ¶ÁĞ±í
+        //çŸ¥è¯†åˆ—è¡¨
         engineList.knowledge = [];
         engineList.knowledge[0] = {
-            name: 'Öªºõ',
+            name: 'çŸ¥ä¹',
             url: 'http://www.zhihu.com/search?q=%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACk0lEQVQ4jY2SS0hUcRTGzyLcRI9Nm8BlbaqFm9xFi+hhm9EgrVZBUETOI3VsUGeiN/RGAqFyGmcRFCFUFJRFWCs1k3LunZnGbOb+73W0ssfo3HEG+7W4E4iBtPjg4xz48Z2PI7J+Z4Psj/ZJ/Z0+qQ//v/ZH+2TX+YjIvmi/nJtBQhNIu4UETMcHraUVyiKnvyPSEHkhQQtpjlN5JkXrw0mkSUcaNcSjI81xxKc7fqFaEkjQRKQ+3CdBC3FrnHv2hUS2wPauDDXditqoSeXZMTZeGWd3WOHqMXH1mGy7abD6ZAppM8qADotlLXGG0nmGzQL54jyTv0oMpPPsDRv0j82ifpR4a9iMKBuAmrCJNKfLgFbFnogipmwqWuI8iuXwPMgiR2KIT2fEtKmNmMjRGOLVGVY2e6LWAkC7SfW1cdaeSiGHPvAiOcPBuxZyaBRx67xTNq4e0+nleJy3yqZuMWBV6CM7bitc3QptskDn62lqbxlUXR5nIJOnLmoibg1pijP8D+CEwhU2GMjYDBo2dvE3+tQcA2mbM8+/8ObTLLU9SwGCFuJPIG6NFW1JdNNmw6Vx5PAo4nVOWDpB0EJaE4hHZ8uNDKXiPPeGfrI8kETcGu+UTU1YOSUe1RjM5BeV+Bfg1rg//JMnsRxPYzl63/+iwqujT87R9HiKNYEErrBiKldyEjQtBDRq7L5lAFDdmWZlIMn7TJ7N1z9z8eU3coV5UtkCI2aBV6lZqq6nEX+mDAiYbOlM8yNXorN/2nldn866C2NUnk0hxzQuvvyKpzfr7LzlV+5QiByI9kvHBJuufmZrl+Es/AnkRBJpXuD9CcQXR/xJpLWsUBaRXecjcnoaCRhOpHbDIS/W4nkoi7TEi38AwHibcZoJerYAAAAASUVORK5CYII=',
             // blank:true,
         };
         engineList.knowledge[1] = {
-            name: 'Î¬»ù(ZH)',
+            name: 'ç»´åŸº(ZH)',
             url: 'http://zh.wikipedia.org/wiki/%s',
             favicon: 'data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACKklEQVR4nM2Xva3yMBSG3xPdBai8Ah0WS1iUiCYbeINITBAWyApImSAjuKOgSUYwFRv43ILryCR2IN8VN58lGr/E5zm/TgiR5Zzj2P5vV5ZlNNzrNz5l9BVMtoTx0Gb214aHa3EAWiL84Vo8AosDfAHAbrfD7XaDEAKr1aoXu64DAFwuF2y326R+PB5RluWTfr/fsdlscDqdRs92XYf1eo3z+fxoB/8rioIBMBExEbG1lkO9rmsWQvR6qDnnWErJRMRVVY20siyZiFgp9bT/BGCt5TzPkwZCSAAjzT87BA/h27ZNA3gIb6BpmiiEBxx6CoDruh7931rLSik2xoy0EYBzjoUQDICllFEAKSUDYCFE760xhpVSUe+bpolGLAlQVVXv5TBnzjlu27aHFEKwMSaZMh+xPM/fB7DW9l6myLXWPWSe5yyEmASIpSYJ4L1MdUOYcyKKFlcYzVhXvAQIi01rPamHtRCrp5T2EsD3NRFxWZaTaYgVrFJqMjUvAZqmYSJKdoQ3npobAJLRewvA5zBWjMaY/nCvh1Fq2zZZ+bMAvKfDIRP2fJgGX4xa62RhzgYY9rxS6iklfg54CD/33zn7LYBw/vvDw2hYa0cFmZqi/wQwvKRid0R4h0gpJ1tvNsAwzFO1krqOfw3g3KPai6JI6v4OmXPm15zXp6IosN/vk/rhcMD1ep1z5OPL6Me7P19ZltHiL6X/B0Dsq/Xjhn9sRg1/qiZijn4DhUA2yPD/DEEAAAAASUVORK5CYII=',
         };
         engineList.knowledge[2] = {
-            name: '°Ù¶È°Ù¿Æ',
+            name: 'ç™¾åº¦ç™¾ç§‘',
             url: 'http://baike.baidu.com/search/word?pic=1&sug=1&word=%s',
             favicon: icon.baidu,
         };
         engineList.knowledge[3] = {
-            name: '°Ù¶ÈÎÄ¿â',
+            name: 'ç™¾åº¦æ–‡åº“',
             url: 'http://wenku.baidu.com/search?word=%s&ie=utf-8',
             favicon: icon.baidu,
         };
         engineList.knowledge[4] = {
-            name: '¶¹¶¡ÎÄµµ',
+            name: 'è±†ä¸æ–‡æ¡£',
             url: 'http://www.docin.com/search.do?searchcat=2&searchType_banner=p&nkey=%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACsklEQVQ4jZ3SWUgTcBwH8H+QeDCpLUXR2vKGyZzHFuq8ErMi1PBK01LSBKdplgeYCPWQZWFgGV2GQhbpQ4XNSs3l0XRTZ+pm6hRiTtnmXOKZZfv2EstSevD3/P18H778CNnmOfmYHSSE7NquJylVjq1O3pTQbWH3Y7YpZcNBhn1uFpz/5SzNdhOGOZXQTa2Ji60XJdgr3ibndBWjtXKSi7Ju33lCCHWTsnY28Uoud3tyo5Oruv/Jb/VO/4Hlsj7Pn8VSD5SM+KB83Ae3J5lIr2Z2bcLc41YZtYrAtc7FaPTqz6JPx4dkNg3CmRjUjnFRKHZFUgcb2SNchJ13ufUXZvJMj76a8YfmRwOWvg9ANlcE2VwhZPqLGNJloXM6ETWjQeB3s5Eg9Qcz1D5uozcpf+0+Il6IhELfhKn5z5BqL6BPm4ZeTSrE6kQIp6LwXBGJq4P+yO7mGWh0mrtRO3ma8xpVAeiYiYZcVwOFXoCB2TyoV5qhXHwG3eoHKBcFqFdE4NqwF3JbuF8pFIq1sSD0BDWzeS4EzcrD0K/JAAASdS4AYG19HdolFQCgS12BkgF7ZApYGkIIzVgQdoqW16jh4eUkD+plMdYNK2hTpQIAZLoGNCjifxfcQ26PHfhNbL2lJbH6M2CgRVTtBAvVI87QrkoAAIIvcQCAIV0d6sajAABC1SOc6WCAX++tIITs3Dgi7fJbx/kK+V50Td+FfFaIx6MHMarrxouJK7gpDYdcK8HDwUvg97ERUeBSuekHAk7uKbo+xkKByAH5H+koFrsgt8sBWe1uyGhlIaHRFSltbOQLgxaodub0rV53R2yp3dNSOReZIi5S33OQ9I6D2CYOYgTeSBP5oUh06Jt7kE3kVth4wcmMgrw3Icr8/iPI6Q9HVk8gzrUHGNIfhLTs97Dx/Tf/C0aUi3kge/guAAAAAElFTkSuQmCC',
             disable:true,
         };
         engineList.knowledge[5] = {
-            name: '°®ÎÊÖªÊ¶',
+            name: 'çˆ±é—®çŸ¥è¯†',
             url: 'http://iask.sina.com.cn/search?searchWord=%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACRElEQVQ4jY2SzUvTcRzHv5dunjqEHWJrzqVGPqxLeUkR/4PPd79Nk/QgFV6GWmhRoCAooWaSumUpiVD0DBVIUkqkl/UA5W/zYU0z0HBqkaZzk1d/gM56nz+f1+X1UmqXuYwKXFKCFhdaG7g9Hna727Hs7Gyn6DKczsbA7T4z9mzoY/jp8MRcXcODgEjVvyEilRQXt5Nmuc6pwkG6+r/iG1ikoPgRx080BUXOJoeIlGM/VB8+mt6J2rcfW0YP+YUvOFn0kvyCYWw2PwcPFvm0W3aHiFSSmV6NRwz+RHrxiMbiuIXD8RBLVhei3YgW3JIMoDWlWlgPPyFu3mBj1o/WgiEajwi/pvtILNxLDnBpIRr2EzebYLIDgq2shduJB30Q7gSzjVioA3ElARjiIREdgm8DEGwmMeljfbaD7Zl2CHYRMx9DdBwxkii1plqthgjxpS/E5rrhczeEOtkONcNEB6yEcGsh1Wq1JjWhlEoREe70XBr4NP586udyID4RGJzq7akb0FqjlErZ61kppZTdbs9yiUaLUCpChQjiLvm/EpVSSotws3WY2JEstmzHiOTk4a/xzYih94ZUVXm92lVOS0v/+shohLHRIAlbLuNvTMbemjRcu78ucm6vEktpbevn9Yi5NT2zycz3BVbTclic/0FkbpOh0RCNV+9GzkgSC2II7z68Z2p+kd8J2EhzQmYqK/ZcVteWmV2aZuKViXiSpix4vV5qay9QerqMhQOO6ELe4e1ZS0b04pVaLtecp766bkdIfwF25n38sMbXHQAAAABJRU5ErkJggg==',
             // encoding: 'gbk',
             disable:true,
         };
         engineList.knowledge[6] = {
-            name: 'ÃÈÄï°Ù¿Æ',
+            name: 'èŒå¨˜ç™¾ç§‘',
             url: 'https://zh.moegirl.org/%s',
             favicon: "data:image/x-icon;base64,AAABAAEAEBAAAAAAIABPAgAAFgAAAIlQTkcNChoKAAAADUlIRFIAAAAQAAAAEAgGAAAAH/P/YQAAAhZJREFUeJyN011ozXEcx/HXOc7mnON4mM0Wo7V5ahJtaTIkuSFFQnGjFrmRxIVy48KN5E7K0412Qx7WmodyQexCuSCxhRUlDzPLtrOj7cw5/n8XkzO2C5+736fv99Pv/ft9v/yr96bJSo7zIZQUioy1ouOKHjrpjjNCVX/57Za4oA9Txtqjabdt9kmdOrPVapKS8EOvK54KTDGEwByBapN1KJKS0m6XphjIalSsQajYiIRhxJWq1eexNnERk5yU1CLpnk++KvVtIsZlQve1uSV0aIwf0eyzZ3boVDIeYbQoqsU6GbMt0q7RR6026LdZaL6MTfKKRFHqgfW2mWdw9BGfWOiSTl+0yTvsuddarTRsqX4HRQ2qttERszSql7HMA9sKv9BlldB0m9TYq0G5i3qcFsgoMijmvrQZ7qrS4LmELgMmQ+w3QKWoPl1KVEuLa5HVpNiAwEzDDhuSMCjw3UZDipQJCwF94kK1XnmjV6cae+SFKuSkZe1TJyIAB3BepYieAkKAEjftNNVua/SbKSnvqx6BuHNuOOeqy84aUCanXEJ3ISAuLy9lru9iBqStENNhuVCIGV6a6q2cXt0q5MTU+lJAWOqRF4676pScb9KOqbTfW91CzHfdSh2g1WrF8hb7XLjBWu0qbJWxwIj1KhyyxTXbf6/OuzHLlTVH1AcRP8dP4kRqdtQT5X/Od9S77sT/Nf+HfgGu7K8KC1PzBgAAAABJRU5ErkJggg==",
             // disable:true,
             blank:true,
         };
         engineList.knowledge[7] = {
-            name: '¹û¿Ç',
+            name: 'æœå£³',
             url: 'http://www.guokr.com/search/all/?wd=%s',
             favicon: 'data:image/x-icon;base64,AAABAAEAEBAAAAAAIAA8AQAAFgAAAIlQTkcNChoKAAAADUlIRFIAAAAQAAAAEAgGAAAAH/P/YQAAAQNJREFUeJxjFGk1/89ABHCTZmYwUGdlYGBgYDg+7w5cnIkYzQwMDHDNX9/+RBFnElRbRpTtuAATAwMDAyuPCV4DVEX+wdmfXn7HNIBHqgiv7dzC7HD+86sf4Wx2IU1EGBDjFXSgwyKGGojYvAILPBj4+fk3nC3ILopqAI9UEYoh+AKPXUiTgYEBSzQihwdy4DEwoEahDosYdgMYGCBeQQ88BgbUGBBkF8VtAI9UEYOirBhu5/MiwgVnSkw0nowhBotCHU4r/AZEKfMyKPPLMARpLsFqOMz5OA2IVYIEljK/DIo4chTiNABmOwyUWhxgYGBAxAAs+nAaALMdGSB7BRZ9MAAAP2Q1NvsvI2QAAAAASUVORK5CYII=',
             blank:true,
         };
         engineList.knowledge[8] = {
-            name: 'Öªºõ(ËÑ¹·)',
+            name: 'çŸ¥ä¹(æœç‹—)',
             url: 'http://zhihu.sogou.com/zhihu?ie=utf8&query=%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACk0lEQVQ4jY2SS0hUcRTGzyLcRI9Nm8BlbaqFm9xFi+hhm9EgrVZBUETOI3VsUGeiN/RGAqFyGmcRFCFUFJRFWCs1k3LunZnGbOb+73W0ssfo3HEG+7W4E4iBtPjg4xz48Z2PI7J+Z4Psj/ZJ/Z0+qQ//v/ZH+2TX+YjIvmi/nJtBQhNIu4UETMcHraUVyiKnvyPSEHkhQQtpjlN5JkXrw0mkSUcaNcSjI81xxKc7fqFaEkjQRKQ+3CdBC3FrnHv2hUS2wPauDDXditqoSeXZMTZeGWd3WOHqMXH1mGy7abD6ZAppM8qADotlLXGG0nmGzQL54jyTv0oMpPPsDRv0j82ifpR4a9iMKBuAmrCJNKfLgFbFnogipmwqWuI8iuXwPMgiR2KIT2fEtKmNmMjRGOLVGVY2e6LWAkC7SfW1cdaeSiGHPvAiOcPBuxZyaBRx67xTNq4e0+nleJy3yqZuMWBV6CM7bitc3QptskDn62lqbxlUXR5nIJOnLmoibg1pijP8D+CEwhU2GMjYDBo2dvE3+tQcA2mbM8+/8ObTLLU9SwGCFuJPIG6NFW1JdNNmw6Vx5PAo4nVOWDpB0EJaE4hHZ8uNDKXiPPeGfrI8kETcGu+UTU1YOSUe1RjM5BeV+Bfg1rg//JMnsRxPYzl63/+iwqujT87R9HiKNYEErrBiKldyEjQtBDRq7L5lAFDdmWZlIMn7TJ7N1z9z8eU3coV5UtkCI2aBV6lZqq6nEX+mDAiYbOlM8yNXorN/2nldn866C2NUnk0hxzQuvvyKpzfr7LzlV+5QiByI9kvHBJuufmZrl+Es/AnkRBJpXuD9CcQXR/xJpLWsUBaRXecjcnoaCRhOpHbDIS/W4nkoi7TEi38AwHibcZoJerYAAAAASUVORK5CYII=',
             disable:true,
         };
 
-        //Éç½»ÁĞ±í
+        //ç¤¾äº¤åˆ—è¡¨
         engineList.sociality = [];
         
         engineList.sociality[0] = {
@@ -1602,23 +1611,23 @@
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABR0lEQVQ4jWNgGEyAH5e4bXhCgX1ibqOVb2gCklpU9ealvRuRFMCBau3cCwxTzvxnmHbhP8PEk//1yyfvl6xb9sDGLywJRaFh/+ZTDBNP/rfOrZ8PM11VW9uAYcnj/wxr3iHwwvv/eZfc/mxkZeeEYoBvdnkdw5p3/xnm3PjP37TunXVu/XyH3LopKJqhODCrtIKBgYEHxQCDliVH4YpWvvrPMOfGf4aZVzA0M6x595+Xl1cEI6RcfIPDeFc8/oxNAzLWWHjuNq5Y4PFvmT6fkCH++dWNuAxgcPAJCteYc+Y2PttFRUUlcBrAwMDA7x4UEWUzbcchbJotbW3tcWq0zq2fz1+38h1D597/DPNvo2h2nrBmG1QzMy4DmNXU1DR8I2IT/FtnLYThkPKWTs+g0HA1NTUNfJqRAY+kpKQ8DEP9y06MxoEDAKUW4Kpi1NnUAAAAAElFTkSuQmCC',
         };
         engineList.sociality[1] = {
-            name: '¶¹°ê',
+            name: 'è±†ç“£',
             url: 'http://www.douban.com/search?source=suggest&q=%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACOElEQVQ4jZXST0jTYRjA8UfQNd2w3DqERIQQBmFQNPFgHVwI2SHokKTQpaB/RJvZ/JPLhWWkCcq2lCIhFILyEHaoYEr9LE1/bXMzqYOYTmeUOT2olWjfDjYV+qcvfC4vL194eR6R7Zqjkqf3SK5ubfL0HslJuCeSr1ekciNSmoAUa1bPvh6pMCJyRNcmJVqqntehjvhXLa02EynSIpKr80iJlmrFSceHLtoHlP/qGfGxs3ZvNKD3yGUDYtWw5XoaJqeZzPoD7Gs4+JsMdzYmZxYxxQakUIfYjdFAEnI+lpa+VgCmv88QmZ1k6uvUkonZSaIn3WVGLLGI3bAiYInjYfARAObbh0i+ksLmyh1Lkh1bud/bAoDJmYVY4v4e2HQ1FTkhyNkVjgt1L+v/FYil9d1TANydd6hsu0mN4qZGcVGjuHA8u4Z3tBeADHf2H75QoKX0iYPP0+MADEaGCX7sp//TewJjb/k2PwdAz4iP1KrdSIF2ZcCAFCUhZwTr40sAHG46hpyLQQr1iC0R/1gfEzMREsqSEeu6xffLASNSEI+cFrZV72F+YZ5GtRk5JchJIeXGLhZ+LNDse7B4Z4lFLiZGx7i4SLe67qKGvPSO9S2NSw15UYd7GIqEABif/oI6rKKO+jG5zIhNsxxoeN2ILxzgzaif9oEOXgx24gsH8IWDdIe8tA8ovBrqxhcO4gsHSHft/xXI1ytSbkQuxCNWzerZEhGHEZEcXZNUGBF7ElK2BuUGxLZh7icJ8DyZ0CDAawAAAABJRU5ErkJggg==',
         };
         engineList.sociality[2] = {
-            name: '°Ù¶ÈÌù°É',
+            name: 'ç™¾åº¦è´´å§',
             url: 'http://tieba.baidu.com/f?kw=%s&ie=utf-8',
             favicon: icon.baidu,
             blank:true,
         };
         engineList.sociality[3] = {
-            name: 'ÌÚÑ¶Î¢²©',
+            name: 'è…¾è®¯å¾®åš',
             url: 'http://search.t.qq.com/index.php?k=%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAADd0lEQVQ4jXXMaUyTBxzH8SfbK98sMjXAoEAB0YHLRuCNjnMLMxhissQd2RYPZgzOuBcsWbIsmbAwNhG6FaaAlhadghzLmFAw8MxyFCiUlkMOW+5SEChFwvGUcn33QvTNsn/yyf/36isIgrBXfvJcdnyGRoz/SSPGpReJMbui0orEY2nP/4t9NK1IPJZeLEak5lQdCIs4I8g/PK/80uTmvHmDZJObs13rfGKQ+NQgkWx0cdYo8VG7xKk2ic87XbvW+cK8zQcavUuITtc0nu50cbx2mgStnfdqpkg3LWByuLCvbjK1uknHnIvvOx3E1UxxvHaaEw+nSWqY50StHeHoDyrxVMsysQ8mift7Au3kCu6tHUT7Cjk9Cyh6F9DZV1nf2ub+8BJRVRO8X20joW6G+KoxhMjvCsSkR4u8XT6MZsjJ9g5cbp4mrNRKyD0LIfcshJVa+UY/w84OKHochJePEFNt490KC8Jb314Xo7WzJFaNIG1uk9k5i0zdT2ylFUX3PDnmOaIrrMjUA/xqnmNe2iC20kp4+QgRJQMIb6bmikdKLKT+M8qCtEFksZngQiPi+DNeXN2oE3l+J1F3e3CsbZCstRBw00SYqgsh8OscMfCmiR8bhxlxruGj0BFeoGduxfUysCi5eadAj1zZhG1J4nLtAAdyGgnKa0Hwu5QtyvI7uVD9mOX1TUJvNBOtbmdJcr8MVPTP4HFVJPJWK07JzccV3ezPfoSfsgnhja+yxACVmfBb7fTNLXPyvpmmcSdKwwQp2gFS6y3I81p4JaOBa23jTCxJBF1vwTtXj6+yCcEzJUs8WNyPV24rhwsNZOpHMU4vslfRgpCpQ/hZx55rTVyse8Lm9g4XH1p4TdGMb34H3soWhP0pWWLwXSueN4zICoz0zM5xWjvIEY2ZjDYbVw02dJPPWHZvcaXVhkeeAZ8CIzJVN96/tz8PHCwbZ19hL59p++maGcVX1c25+gn6HBK9DonbgwskVll5Pb8bWVEf/uo+Am4P4pNvRNh36Tfd4b+e4qWx8EtHF2VDJrzUFvzvPMFbPYi3ehBP9SDemiEC/7AQtCu4dBQ/VR+Cx5krdaH1a8jL7ZQMNVDwuBW/smkOVU4RsuvQf9gIrXHip+pBeNU3KNEz/c+n8pIxEh70EVPVT0DJOIGlY/8rqGwS/6Je9iRduPMvGb/OaZ8pffkAAAAASUVORK5CYII=',
         };
         engineList.sociality[4] = {
-            name: 'ĞÂÀËÎ¢²©',
+            name: 'æ–°æµªå¾®åš',
             url: 'http://s.weibo.com/weibo/%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACpElEQVQ4jb2SXUiTcRTGH9CZNmeyvXO+2163tSWaFWmsMmtpSpC1EBNDJaiky0AEL6S0D4pKHVFpXmTaB5FdtIuEqBslBCMqKyNDUFKpLQ2rOb9y/s/pIlYUeBFBz+U55wfnBw/wHxO7zowNa4zIAKD6a3pPOkpG6zA+WoeJ50fwJi8VOxc91gLKzpjYwjUq1cbwLA7QbluJHVuSkespxsWpywi5HNj+JxtToZWOv7As980kp3G/1T4pAXJ42VCCpp5q9KZbkHmhFC091ej7JQgk3JLND4LJK3nckcJ+Rwr3W+yTOUuW5rvV6pIqrXRib6L6QI0bp7uq8NRlx7aRs/gc5uO9RqU76EjlUZOF3+llGjGYaECSZ/t0CV8+KTaeSU7jLr190GWM3N68H9d2rEaB34PZH6/pE9umbCt42GBmX3YezRytJXH9JoVaWjlQWcUfMjfzmKzwsySrzwDYAGCtAmdDEZqRGR2d609azr6UVRy40kJibo7eDg/Tw+5uGvT5SAhB8z4/TVRW0ZCshO4ZlccZkdFbfro36PVtAesKnrrrZSEEnfF4CAABIJ1OR16vl4QQtDA/Tx93FfC02cbdim1IA0gAgDvx0qPpfDcLIehJby9pNBoqKioit9tNKpWKnE4nCSFICEHjhyvIn2DkfqtjMqyCGrXG8y07j5mYOzo7aavLRYFAgLKysggAHSwvJyEEhfx+8m1y8YzFwU16QzuAiHBpzA+khFd88hQvBINcW1/P63NyOE6WqXDfPhqbnubQ4BB/LS7loMnC90yWHgkw/tYeCZDr1eqW97sLJ7ntBr++1MgDV1uZO+4zHzvBX9Od/FJv8FfrpHMA4hetsAVILYuIOOSREi+3GpX2xrhlt2tUMed3R0WVGYGkRcF/yXdyajYEKzT4iQAAAABJRU5ErkJggg==',
         };
@@ -1635,26 +1644,26 @@
             favicon: 'data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACM0lEQVR4nG2TT0iUURTFf/d93zeiFkJkFLXJkhYFbYIQIhdZ6EyG0DCWRLZLWrcvgoK2bdwFLUSKIKMCW4hkZgsRMaRFmiMVhSgurNCcee+0cPwz4uU9eFzOue/ce7jGtsjfvrVfszO/kEBCIYCEJQl1z/ttO74skc9lJAQl0kYBKOUCxbhi+diLt1XrHLf+mMmltb36ThEX/lVOX2zcwDqAmWyzkJACWtNQdtFmbZWU5bPpUYB4uuvaPubnQaKYVFDb/aTsx5+dWWIgQpv9Svi/S6cAnJubm0PCR6kN8sjNTj49uAvA7GqBZe8RYu2UFArybecf2de2JmHGnsfPABjoaIMgnBkEEeGpdsahOMIFqO3pY+ZKhiqMGBFT6hlg/P4dVPSknHG292VZKxPtrZx8+gqAw72v+dKeoQZwqGQbsLvuCGZGtMP0VxSYzKWRxGg2zbL3eAmHwvqsOXr1esl3MZJrZSibBuDzw3ugQApjMpchMVFdstCmMo0yM1aCONjTt6P3H7It1JhjlwkwTJ5E8CeERlf/5p2hQALkOy7h/61sEBcnxnl/uYUEqEA4g8REghE54/Tg6FAMsFIsLFdEcWU18O1Glu+rRQjgDFIG1QYpwAUwDEP88DoOW3ZhqvmMDAgIL1jwAScRAQkQmzAZzsRvXxxoGBxrgi27UN8/bIsFP+YkEsSByEghEtMaSGAm5nw4sU4uU7A1Pp5r6N7r6AJYCh4TLKwWmi4Mjw9sx/4HkrAQwN8GM6wAAAAASUVORK5CYII=',
         };
         
-        // Ñ§ÊõËÑË÷ÁĞ±í
+        // å­¦æœ¯æœç´¢åˆ—è¡¨
         engineList.scholar = [];
         
         engineList.scholar[0] = {
-            name: '¹È¸èÑ§Êõ',
+            name: 'è°·æ­Œå­¦æœ¯',
             url: 'https://scholar.google.com/scholar?hl=zh-CN&q=%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACqklEQVQ4jYWT2UtUURzHL/QH1LMP9hKVNUKFWpP7TDrjU9uEo4WPWlERUbSoueSMaTWjTBCRGV3HiCsSWrTQApVSZBtZWEZSUWZkC3PPne3OzKeHK1NKy4Hfyzl8P+d3vt/fkSRJmpWSVbU9vbxbMZXJSnqZrMx3yErqmrN/r7V+Zf76jjNz5mYXSilZldtKfGBrA5sXcg7Dpg5wX/lzNV+FlmuwsRNy6r9HJFO5v9feBlaXILNWxenT+Pgtzr/W2Oc4azwalqMgLXZ29di9JMXj/xH3P4pybjDKhvYg1qMgpZfKyko3lPk0xr9PF7/4EOfTjwQAiQRcfqpjrlMZeBVjc2eI/FaQ5jlkZWs3qKHENPH7yTg5DYKKExp6DGJxcLRprHILAJr7w5hdIC1wyMquHmNj3/kQN57rALz9Eie/SZBRo/JwLAZAtRLC4jIA7r4pQHqprBS0QkaNysLdAXbKIQAiOjh9Gml7VOS7kaSooGkGwFQqKzYvWFyCgiZBbqPg3mvjRv9ABNPeANeHdSbVBOu8GvYWA9ByMcyKmQCLS5DToFLSKlDuR/kmEox+Moyt6w2TtidAUbPgyKUwZceDWI7MAFhdRgdL9quk7ghw8bGeNPXdZJzKjiCZNSpZtSp5jQKb9zeA1SUw16ms9WqcvBlhcDTG4KsYoxO/ohXhBFWng5jrVCwuQbHnN0B2vaDiRJCJqdzvvtRZfUyQ3SA4dSuCbtjC0JsY5npBYRLg9PfaPEYK14f15NA4fRpLD6jkHxKY9ga4PWKcvRyPk9toGF7sBWmR45S/pN0Y5a6BaLLdroEoGTUqy6oNc99NGk85dCHM8oMCqzuIvQ2k2XPzLAWNX9UiD9i90D0EE8Yo8GQc/A/g2QSMfIHaPsg9DMUe4/dmbrnz8CdxKwtDTtdexQAAAABJRU5ErkJggg==',
         };
         engineList.scholar[1] = {
-            name: '°Ù¶ÈÑ§Êõ',
+            name: 'ç™¾åº¦å­¦æœ¯',
             url: 'http://xueshu.baidu.com/s?wd=%s',
             favicon: icon.baidu,
         };
         engineList.scholar[2] = {
-            name: 'ÖªÍø',
+            name: 'çŸ¥ç½‘',
             url: 'http://epub.cnki.net/kns/brief/default_result.aspx?txt_1_value1=%s&dbPrefix=SCDB&db_opt=CJFQ%2CCJFN%2CCDFD%2CCMFD%2CCPFD%2CIPFD%2CCCND%2CCCJD%2CHBRD&singleDB=SCDB&action=scdbsearch',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB3klEQVQ4jaXSMUhqURzH8YuBrSbiIIKIS4vo4ORQgyJCBg5Fuuqgsyh3tKFwUsjFycEIwq0lBMc7RLQFIl4RnLxXzqbe4Yp0v28I6vle+F70h99y4Hw45///S9SO+Ukkasf8XovFgkKhgCzLrFYrdtZXgBCCw8NDbDYbnU7n+4Cu67hcLlKpFEKI7wOPj4/Y7Xaen595eXmhUqmg6/r/AUIIQqEQBwcH5PN5HA4HTqcTVVW37mma9t6fP4GrqyskSfqIx+Oh1+sBsNlseHp6olwuE4lEuLy8/BsYj8fc3NwQCATw+/0Mh0NM0+Tu7o5Go0GhUKBerxMOh4nFYl/3wDAMms0mPp+P+/t7ptMpXq+XYrGIaZqs12vOzs5QFGUbGAwG9Pt9FEUhm80iSRJHR0dMJhNOTk6oVCoAtNttzs/P2Ww2n4CmabjdbhwOB7FYDL/fjyzLCCGwLItSqUQwGKRarbK3t0c6nWa5XH4Cs9mM09NTcrkco9GIWq3G7e0tlmUBMJ1OiUajxONxWq0Wqqry9va2/YXFYvExynQ6zfX1NZlMhvF4/HFuGMbuPdA0jWQySbVaRdd19vf3ubi4YL1e/3uRXl9fyefzJBIJ5vM5AN1ul4eHh/fn7gR+kF/ZQQ/WnEhepgAAAABJRU5ErkJggg==',
         };
         engineList.scholar[3] = {
-            name: 'Íò·½',
+            name: 'ä¸‡æ–¹',
             url: 'http://s.g.wanfangdata.com.cn/Paper.aspx?q=%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABJ0lEQVQ4jdWSvY4BURhAPwoS8TuTqESC3lN4DZGYVqGTaPQa4g1UYjqxdN5EoURI/CQ0M9/ZYnYya9fsRrHFFqe5Jzm5936ftEXatog9EZm+ii1iy1xkQbUKlgXNpodlQb0O8TjUao/O940GJJPIRGRKr4fCd0wTXa2eO4BK5SPQ6XiHqh6Ans+oYaCz2aPz/e0GpdJfBk4nL7BcPn+C60K5/MsNTBMdj9HDAd1uA3Y7dLOBYvGHwPWKFgqoSCiI/BC4XNB8HrUsdDRCB4OA4RDt98EwwgOcz2guFzpG/sEYXwp0uziuq59x73d1DEOdxUK/Osd11XUcDfag1UKPx2DO+z2s194nhuwB/h7MRd6IxSCbhXTaI5OBVAoiEUgkHp1PKgXRKO8NfBp7UCxd2QAAAABJRU5ErkJggg==',
         };
@@ -1696,7 +1705,7 @@
         };
         engineList.htmls[2] = {
             name: 'GitHub',
-            url: 'https://github.com/search?utf8=?&q=%s',
+            url: 'https://github.com/search?utf8=âœ“&q=%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADLElEQVR4nM1Xz2sTQRT+dpNScqhJW7ZJ9mx706RJ0/SHbRHR/8Cz9ORBBBEUEfwjBJVePHhQFPUiIi09SNqkSbtJU70p6dH+IOChQmpNss9Ddqezu7NJmgT0LQPZN/O+75s3bzI7wD826QxjPURUawtUktrGbWfggK7rR3bnxWjc8v51p+AIlGVZBkAdC9B1nQXbCZuZXYwsy648bh1yvV6vA8D9Bw+xvLLSNrlFSPFUiMfjEXKJnJ5arVYDgMj4REfEdvtSzAMAvF6vg8/hqFWrBACRWKIn5EzEttYQ0ddn4bS8VE3yHs3cIaKYR6VSOfD7/WHTJ3P9YSJykCuKgp1tDTvGDNoxt/FEBJ/PF+J9LAMnJycEAFFb6s9CbDc7Fo/X398vAYDX8A+ACJH4pBOFmm7jpiaMtOHJAPD7+PiIiBqdthaJJUBEHbVmeKqqjjEBLMhQzbdifrNjAcX8phCTiLBbKn1jS0BEGJ9IOrJlkndlgngeUwbQ11AsylhnM+fbtpZzxTUF+BrpFzw9ECDCXrhyjQlgSyAq2a7TDyC1tu7AHvT7LQKO+ZT0WsCdu/ccvvdvX1uWoEq6LlyC8cQUSNe7a6LH6DMFgIhQyGUE+6W7QoxNzjTFtAhwK8RYcqYj8pu3botnbxR3YGjoPBMwODx8jhWi0fLZNPsdT84inpxti/jxk2eIJ2ehaQXh7PPZtDn7XYA7jH6WywQA8alLrFgKuTSm5y7jT7VqKaJCLi0sOD7WzczYIUWRWAYMh0oAVpc/WgA31j87QIR/ry2pgXwuDeLIgdPTEAD2iQgBbo8CjfrQsutWAS7bs9m2fffmJYgINxYXr/N+xydZ+fCQACAxPcd8dgFuxsfYzcRQgkH3TzLDPOWDgxoATMzMOzpfvXiOsdFRIYlo/OqnDxgMBBrkoZCDT7Y7ANSVUMhDRNAyKWiZlOUk+bG377oD7KeOlkmxJRWRuwkAAH0kHJbM4traWMPWxhoAYGF+rmURmuMJwNOlpUcj4fCZLya8DRzu7TmuZu1YUFVbXs3cMsDbr6CqSkFV9X4vlbJuszfbhWj0qjFeakX+X9hfKwNpwLLdyLQAAAAASUVORK5CYII=',
             blank:true,
         };
@@ -1706,31 +1715,31 @@
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACHklEQVR4nIWTX0jTURTHP+fu59xUCJLGCgp0IIPSIvLPg9JTvZq+RBj5WJGySWVPKSH0ZCSWD/ZiFAQVqQUVBulbaQT2IkVEUhISPrTptE23e3pYm26t+sLlHrjnfL/3fM+9Qh4Gp5ubVOSmqlSLIACqGkUY8bp83acP3drYmi+ZYGSq3RP1RudFxJ9PmgOVU6GG0bs5BCNT7Z7lkuUVwPlncZaEi6GGsf4swcD0sUW14p954S6cryAoKoJ/j6VybxLEHAzVPZp1Bl63HBHB//2bYe6N2dLUJhqD68xKgANflpj7GCewL4m1qQnAJwPTLZ9ECJS7K2ja3gFogRuneRX4mYowsdSHIKRc7HJECAAYceEu2rRARECV6Ooa28pKUU0Tp0xRNseVpNXkqxljeDz5ig/zC0RiqywsLnGhf5jYWryQO00mv/j4+T6qqyoJVuzm3tNJaqoquN59ls6rN3j/+WtuubDgqJIQoRjAWsv9a5eZmnmHqiWyHAOgd+gOw71duIsc1lKRTUExE0aE51tZrbUcrq1h545yzp1oJmUtPWfacvzJoLN29KWzXhw76U6UxRJ2BSOu7GGZtyQnOTNdVft757YImn5IMy1XBHoKjfAP29JbPFw/7gUwAOH6sV5Fh9I6/1vEExvWl/UhE4TrxzvUchRl9a/qyoMfdftLLzU+WclvLQeDb1uDNqltiAZREgIPPY7vWf5XBvgFMS/Jw/yUPqwAAAAASUVORK5CYII=',
         };
 
-        // ×ÔÓÃ ¸ÃÁĞ±íÄ¬ÈÏÒş²Ø,
+        // è‡ªç”¨ è¯¥åˆ—è¡¨é»˜è®¤éšè—,
         engineList.mine = [];
         // engineList.mine[0] = {
         //  name: "",
         //  url: "",
         // }
         engineList.mine[0] = {
-            name: 'µçÓ°-ÈËÉú05',
+            name: 'ç”µå½±-äººç”Ÿ05',
             url: 'http://www.rs05.com/search.php?s=%s',
             favicon: 'data:image/x-icon;base64,AAABAAEAEBAAAAAAIACBAgAAFgAAAIlQTkcNChoKAAAADUlIRFIAAAAQAAAAEAgGAAAAH/P/YQAAAkhJREFUeJytk19IU2EYxp9z5s40ZzSRkWOQJIog0dzmH2aECFEIhiSCoN2oECJYYUI3QjqlQdqdF6bYRcwLUQhRxBBkXgQqKaKRjWFYMmnmyMN2FMzv6SI9FnXRvwe+m4f3+/G+L88rCSGIf1ACAEiS9NcA+VfmdjiMT1tbv0cQQpAkhRD8sL7OOxUVdAB0JyXx3doajxVaWWG1w8Eal4s1Lhdr3W7OTU9TB7ycmmKJ1UonwFKrlbfLy+ltbCRJxlWVFTk5zAPoPHqXLRZGIxEmAMBGMIj2hgbg8BCdfj8uejzY0zT0d3VhX9Nwt6oKqenpuNfTA0mWQQDnsrNxJi0NeLO4yCs2GwtMJr4KBPSWnw8O0tvUxIVAgBcMBo729fFxayuf+nyMqapeh/b6ejolif2dnbqpRqMssdk47vdzZmyMTlnWW88D2FJZeQK4npnJktRURiMR3ez3+VhgNvN9KMTPOzt82NzMF8PD/Li5ydDqKmuKini8O+QbjXzW3a1/nh0fZ57RyJ6WFr3oWEII9ra1sbaw8ARwKSWFb5eW+OXggKMDAyw2m3nT4+GepnF2YoJPOjoYU1W+np/n/epquo1G9nm9OlS6VVrKpORkaLEYFmZmcDYjA72Tk1ASE3EjNxfns7KgxePYDIUgGQwoLivDo5ERKIryLUjB5WVes9vpkmU+qKvjdjhMktwIBpmvKPryrtrtnBwa4r6m/TCWdDQL9jUNp8zm7xOKlbk5xHd3cdpiQbbDAcVk+inJkhCC//2Y/kRfASoRrtb2v2kbAAAAAElFTkSuQmCC',
             blank:true,
         };
         engineList.mine[1] = {
-            name: '×ÖÄ»-ÉäÊÖÍø(Î±)',
+            name: 'å­—å¹•-å°„æ‰‹ç½‘(ä¼ª)',
             url: 'http://assrt.net/sub/?searchword=%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAADfElEQVR4nF2TQUxTdxzHv7//e319pH3QEi3MAYMpqWZj1c1lESIz0WwLXmZl7CAXjCYzuyCJJPVgPAy8zZglEuRA5sLJiIlm4ExmQtDilmVgQrDCsq2WuRRKoX20tO+9//vtglni9/z5fk7fLzEzXs+T8+f3rTx6VItSSV2fn4/qVVVjX25szACQ3xLt72Oee8XS64LfYrHe9bm5Do/P50mOjxvEHJZESx8MDKzv6O5mZ3bWHz9z5s8t0/wOzDPqq+JPx49/nJqY+CIYDkcPj46+wa6L5N27YNuGZD5gmyZ21dcjnUxCWtZHKJU+8er6VQEAP9TUtIZ7esbbR0a+lqZZLUslu6atzYlcvCgl4BLgCE2zXdd1lm7edMxcziKgOhCJfKMCQGFlJZpfWqp+LxYrldfXPc9u3IC+cyf9Oz0tBOBKQAURCyEgVBXBhgbFSqcdaVlCAAAB+7Nzcy67rvJWZyftO3eOVuNxpB4+ZAmQBFitqCAA3NLfT9GFBT4wOEiObbvqtmCjnMkQiLA0PMyKYUDVdaH7fNTU2cl1HR1Ue/Qou8xkNDZybnGRVuNx8vr9qjpFFCDAkYUC2ZubqNq7l6x8nkPt7fjs0CGEWlsZAJVzOSKAnw0N0e+XLrnlTEbUHjy4JjKVlbUuUOEyO7JUonI2i2AkQm6xiF/6+vDjkSN0a88e/DE6CiJCenqazUzGNUIhrj12bEj8VSjU6Iax693+flfRNKpsbqZQa6v458EDyHIZgXCYpGWBpQQAaJWVEIAiNG3r/StXBgRL+XbTiRM+f1OT/WtvL3kMg8vZLDd2deHT+/fRNjzMkQsXgO3BqYbBBJAsFh1zcdFW5xXlxZuTkykzkZAfXrv2TiGV4uWJCTR2dWFhbIzTjx9TLpFAJBYDtjUMsDcUyq/OzEB87zg/b62urjWfPbubhHCmTp8mUhTKJRLs5PMkPB6spdNgAMxMiqa5BEAJBmdnL1+WKgDYwJ2ng4OfF1MpKR2HG6JRpfjyJf6+d889PDJCu0+domBLC4iINb9fAlB9qhooAxAA8BXzLW8gcMeoq9MVXdde3L6tFJJJJZ9MiumeHlJ9PgQjEUjLEuVs1uvRdeuppl3VAoH/37g8OVllZbP9ievXA8l43OvXtJDrOHV6MLiDdL2+8eRJ2KYZ31xeTnoDgalCd/dw3fPn4j+2Ya+YXX1PBgAAAABJRU5ErkJggg==',
             blank:true,
         };
         engineList.mine[2] = {
-            name: '×ÖÄ»-×ÖÄ»¿â',
+            name: 'å­—å¹•-å­—å¹•åº“',
             url: 'http://www.zimuku.net/search?ad=1&q=%s',
             blank:true,
         };
         engineList.mine[3] = {
-            name: 'ÓÎÏ·-3dm',
+            name: 'æ¸¸æˆ-3dm',
             url: 'http://so.3dmgame.com/?type=4&keyword=%s',
             favicon: 'data:image/x-icon;base64,AAABAAEAEBAAAAAAIAALAwAAFgAAAIlQTkcNChoKAAAADUlIRFIAAAAQAAAAEAgGAAAAH/P/YQAAAtJJREFUeJydU0tIVGEU/v57r3dmdJzG0a6T6UyaM6GZYkJhBRZE9EJcCEVpVIuIyGhRi6hNBC5bBBJRqxgiopoWlVZoVvQgUsuaIZPyNabzuukd5zre199CMaMk6IPDgXP4vvNxDgdYBKET/GKt30D+Vrx8alu5JCn5Jl4Mfg9zwpoyy7j2JjV8qLXr3wLnfV4UBB2bSyqXt7gKM0vtdjMkSUU0nOzu7Qqfbjj3tGNRgRgFHl3YsnPL7iK/IJh4EIBQAkoMEINC/KFrT+8N7Nmf77yrHvb9KXC7qdxaVlfe7/EucRJQTM9oYBiCkYEEXEWZmJY1RKOK+OROYFVZrTDR91At4n7zn2evdzgtzgedI1BUQJI0yLKKowe8aO2IYGhEQoaVOIrLlx1LDbPipu2OSvK5dS9vzx5XfIEhVGulfq+k14VjMzDVuBAKxUAjERjTMsCxYCzpyF2aA9PzyLh130p71MB1LqkzXSSRb1ufln0rN8+01ZyYgduVicl0DY6cJdCyV0FTOBAiw2KKw11iQzzP6szyZmGsW4xwUJRXxZXOI6mUcsq92g4GAAWFyVyBZenrAMLO75tSBUbyLXjpLQwdCA2IPczHz+GW4cGplKdklgwQUL4YbMYGEMKBAQEDgAEFQ9LAWjdCT3Ojv18KMkZOGxPrSxpiVJbkpA5Np0ilVMCyBoQuPBEBQEDmMjWvfRVIjFUNVbfJJD4R53wndzmFwoymAo/tIM9DqNpxBoQxzRF+wQCgGxSBZ88bK3c2+QCAybJlofHivXFLw46zr9vHaghLBg2qzk4C5sMAoGoaPrx8eTN4tfnGvDdKKQcAycQM7sff4X3zJVt1he3KikJPvUVwgbAsdINO/fgaYEY7/Wb7asG99Xh7aKEAAwC6rmM0JqJv8hp6H6s297cXtZMOjyhDmKAZrGymiplXk+kjSfZLz6evMb/fL//xWf+Dnxs2M3yo2q6nAAAAAElFTkSuQmCC',
             blank:true,
@@ -1748,70 +1757,70 @@
             blank:true,
         };
         engineList.mine[6] = {
-            name: 'Î¢ĞÅ(ËÑ¹·)',
+            name: 'å¾®ä¿¡(æœç‹—)',
             url: 'http://weixin.sogou.com/weixin?ie=utf8&type=2&query=%s',
             favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAF9ElEQVR4nL2XS2xdZxHHfzPn3CfXjxvHiWMntZvEaZ2mjWs1VIqqREjUooIFD4UdEiwrEAvEplIKK1iCQEKAoBDRVS3EIiJQkvRFUiTciCRYSWOH0NRNr4nt2r5++9xzvmFxjq+vH0mchjJXcxfffOeb/zw1I98dOkwNtQPHgF6gE2gF0jwYBUAJGALOAH3A8LLQr7n4LPBDoAfQB1RaS2mgI+HPEht4PAFTVdQLnACeWq3cMByGAwzBR0klEocRAXY/YBT4dKKrF2IPtAM/IHZ3jWqHT4566aSJg+RkGxm2oKRYZJyAMpN2lUm7whITCALIZoG0JjoHfYxjCD21Nnuk2C7PsEs+R1EeI0Xdho9HssSs3eRDe41b9ipLTCKbj14PxjHfsF5s+SsjQxOd+jV26XP45GtCsJ4UnwbZR73spdkOcdX9nLINbRaEAr1KnO2AkaaRx73v8LB+GY8siEMERNZbLyLxucQ50CyH6NYXaJSuOwLegDqVJPaCslu/Sos8gxErHiu9z7mTLzP4j/OYrTwqIpTeG+Tcyd9xY6AfzDAiGqST/fo8WZrYZHK2KkbaLKKRLh7SL1Qlzjn+ef5VLr71R945+wfmp8tVT0RhyKW/nuLiW6foP/175menERGMiCbppk2excxiDHfntBqGAdv0MBmKVeQiSnFbK/lCPVtbO0hlslWbVJXmto5E1k4qncESoaC06FF8Cjgi7B4/HzM8ydDII2u8Yzx+uJedex6jUGwincuzokXoPvJ52h/tpq7YTCqTAwxfwVfHDmmnTZ5gNLrCopshshBBk1JdTb5heJYlLY3r4uan0mx7aE8cY9tAtnMPglGXNhqyQj4FvoInBdrdC8y5Cf4TXOfawjn+tfB3AptfVyE+Bk4iHBU2qnVzG2e0AVnPsaMg1GcUT1bOAQpekYK3hZZ0J/vzn+HGYj9vTP2akeA6WgNCDQhtnnkrbajoTsrzPnQ0KsWsoAKiiqjW3DEQQxRSmqErd5QvNb1IW7prVW4oBs4qjEcXk95+b/IV2uqEvB+DcVHE5UsXGbx2tRoqEWFqcpK/vX2OiY/GMXHsyOyjt/gtCrq1WiUa14AwEp1n0l1D8O5pfTEr1GUEI66IkZESv/3VL3j5xEuUy1NJgxLefP0sv/zZT3nzjddABGcRHdlu9ueP4iz2gpoZZrBgo1yrvMSSfXTXVqpAXdqq2WJm1Nc3cPDJHrr2HyCbzS4LeHj3Hp44+CTt7R3VClLx2Jt7Gl8ymBny7YGnbDlmAuzyn+NA6nmyspWNupmKY+8WKKT8qlRECMMQEUF1NfgwDPH9lbFDUMYqN/lN6ZvMRGPLHojjYQbvV05xOfgRoc0hyB3rd1VYzPA8b51yYJXyZXIWxSEw8NfWt+EQUviSo2LzzNowGdlCRhpQ0ph5VCIjmUvum0SE6XCUxWgWLGlEqy7g06w93A77uV7pYyIaICNF8tpCXloAoTy3jyPZr9zTMxuRmXFj/h0Ct4CIrveAoLwXnGTa3SSwMiIeS65MOfp34iHj9lQTO3MddH7qaZxtrnQhTsAPFq5weeZ0kpNJH6hlZwHj4WUCm4lL0mJYgofgofjMhBP8aezH3Fp8F5W7l22tYePBMH8e+wkTwYex9wzUnLGaAVNwsF4Ws5hya+FdXim9yMD0WSKroOKtSdg4gVU8VDzGg2H6Rr7P9bl+xLT6lm9mAR9j9heUkcUhXil9j0cKh+kqHGFX7gB1fhO+pIgsZDacoByO0pKJh66JoJQML9WwB76ZlYhn9vsmQVmM5rhU/gsD069T8Io0pLaT1hyhCyiHt5mPpmnLPsqhxi+yPb2byaCEriRvyTezoY8LoBZIZCFlN8pU5TYk7X15VL8xd4EP5q/gawpMaj0w5DtzZ4g3lv/RNrSyH1j1XwhskcAtJicG4IAzitFnZheWO+L/kS9g9PlmNmzYcYwTrNmOPkEqIRwHhjVpRGcM+0biCfcJWu3MrN+wrwNnzCzZjuNgnTazQdas54Y90HouyLr1XESGl/PwvyqcdNFgnYiiAAAAAElFTkSuQmCC',
             // blank:true,
         };
         
-        //¿ØÖÆÁĞ±íµÄ¾ßÌåÏ¸½Ú
-        //engineList.details[ÅÅĞò(´ÓĞ¡µ½´ó,Ğ¡ÓÚ0²»ÏÔÊ¾ÏàÓ¦ÁĞ±í)]=['ÏÔÊ¾ÔÚÍøÒ³ÉÏµÄÃû×Ö',ÁĞ±íÃû³Æ(±ğ¸ÄÕâ¸ö)]
+        //æ§åˆ¶åˆ—è¡¨çš„å…·ä½“ç»†èŠ‚
+        //engineList.details[æ’åº(ä»å°åˆ°å¤§,å°äº0ä¸æ˜¾ç¤ºç›¸åº”åˆ—è¡¨)]=['æ˜¾ç¤ºåœ¨ç½‘é¡µä¸Šçš„åå­—',åˆ—è¡¨åç§°(åˆ«æ”¹è¿™ä¸ª)]
         // engineList.details = [];
         
-        // engineList.details[0] = ['ÍøÒ³', 'web'];
-        // engineList.details[1] = ['·­Òë', 'translate'];
-        // engineList.details[2] = ['ÖªÊ¶', 'knowledge'];
-        // engineList.details[3] = ['Í¼Æ¬', 'image'];
-        // engineList.details[4] = ['ÊÓÆµ', 'video'];
-        // engineList.details[5] = ['ÒôÀÖ', 'music'];
-        // engineList.details[-6] = ['Ñ§Êõ', 'scholar'];
-        // engineList.details[7] = ['Éç½»', 'sociality'];
-        // engineList.details[8] = ['¹ºÎï', 'shopping'];
+        // engineList.details[0] = ['ç½‘é¡µ', 'web'];
+        // engineList.details[1] = ['ç¿»è¯‘', 'translate'];
+        // engineList.details[2] = ['çŸ¥è¯†', 'knowledge'];
+        // engineList.details[3] = ['å›¾ç‰‡', 'image'];
+        // engineList.details[4] = ['è§†é¢‘', 'video'];
+        // engineList.details[5] = ['éŸ³ä¹', 'music'];
+        // engineList.details[-6] = ['å­¦æœ¯', 'scholar'];
+        // engineList.details[7] = ['ç¤¾äº¤', 'sociality'];
+        // engineList.details[8] = ['è´­ç‰©', 'shopping'];
         // engineList.details[9] = ['html', 'htmls'];
-        // engineList.details[-10] = ['mine', 'mine'];   // Òş²Ø
+        // engineList.details[-10] = ['mine', 'mine'];   // éšè—
         
-        // ÃæÊÔÒ»ÂÖ¾Í±»Ë¢£¬Ğ´»á¶ù´úÂë»º½âÏÂĞÄÇé£¬¸üĞÂÖÁ5.11.0
+        // é¢è¯•ä¸€è½®å°±è¢«åˆ·ï¼Œå†™ä¼šå„¿ä»£ç ç¼“è§£ä¸‹å¿ƒæƒ…ï¼Œæ›´æ–°è‡³5.11.0
         var settingData = {
             "status":1,
-            "message":"$Ïà¹ØËµÃ÷$(status: Èç¹ûÉèÖÃ³ö´í£¬È¥TampermonkeyÖĞ½«¸Ã½Å±¾¸´Ô­³ö³¡ÉèÖÃ»ò½øÈëÆäStorage,½«ÆäÉèÖÃÎª0£¬¿ÉÇå¿ÕÉèÖÃ)..."+
-                    "(version: ÈôÓĞĞÂ¹¦ÄÜ¼ÓÈë£¬¿¿Õâ¸ö°æ±¾ºÅÊ¶±ğ)..." +
-                    "(newtab: 0ÎªÄ¬ÈÏÉèÖÃ£¬1ÎªĞÂ±êÇ©Ò³´ò¿ª)..." +
-                    "(foldlist: ÕÛµşµ±Ç°ËÑË÷·ÖÀàÁĞ±í¡£trueÎªÕÛµş£¬falseÎªÕ¹¿ª¡£)..." +
-                    "(settingOpacity: ÉèÖÃ°´Å¥µÄÍ¸Ã÷¶È£¬ÖµÎª0-1Ö®¼äµÄÊı£¬0ÎªÍ¸Ã÷£¬1ÎªÍêÈ«ÏÔÊ¾£¬ÖĞ¼äÖµ°ëÍ¸Ã÷¡£×¢£º-1ÎªÖ±½Ó¹Ø±Õ°´Å¥£¬¹Ø±ÕÖ®Ç°ÇëÈ·¶¨×Ô¼ºÖªµÀÈçºÎÔÙ´Î´ò¿ªËü)..." +
-                    "(debug: debugÄ£Ê½£¬¿ªÆôºó£¬¿ØÖÆÌ¨»áÊä³öÒ»Ğ©ĞÅÏ¢£¬¡°¹Ø±Õ²¢±£´æ¡±°´Å¥½«²»»áÔÚË¢ĞÂÒ³Ãæ)..." +
-                    "(fixedTop: ½«ËÑË÷À¸¹Ì¶¨µ½¶¥¶Ë¡£ true¿ªÆô£¬false¹Ø±Õ)..." +
-                    "(engineDetails: µÚÒ»¸öÖµÎª·ÖÀàÁĞ±í±êÌâÃû³Æ£¬µÚ¶ş¸öÖµÓëenginelistÏà¹ØÁª£¬±ØĞëÆ¥Åä,µÚÈı¸öÖµtrueÎªÏÔÊ¾ÁĞ±í£¬falseÎª½ûÓÃÁĞ±í¡£¿ÉÒÔÓÃËü½«·ÖÀàÁĞ±í°´×Ô¼ºÏ²»¶ÅÅĞò)..." +
-                    "(engineList: ¸÷¸öËÑË÷µÄÏà¹ØĞÅÏ¢)" +
-                    "(rules: ½«ËÑË÷ÑùÊ½²åÈëµ½Ä¿±êÍøÒ³£¬Í¬½Å±¾ÖĞµÄrulesÉèÖÃÏàÍ¬£¬ÓÅÏÈ¼¶¸ßÓÚ¡£×Ô´øÁË360ËÑË÷£¬¿É·ÂĞ´)...",
+            "message":"$ç›¸å…³è¯´æ˜$(status: å¦‚æœè®¾ç½®å‡ºé”™ï¼Œå»Tampermonkeyä¸­å°†è¯¥è„šæœ¬å¤åŸå‡ºåœºè®¾ç½®æˆ–è¿›å…¥å…¶Storage,å°†å…¶è®¾ç½®ä¸º0ï¼Œå¯æ¸…ç©ºè®¾ç½®)..."+
+                    "(version: è‹¥æœ‰æ–°åŠŸèƒ½åŠ å…¥ï¼Œé è¿™ä¸ªç‰ˆæœ¬å·è¯†åˆ«)..." +
+                    "(newtab: 0ä¸ºé»˜è®¤è®¾ç½®ï¼Œ1ä¸ºæ–°æ ‡ç­¾é¡µæ‰“å¼€)..." +
+                    "(foldlist: æŠ˜å å½“å‰æœç´¢åˆ†ç±»åˆ—è¡¨ã€‚trueä¸ºæŠ˜å ï¼Œfalseä¸ºå±•å¼€ã€‚)..." +
+                    "(settingOpacity: è®¾ç½®æŒ‰é’®çš„é€æ˜åº¦ï¼Œå€¼ä¸º0-1ä¹‹é—´çš„æ•°ï¼Œ0ä¸ºé€æ˜ï¼Œ1ä¸ºå®Œå…¨æ˜¾ç¤ºï¼Œä¸­é—´å€¼åŠé€æ˜ã€‚æ³¨ï¼š-1ä¸ºç›´æ¥å…³é—­æŒ‰é’®ï¼Œå…³é—­ä¹‹å‰è¯·ç¡®å®šè‡ªå·±çŸ¥é“å¦‚ä½•å†æ¬¡æ‰“å¼€å®ƒ)..." +
+                    "(debug: debugæ¨¡å¼ï¼Œå¼€å¯åï¼Œæ§åˆ¶å°ä¼šè¾“å‡ºä¸€äº›ä¿¡æ¯ï¼Œâ€œå…³é—­å¹¶ä¿å­˜â€æŒ‰é’®å°†ä¸ä¼šåœ¨åˆ·æ–°é¡µé¢)..." +
+                    "(fixedTop: å°†æœç´¢æ å›ºå®šåˆ°é¡¶ç«¯ã€‚ trueå¼€å¯ï¼Œfalseå…³é—­)..." +
+                    "(engineDetails: ç¬¬ä¸€ä¸ªå€¼ä¸ºåˆ†ç±»åˆ—è¡¨æ ‡é¢˜åç§°ï¼Œç¬¬äºŒä¸ªå€¼ä¸enginelistç›¸å…³è”ï¼Œå¿…é¡»åŒ¹é…,ç¬¬ä¸‰ä¸ªå€¼trueä¸ºæ˜¾ç¤ºåˆ—è¡¨ï¼Œfalseä¸ºç¦ç”¨åˆ—è¡¨ã€‚å¯ä»¥ç”¨å®ƒå°†åˆ†ç±»åˆ—è¡¨æŒ‰è‡ªå·±å–œæ¬¢æ’åº)..." +
+                    "(engineList: å„ä¸ªæœç´¢çš„ç›¸å…³ä¿¡æ¯)" +
+                    "(rules: å°†æœç´¢æ ·å¼æ’å…¥åˆ°ç›®æ ‡ç½‘é¡µï¼ŒåŒè„šæœ¬ä¸­çš„rulesè®¾ç½®ç›¸åŒï¼Œä¼˜å…ˆçº§é«˜äºã€‚è‡ªå¸¦äº†360æœç´¢ï¼Œå¯ä»¿å†™)...",
             "version":1.8,
             "newtab":0,
             "foldlist":false,
             "setBtnOpacity":0.8,
             "debug":false,
             "fixedTop":true,
-            "engineDetails":[['ÍøÒ³', 'web',true],['·­Òë', 'translate',true],['ÖªÊ¶', 'knowledge',true],['Í¼Æ¬', 'image',true],['ÊÓÆµ', 'video',true],['ÒôÀÖ', 'music',true],['Ñ§Êõ', 'scholar',false],  ['Éç½»', 'sociality',true],['¹ºÎï', 'shopping',true],['html', 'htmls',false],['mine', 'mine',false]],
+            "engineDetails":[['ç½‘é¡µ', 'web',true],['ç¿»è¯‘', 'translate',true],['çŸ¥è¯†', 'knowledge',true],['å›¾ç‰‡', 'image',true],['è§†é¢‘', 'video',true],['éŸ³ä¹', 'music',true],['å­¦æœ¯', 'scholar',false],  ['ç¤¾äº¤', 'sociality',true],['è´­ç‰©', 'shopping',true],['html', 'htmls',false],['mine', 'mine',false]],
             "engineList":{},
             "rules":[{"name": "360", "url": "/^https?:\\/\\/www\\.so\\.com\\/s\\?/", "enabled": true, "engineList": "web","fixedTop":50, "style": "padding-left:35px;margin-top:0px;z-index:3001;", "insertIntoDoc": {"keyword": "//input[@name='q']", "target": "css;#header", "where": "afterEnd"}}]
         }
         // GM_deleteValue("searchEngineJumpData");
         var getSettingData = GM_getValue("searchEngineJumpData");
         if(getSettingData){
-            // console.log("´æÔÚÁĞ±í£º",getSettingData);
-            if(!getSettingData.status && confirm("ÉèÖÃ·¢Éú´íÎó£¬½Å±¾½«»á¸´Ô­³ö³§ÉèÖÃ")){
+            // console.log("å­˜åœ¨åˆ—è¡¨ï¼š",getSettingData);
+            if(!getSettingData.status && confirm("è®¾ç½®å‘ç”Ÿé”™è¯¯ï¼Œè„šæœ¬å°†ä¼šå¤åŸå‡ºå‚è®¾ç½®")){
                 // if(){
                     GM_deleteValue("searchEngineJumpData");
                     window.location.reload();
                 // }
             }
 
-            // »ñÈ¡°æ±¾£¬ÓÃÓÚËÑË÷ÁĞ±í¸üĞÂ
-                // Ö»ÄÜ¶ÔÉÏÒ»°æ±¾ÔöÁ¿¸üĞÂ
+            // è·å–ç‰ˆæœ¬ï¼Œç”¨äºæœç´¢åˆ—è¡¨æ›´æ–°
+                // åªèƒ½å¯¹ä¸Šä¸€ç‰ˆæœ¬å¢é‡æ›´æ–°
             // console.log(getSettingData.version,settingData.version);
             if(parseFloat(getSettingData.version) < settingData.version){
-                console.log("°æ±¾¹ıµÍ£¬¿ªÊ¼¸üĞÂ,µ±Ç°°æ±¾ºÅºÍÄ¿±ê°æ±¾ºÅ: ",getSettingData.version,settingData.version)
-                // 1.4¸üĞÂ
+                console.log("ç‰ˆæœ¬è¿‡ä½ï¼Œå¼€å§‹æ›´æ–°,å½“å‰ç‰ˆæœ¬å·å’Œç›®æ ‡ç‰ˆæœ¬å·: ",getSettingData.version,settingData.version)
+                // 1.4æ›´æ–°
                 // getSettingData.foldlist = settingData.foldlist;
-                // 1.5¸üĞÂ
+                // 1.5æ›´æ–°
                 if(getSettingData.versiion===1.4){
                     getSettingData.setBtnOpacity = settingData.setBtnOpacity;
 
@@ -1823,18 +1832,18 @@
                     delete getSettingData.details;
                 }
 
-                // 1.6¸üĞÂ
+                // 1.6æ›´æ–°
                 if(getSettingData.versiion===1.5){
                     getSettingData.rules = settingData.rules;
                 }
-                // 1.7¸üĞÂ
+                // 1.7æ›´æ–°
                 if(getSettingData.versiion===1.6){
                     getSettingData.debug = settingData.debug;
                 }
-                // 1.8¸üĞÂ
+                // 1.8æ›´æ–°
                 getSettingData.fixedTop = settingData.fixedTop;
 
-                // ¸üĞÂ±¾µØ°æ±¾ ÆäËûÏà¹ØĞÅÏ¢
+                // æ›´æ–°æœ¬åœ°ç‰ˆæœ¬ å…¶ä»–ç›¸å…³ä¿¡æ¯
                 getSettingData.version = settingData.version;
                 getSettingData.message = settingData.message;
                 GM_setValue("searchEngineJumpData",getSettingData);
@@ -1843,13 +1852,13 @@
             engineList = getSettingData.engineList;
                  
         } else {
-            console.log("Î´·¢ÏÖ±¾µØÁĞ±í");
+            console.log("æœªå‘ç°æœ¬åœ°åˆ—è¡¨");
             // "details":[],
             // "engineDetails":[],
             // "engineList":{}
             // console.log(engineList.details);
             settingData.engineList = engineList;
-            console.log("³õÊ¼»¯£º",settingData);
+            console.log("åˆå§‹åŒ–ï¼š",settingData);
 
             GM_setValue("searchEngineJumpData",settingData);
             getSettingData = GM_getValue("searchEngineJumpData");
@@ -1858,15 +1867,15 @@
 
         }
         
-        // ´¦Àíenginlist.detailµÄÏà¹ØĞÅÏ¢     
+        // å¤„ç†enginlist.detailçš„ç›¸å…³ä¿¡æ¯     
         var engineDetails = getSettingData.engineDetails;
-        //ÁĞ±í·ÖÀàÏÔÊ¾Çé¿ö
+        //åˆ—è¡¨åˆ†ç±»æ˜¾ç¤ºæƒ…å†µ
         var getDetails = engineDetails.map(function(value,index){
             // console.log(value,value[2]);
             return value[2]?index:-index;
         })
 
-        // ÁĞ±í·ÖÀàµÄkey value
+        // åˆ—è¡¨åˆ†ç±»çš„key value
         var getDetailsL = getDetails.length;
         var details = [];
         for(let i=0;i<getDetailsL;i++){
@@ -1878,9 +1887,9 @@
         // getSettingData.debug = true;
         reloadDebug(getSettingData.debug);
 
-        ///test -------------- ²âÊÔ start
+        ///test -------------- æµ‹è¯• start
         debug("searchEngineJump test location.href: ",window.location.href)
-        ///test -------------- ²âÊÔ end
+        ///test -------------- æµ‹è¯• end
 
         // parseUri 1.2.2
         // (c) Steven Levithan <stevenlevithan.com>
@@ -1940,16 +1949,16 @@
             }
         };
 
-        // --------------------¿ÉÉèÖÃÏî½áÊø------------------------
+        // --------------------å¯è®¾ç½®é¡¹ç»“æŸ------------------------
         // console.log("engineList: ",engineList);
-        //xpath »ñÈ¡µ¥¸öÔªËØ
+        //xpath è·å–å•ä¸ªå…ƒç´ 
         function getElementByXPath(xPath, contextNode, doc) {
             doc = doc || document;
             contextNode = contextNode || doc;       
             return doc.evaluate(xPath, contextNode, null, 9, null).singleNodeValue;
         };
 
-        // ´Óº¯ÊıÖĞ»ñÈ¡¶àĞĞ×¢ÊÍµÄ×Ö·û´®
+        // ä»å‡½æ•°ä¸­è·å–å¤šè¡Œæ³¨é‡Šçš„å­—ç¬¦ä¸²
         function getMStr(fn) {
             var fnSource = fn.toString();
             var ret = {};
@@ -1965,8 +1974,8 @@
             return ret;
         };
             
-        // ÊÂ¼şÖ§³Ö¼ì²â.
-        // ±ÈÈç eventSupported('fullscreenchange', document);
+        // äº‹ä»¶æ”¯æŒæ£€æµ‹.
+        // æ¯”å¦‚ eventSupported('fullscreenchange', document);
         function eventSupported(eventName, elem) {
             elem = elem || document.createElement('div');
             var prefix = ['o', 'ms', 'moz', 'webkit', ''];
@@ -1981,7 +1990,7 @@
                 
                 if (pEventName in elem) {
                     return pEventName.slice(2);
-                } else if (typeof elem.setAttribute == 'function') { // setAttribute ÊÇÔªËØ½ÚµãµÄ·½·¨ 
+                } else if (typeof elem.setAttribute == 'function') { // setAttribute æ˜¯å…ƒç´ èŠ‚ç‚¹çš„æ–¹æ³• 
                     setAttr = false;
                     if (!elem.hasAttribute(pEventName)) {
                         setAttr = true;
@@ -2001,7 +2010,7 @@
             return false;
         };
 
-        // ±£´æÖ¸¶¨¶ÔÏóÏà¹ØÊı¾İ
+        // ä¿å­˜æŒ‡å®šå¯¹è±¡ç›¸å…³æ•°æ®
         var data = (function () {
             'use strict';
             
@@ -2015,10 +2024,10 @@
                 if (id == -1) {
                     id = cache.objs.push(obj) - 1;
                 };
-                if (!cache.data[id]) {//³õÊ¼»¯
+                if (!cache.data[id]) {//åˆå§‹åŒ–
                     cache.data[id] = {};
                 };
-                if (typeof value == 'undefined') {// È¡Öµ
+                if (typeof value == 'undefined') {// å–å€¼
                     return typeof key == 'undefined' ? cache.data[id] : cache.data[id][key];
                 } else {
                     return cache.data[id][key] = value;
@@ -2028,8 +2037,8 @@
             return data;
         })();
             
-        // Îªmouseleave mouseenterÊÂ¼ş×ö¸ö¼æÈİ
-        // ĞèÒª eventSupported£¬ dataº¯ÊıÖ§³Ö
+        // ä¸ºmouseleave mouseenteräº‹ä»¶åšä¸ªå…¼å®¹
+        // éœ€è¦ eventSupportedï¼Œ dataå‡½æ•°æ”¯æŒ
         var mouseEventListener = (function () {
 
             var support = {
@@ -2043,17 +2052,17 @@
             };
             
             return {
-                add : function (type, ele, callback) { //ÊÂ¼şÀàĞÍ£¬ÔªËØ£¬¼àÌıº¯Êı
+                add : function (type, ele, callback) { //äº‹ä»¶ç±»å‹ï¼Œå…ƒç´ ï¼Œç›‘å¬å‡½æ•°
                     if (support[type]) {
-                        ele.addEventListener(type, callback, false); //mouseleave,enter²»Ã°Åİ£¬ËùÒÔÔÚÃ°Åİ½×¶Î¼àÌıÊÂ¼ş£¬²»Òªµ£ĞÄ×ÓËïÔªËØ½ø³ö·¢ÉúµÄÊÂ¼şÃ°ÅİÉÏÀ´¡£
+                        ele.addEventListener(type, callback, false); //mouseleave,enterä¸å†’æ³¡ï¼Œæ‰€ä»¥åœ¨å†’æ³¡é˜¶æ®µç›‘å¬äº‹ä»¶ï¼Œä¸è¦æ‹…å¿ƒå­å­™å…ƒç´ è¿›å‡ºå‘ç”Ÿçš„äº‹ä»¶å†’æ³¡ä¸Šæ¥ã€‚
                     } else {
                         var listener = data(callback, 'mouseELListener');
                         if (!listener) {
                             listener = function (e) {
-                                var relatedTarget = e.relatedTarget; //mouseout£¬È¥ÍùµÄÔªËØ£»mouseover£¬À´×ÔµÄÔªËØ
-                                // µ±mouseout£¨Àë¿ªele£©È¥ÍùµÄÔªËØ²»ÊÇ×Ô¼ºµÄ×ÓËïÔªËØ
-                                // µ±mouseover£¨½øÈëele£©À´×ÔµÄÔªËØ²»ÊÇ×Ô¼ºµÄ×ÓËïÔªËØ
-                                if (!ele.contains(relatedTarget)) { // containsº¯Êı£¬×Ô¼º.contains(×Ô¼º) ·µ»Øtrue
+                                var relatedTarget = e.relatedTarget; //mouseoutï¼Œå»å¾€çš„å…ƒç´ ï¼›mouseoverï¼Œæ¥è‡ªçš„å…ƒç´ 
+                                // å½“mouseoutï¼ˆç¦»å¼€eleï¼‰å»å¾€çš„å…ƒç´ ä¸æ˜¯è‡ªå·±çš„å­å­™å…ƒç´ 
+                                // å½“mouseoverï¼ˆè¿›å…¥eleï¼‰æ¥è‡ªçš„å…ƒç´ ä¸æ˜¯è‡ªå·±çš„å­å­™å…ƒç´ 
+                                if (!ele.contains(relatedTarget)) { // containså‡½æ•°ï¼Œè‡ªå·±.contains(è‡ªå·±) è¿”å›true
                                     callback.call(ele, e);
                                 };
                             };
@@ -2073,7 +2082,7 @@
             };
         })();
 
-        //»ñÈ¡ÒÑ¹ö¶¯µÄ¾àÀë
+        //è·å–å·²æ»šåŠ¨çš„è·ç¦»
         function getScrolled(container) {
             if (container) {
                 return {
@@ -2124,7 +2133,7 @@
             value = decodeURI(value);
             var targetURL = target.getAttribute('url');
             // console.log(targetURL);
-            // Èç¹ûÓĞpostÇëÇó
+            // å¦‚æœæœ‰postè¯·æ±‚
             var postSign = targetURL.indexOf('$post$');
             if(~postSign){
                 // var targetBlank = 
@@ -2139,7 +2148,7 @@
                 target.href = target.getAttribute('url').replace('%s', value);
             }
         };
-         //»ñÈ¡  POST µÄ±íµ¥µÄ HTML
+         //è·å–  POST çš„è¡¨å•çš„ HTML
         function getPostFormHTML(url, value, newTab) {
             console.log(url,value,newTab)
             var ospan = document.createElement('span');
@@ -2158,14 +2167,14 @@
             return ospan;
         };
         
-        // iframe ½ûÖ¹¼ÓÔØ
+        // iframe ç¦æ­¢åŠ è½½
         if (window.self != window.top) return;
 
         var url = location.href;
         var matchedRule;
         var marchedSign;
 
-        //ÏÈÅĞ¶ÏÓÃ»§¹æÔò 
+        //å…ˆåˆ¤æ–­ç”¨æˆ·è§„åˆ™ 
         marchedSign = getSettingData.rules.some(function (rule) {
             // console.info("rule: ",rule.url,typeof(rule.url),rule);
             // console.log(getSettingData.rules);
@@ -2195,14 +2204,14 @@
         var iTarget = getElement(matchedRule.insertIntoDoc.target);
         var iInput = typeof matchedRule.insertIntoDoc.keyword == 'function' ? matchedRule.insertIntoDoc.keyword : getElement(matchedRule.insertIntoDoc.keyword);
         
-        ///test -------------- ²âÊÔ start
+        ///test -------------- æµ‹è¯• start
         debug("searchEngineJump test iTarget, iInput: ",iTarget, iInput);
-        ///test -------------- ²âÊÔ end
+        ///test -------------- æµ‹è¯• end
 
 
         if (!iTarget || !iInput) return;
             
-        // Ìí¼ÓÈ«¾ÖÑùÊ½
+        // æ·»åŠ å…¨å±€æ ·å¼
         var globalStyle = document.createElement('style');
         globalStyle.type = 'text/css';
         globalStyle.textContent = getMStr(function(){               
@@ -2315,7 +2324,7 @@
         }).cssText;
         document.head.appendChild(globalStyle);
             
-        // ÁĞ±í¶ÔÏó
+        // åˆ—è¡¨å¯¹è±¡
         function DropDownList(a, list) {
             this.a = a;
             this.list = list;
@@ -2335,7 +2344,7 @@
                 
                 var self = this;
                 
-                // ½øÈëÏÔÊ¾
+                // è¿›å…¥æ˜¾ç¤º
                 mouseEventListener.add('mouseenter', a, function () {
                     clearTimeout(self.hideTimerId);
                     
@@ -2350,7 +2359,7 @@
                     };
                 });
                 
-                // Àë¿ªÒş²Ø
+                // ç¦»å¼€éšè—
                 mouseEventListener.add('mouseleave', a, function () {
                     clearTimeout(self.showTimerId);
                     
@@ -2426,7 +2435,7 @@
         
         var pageEncoding = (document.characterSet || document.charset).toLowerCase();
         
-        // ´´½¨dom
+        // åˆ›å»ºdom
         var aPattern = '<a href="" class="sej-engine" target="$blank$" encoding="$encoding$" url="$url$"><img src="$favicon$" class="sej-engine-icon" />$name$</a>';
         var container = document.createElement('sejspan');
         container.id = 'sej-container';
@@ -2445,7 +2454,7 @@
             var engines = [];
             
             engineList[category].forEach(function (engine) {
-                // ¼ì²âÊÇ·ñÓÃËÑË÷ËÑÄ³Ò»ÍøÕ¾ site:xxx.xx
+                // æ£€æµ‹æ˜¯å¦ç”¨æœç´¢æœæŸä¸€ç½‘ç«™ site:xxx.xx
                 var engineUrl = engine.url;
                 var siteIndex = engineUrl.lastIndexOf("site");
                 var siteMark = null;
@@ -2456,7 +2465,7 @@
                     // console.log(/([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}/.test(siteURL),siteURL);
                 }
 
-                if (!siteMark && matchedRule.url.test(engineUrl)) return;// È¥µôÌø×ªµ½µ±Ç°ÒıÇæµÄÒıÇæ
+                if (!siteMark && matchedRule.url.test(engineUrl)) return;// å»æ‰è·³è½¬åˆ°å½“å‰å¼•æ“çš„å¼•æ“
                 if(engine.disable) return;
                 var a = aPattern.replace('$encoding$', (engine.encoding || 'utf-8').toLowerCase())
                     .replace('$url$', engineUrl)
@@ -2476,12 +2485,12 @@
                 
                 engines.push(a);
             });
-            // ·Ç¿ÕÁĞ±í
+            // éç©ºåˆ—è¡¨
             if (!engines.length) return;
             
             engines = engines.join('');
             
-            // Õ¹¿ªµ±Ç°ËÑË÷·ÖÀàÁĞ±í
+            // å±•å¼€å½“å‰æœç´¢åˆ†ç±»åˆ—è¡¨
             if (!getSettingData.foldlist && category == matchedRule.engineList) {
             // if (category == matchedRule.engineList) {
                 container.innerHTML = engines;
@@ -2491,7 +2500,7 @@
                 dropList.className = 'sej-drop-list rwl-exempt';
                 dropList.innerHTML = engines;
                 
-                // ·Ç¿ÕÁĞ±í
+                // éç©ºåˆ—è¡¨
                 var a = dropList.firstElementChild.cloneNode(true);
                 a.className = a.className + ' sej-drop-list-trigger';
                 a.lastChild.nodeValue = cName;
@@ -2499,7 +2508,7 @@
             };
         });     
         
-        //½«¸÷¸öËÑË÷ÁĞ±í²åÈëÎÄµµÖĞ
+        //å°†å„ä¸ªæœç´¢åˆ—è¡¨æ’å…¥æ–‡æ¡£ä¸­
         dropLists.forEach(function (item) {
             container.appendChild(item[0]);
             document.body.appendChild(item[1]);
@@ -2508,7 +2517,7 @@
             new DropDownList(item[0], item[1]);
         });
         
-        // ²åÈëµ½ÎÄµµÖĞ
+        // æ’å…¥åˆ°æ–‡æ¡£ä¸­
         switch (matchedRule.insertIntoDoc.where.toLowerCase()) {
             case 'beforebegin' :
                 iTarget.parentNode.insertBefore(container, iTarget);
@@ -2532,7 +2541,7 @@
             break; 
         };
 
-        // todo: ´Ë´¦ÓëÉÏÃæÖØ¸´£¬ÔÚ°Ù¶ÈÒ³Ãæ»á²åÈëÁ½´Î
+        // todo: æ­¤å¤„ä¸ä¸Šé¢é‡å¤ï¼Œåœ¨ç™¾åº¦é¡µé¢ä¼šæ’å…¥ä¸¤æ¬¡
         if(/^https?:\/\/www\.baidu\.com\/(?:s|baidu)/.test(url)){
             var sej = document.getElementsByTagName("sejspan")[0];
             sej.appendChild(globalStyle);
@@ -2548,24 +2557,24 @@
             });
         };
 
-        // ÓÉÓÚÓëÒª²åÈëÍøÒ³µÄÑùÊ½ÎŞ·¨ºÜºÃµÄ¼æÈİ£¬¸ü¸ÄÔ´ÍøÒ³µÄÑùÊ½
+        // ç”±äºä¸è¦æ’å…¥ç½‘é¡µçš„æ ·å¼æ— æ³•å¾ˆå¥½çš„å…¼å®¹ï¼Œæ›´æ”¹æºç½‘é¡µçš„æ ·å¼
         if(matchedRule.stylish){GM_addStyle(matchedRule.stylish);};
-        //¹Ì¶¨ËÑË÷À¸
+        //å›ºå®šæœç´¢æ 
         if(getSettingData.fixedTop){
             window.onscroll = function(){
                 fixedTopFun(matchedRule.fixedTop);
             };
-            // ¹Ì¶¨ËÑË÷À¸
+            // å›ºå®šæœç´¢æ 
             function fixedTopFun(height){
                 var obj = document.getElementById("sej-container");
                 var objTop = obj.offsetTop ;
                 var objLeft = obj.offsetLeft ;
 
                 var current = obj.offsetParent;
-        ¡¡¡¡¡¡¡¡while (current !== null){
+        ã€€ã€€ã€€ã€€while (current !== null){
                     objLeft += current.offsetLeft;
-        ¡¡¡¡¡¡¡¡¡¡¡¡current = current.offsetParent;
-        ¡¡¡¡¡¡¡¡}
+        ã€€ã€€ã€€ã€€ã€€ã€€current = current.offsetParent;
+        ã€€ã€€ã€€ã€€}
 
                 var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
                 // console.log("obj.offsetLeft",obj.offsetLeft);
@@ -2576,8 +2585,8 @@
                     height = 0;
                 }
 
-                // console.log("¶¨Î»ÊôĞÔ",obj.style.position);
-                // console.log("height²ÎÊı£º",height);
+                // console.log("å®šä½å±æ€§",obj.style.position);
+                // console.log("heightå‚æ•°ï¼š",height);
 
                 if(scrollTop <= objTop){
                     obj.style.position = 'relative';
@@ -2604,8 +2613,8 @@
             };
         };
 
-        // -------------------ÉèÖÃÏà¹Ø--------------------------------
-        // ÉèÖÃ°´Å¥Ïà¹Ø
+        // -------------------è®¾ç½®ç›¸å…³--------------------------------
+        // è®¾ç½®æŒ‰é’®ç›¸å…³
         var dragEl = null;
         var dragData = null;
         
@@ -2644,9 +2653,9 @@
                 this.mask.appendChild(this.ele);
                 document.body.appendChild(this.mask);
 
-                // °ó¶¨ÊÂ¼ş
+                // ç»‘å®šäº‹ä»¶
                 this.ele.addEventListener("click",that.domClick.bind(this),false);
-                // ÍÏ×§
+                // æ‹–æ‹½
                 var odivsdrag = document.querySelectorAll(".drag");
                 [].forEach.call(odivsdrag,function(odiv){
                     odiv.addEventListener("dragstart",that.domdragstart,false);
@@ -2670,11 +2679,11 @@
                                 ' data-iqxintarget="$blank$" ' +
                                 ' data-iqxindisabled="$disabled$" ' +
                                 '><img src="$favicon$" class="sej-engine-icon" /><span>$name$</span></span>' +
-                                ' <span class="iqxin-set-edit" title="±à¼­ Edit"><img class="sej-engine-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAACDklEQVR4nJXVzUtUURjH8Y/mSNKkki2iwiApxHQ1q/6C+gusoCB6oxbRRqFNL4sWtRKqhVSLIDe1CqpNiwjKIilKLKKFEr2Z2qI0xxHN0+LOm+PMOPOc1T2H7/f5ncO991BdNer30zmxKrl0xV2zKJjRoy6aqkkvbbdVLPuUq+8+5uGXnVILki7qsxgtNDtrTNLcijHvrdYsft0/wQ8DZgSzeqMUDW4IJceYHcvwCd1ies0KZvWI1TnhIH6574Olgg0E74zmhZ902j304by4Cxp5LPjtQNmjy3XPVK2rgmCBCcGgdVXhdBgUBCMEwVMNVeIvBMFLifKC8vgrndFBlRJUhJcWFMd3ZfGuzFRxwWrdu3KTxQQVhi8lqApfKVhf0d4bc2/OckG9Pkur7r3TEw+1FRO0GxdM2Vc2/HHBgr1If935UTfigbt5+C27MeSo9+m5GJYitlCwWR2G8oQZ/FgWX1aFgnZMG852v5nFR4rhMn+2dDVJYFpKqy0SDksUhF9FsE0bWgyIa9bIanihoEUcDTrSz4ueOVMOLxQkzVkrZcaoNz755rmpcnihYNghm3w26Ys/5cGcIKgRBJDyqCIquj8C1PqKZvHK+qVrJ5bMRwmGterU64pkkZupWO3RjXkzUZj9+jVZMGK6IsEaHTbgjpOSUYZL/pa5m4qPIbtyznpHvJaqGB53O33h4T/3VzLuzDhE6AAAAABJRU5ErkJggg=="/></span>' +
-                                ' <span class="iqxin-set-del" title="É¾³ı Delete"><img class="sej-engine-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAADAFBMVEUAAADsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVH///9VVVVWVlZXV1dYWFhZWVlaWlpbW1tcXFxdXV1eXl5fX19gYGBhYWFiYmJjY2NkZGRlZWVmZmZnZ2doaGhpaWlqampra2tsbGxtbW1ubm5vb29wcHBxcXFycnJzc3N0dHR1dXV2dnZ3d3d4eHh5eXl6enp7e3t8fHx9fX1+fn5/f3+AgICBgYGCgoKDg4OEhISFhYWGhoaHh4eIiIiJiYmKioqLi4uMjIyNjY2Ojo6Pj4+QkJCRkZGSkpKTk5OUlJSVlZWWlpaXl5eYmJiZmZmampqbm5ucnJydnZ2enp6fn5+goKChoaGioqKjo6OkpKSlpaWmpqanp6eoqKipqamqqqqrq6usrKytra2urq6vr6+wsLCxsbGysrKzs7O0tLS1tbW2tra3t7e4uLi5ubm6urq7u7u8vLy9vb2+vr6/v7/AwMDBwcHCwsLDw8PExMTFxcXGxsbHx8fIyMjJycnKysrLy8vMzMzNzc3Ozs7Pz8/Q0NDR0dHS0tLT09PU1NTV1dXW1tbX19fY2NjZ2dna2trb29vc3Nzd3d3e3t7f39/g4ODh4eHi4uLj4+Pk5OTl5eXm5ubn5+fo6Ojp6enq6urr6+vs7Ozt7e3u7u7v7+/w8PDx8fHy8vLz8/P09PT19fX29vb39/f4+Pj5+fn6+vr7+/v8/Pz9/f3+/v7///8dej9TAAAAU3RSTlMAAABm7P/sZgAAABPO////zhQAAB/i/////////+IfAAAe4fvk4AAAAAAd/+Q3GxwAFR85FQBjz+LPY+v////r6//////rZM/h4c9jABUdHRUAAP0EcPoAAAEuSURBVHic7ZRnc8IwDIbdEUZHGB0kDsMOMcOMttBBB93Qvcj//y9VjB0Czh13/dz3ixT5OVmSYyMktLK6tm74oYxEMpVGUW1sbm2bM8DMZHP5OWBnd2+/YNnYAWHbKhRL5cocQKjrWFWPuSDmVS3HpUQu1eoNQkiTM9xqd7oHoG6n3cKMNyHcqNfQ4VGPUsr7nh0FbK/PIdw7PkGnZwOZNrqF9AfnF+jyaigLixYp/eH1Dbq9u4eAHyOAHh5HaPz0DCnjANjm5fUNvX98QoGCxyo5Fjmh0K/vH2hzAi0KnqnymMgJrU6gzemQBM+DZpX1/XBYUyAYTTAuZTUg+Aw8Zf+BvwJLR730sPTjXgD0H2YB0BUClXKpGAeE1y+fy2ZMfX12gdOpZMLQAfkE/AL7e5vGZF+dOQAAAABJRU5ErkJggg=="></span>' +
+                                ' <span class="iqxin-set-edit" title="ç¼–è¾‘ Edit"><img class="sej-engine-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAACDklEQVR4nJXVzUtUURjH8Y/mSNKkki2iwiApxHQ1q/6C+gusoCB6oxbRRqFNL4sWtRKqhVSLIDe1CqpNiwjKIilKLKKFEr2Z2qI0xxHN0+LOm+PMOPOc1T2H7/f5ncO991BdNer30zmxKrl0xV2zKJjRoy6aqkkvbbdVLPuUq+8+5uGXnVILki7qsxgtNDtrTNLcijHvrdYsft0/wQ8DZgSzeqMUDW4IJceYHcvwCd1ies0KZvWI1TnhIH6574Olgg0E74zmhZ902j304by4Cxp5LPjtQNmjy3XPVK2rgmCBCcGgdVXhdBgUBCMEwVMNVeIvBMFLifKC8vgrndFBlRJUhJcWFMd3ZfGuzFRxwWrdu3KTxQQVhi8lqApfKVhf0d4bc2/OckG9Pkur7r3TEw+1FRO0GxdM2Vc2/HHBgr1If935UTfigbt5+C27MeSo9+m5GJYitlCwWR2G8oQZ/FgWX1aFgnZMG852v5nFR4rhMn+2dDVJYFpKqy0SDksUhF9FsE0bWgyIa9bIanihoEUcDTrSz4ueOVMOLxQkzVkrZcaoNz755rmpcnihYNghm3w26Ys/5cGcIKgRBJDyqCIquj8C1PqKZvHK+qVrJ5bMRwmGterU64pkkZupWO3RjXkzUZj9+jVZMGK6IsEaHTbgjpOSUYZL/pa5m4qPIbtyznpHvJaqGB53O33h4T/3VzLuzDhE6AAAAABJRU5ErkJggg=="/></span>' +
+                                ' <span class="iqxin-set-del" title="åˆ é™¤ Delete"><img class="sej-engine-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAADAFBMVEUAAADsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVHsbVH///9VVVVWVlZXV1dYWFhZWVlaWlpbW1tcXFxdXV1eXl5fX19gYGBhYWFiYmJjY2NkZGRlZWVmZmZnZ2doaGhpaWlqampra2tsbGxtbW1ubm5vb29wcHBxcXFycnJzc3N0dHR1dXV2dnZ3d3d4eHh5eXl6enp7e3t8fHx9fX1+fn5/f3+AgICBgYGCgoKDg4OEhISFhYWGhoaHh4eIiIiJiYmKioqLi4uMjIyNjY2Ojo6Pj4+QkJCRkZGSkpKTk5OUlJSVlZWWlpaXl5eYmJiZmZmampqbm5ucnJydnZ2enp6fn5+goKChoaGioqKjo6OkpKSlpaWmpqanp6eoqKipqamqqqqrq6usrKytra2urq6vr6+wsLCxsbGysrKzs7O0tLS1tbW2tra3t7e4uLi5ubm6urq7u7u8vLy9vb2+vr6/v7/AwMDBwcHCwsLDw8PExMTFxcXGxsbHx8fIyMjJycnKysrLy8vMzMzNzc3Ozs7Pz8/Q0NDR0dHS0tLT09PU1NTV1dXW1tbX19fY2NjZ2dna2trb29vc3Nzd3d3e3t7f39/g4ODh4eHi4uLj4+Pk5OTl5eXm5ubn5+fo6Ojp6enq6urr6+vs7Ozt7e3u7u7v7+/w8PDx8fHy8vLz8/P09PT19fX29vb39/f4+Pj5+fn6+vr7+/v8/Pz9/f3+/v7///8dej9TAAAAU3RSTlMAAABm7P/sZgAAABPO////zhQAAB/i/////////+IfAAAe4fvk4AAAAAAd/+Q3GxwAFR85FQBjz+LPY+v////r6//////rZM/h4c9jABUdHRUAAP0EcPoAAAEuSURBVHic7ZRnc8IwDIbdEUZHGB0kDsMOMcOMttBBB93Qvcj//y9VjB0Czh13/dz3ixT5OVmSYyMktLK6tm74oYxEMpVGUW1sbm2bM8DMZHP5OWBnd2+/YNnYAWHbKhRL5cocQKjrWFWPuSDmVS3HpUQu1eoNQkiTM9xqd7oHoG6n3cKMNyHcqNfQ4VGPUsr7nh0FbK/PIdw7PkGnZwOZNrqF9AfnF+jyaigLixYp/eH1Dbq9u4eAHyOAHh5HaPz0DCnjANjm5fUNvX98QoGCxyo5Fjmh0K/vH2hzAi0KnqnymMgJrU6gzemQBM+DZpX1/XBYUyAYTTAuZTUg+Aw8Zf+BvwJLR730sPTjXgD0H2YB0BUClXKpGAeE1y+fy2ZMfX12gdOpZMLQAfkE/AL7e5vGZF+dOQAAAABJRU5ErkJggg=="></span>' +
                                 '</span>';
                 var details = engineList.details;
-                // Èô¸ù¾İÊı×é³¤¶È»ñÈ¡£¬¸ºÊıÒıµ¼µÄÎªÊôĞÔ£¬²»ÔÙlength³¤¶ÈÖ®ÄÚ£¬ËùÒÔÀ´¸ö´óÌåµÄÊı×Ö£¬µ±¶¼Îª¿ÕÊ±£¬½áÊøÑ­»·
+                // è‹¥æ ¹æ®æ•°ç»„é•¿åº¦è·å–ï¼Œè´Ÿæ•°å¼•å¯¼çš„ä¸ºå±æ€§ï¼Œä¸å†lengthé•¿åº¦ä¹‹å†…ï¼Œæ‰€ä»¥æ¥ä¸ªå¤§ä½“çš„æ•°å­—ï¼Œå½“éƒ½ä¸ºç©ºæ—¶ï¼Œç»“æŸå¾ªç¯
                 // var detailsLength = details.length;
                 var detailsLength = 99;
                 for (let i=0;i<detailsLength;i++){
@@ -2692,8 +2701,8 @@
                     oDivTitle.dataset.iqxintitle = details[j][1];
                     oDivTitle.dataset.xin = j;
                     oDivTitle.innerHTML ='<span class="iqxin-pointer-events">' + details[j][0] + '</span>' + 
-                                        '<span class="iqxin-title-edit" title="±à¼­ Edit"><img class="sej-engine-icon" src="' + icon.edit + '"/></span>'+
-                                        ' <span class="iqxin-set-title-del" title="É¾³ı Delete"><img class="sej-engine-icon" src="' + icon.del + '"></span>';
+                                        '<span class="iqxin-title-edit" title="ç¼–è¾‘ Edit"><img class="sej-engine-icon" src="' + icon.edit + '"/></span>'+
+                                        ' <span class="iqxin-set-title-del" title="åˆ é™¤ Delete"><img class="sej-engine-icon" src="' + icon.del + '"></span>';
                     odiv.appendChild(oDivTitle);
 
                     var oDivCon = document.createElement("div");
@@ -2708,7 +2717,7 @@
                                 .replace('$favicon$', engineListItme[jj].favicon)
                                 .replace("$xin$",jj);
                         // console.log(a);
-                        // Ìí¼ÓÊôĞÔ
+                        // æ·»åŠ å±æ€§
                         a = a.replace("$img$", engineListItme[jj].favicon)
                             .replace("$title$", engineListItme[jj].name)
                             .replace("$link$", engineListItme[jj].url);
@@ -2734,7 +2743,7 @@
                     this.ele.appendChild(odiv);
                 };
 
-                // ¸ü¶àÉèÖÃ ²Ëµ¥
+                // æ›´å¤šè®¾ç½® èœå•
                 var btnEle2 = document.createElement("div");
                 btnEle2.id = "btnEle2"
                 var fixedTop_checked = getSettingData.fixedTop?"checked":"";
@@ -2743,71 +2752,71 @@
 
                 // var setBtnOpacity_value = getSettingData.setBtnOpacity;
                 var btnStr2 = "<div>" +
-                            // "<span class='feedback' title='ÒÑÈ»¿´²»¶®×Ô¼ºĞ´µÄ´úÂë'><a target='_blank' href='https://greasyfork.org/zh-CN/scripts/27752-searchenginejump'>·´À¡ greasyfork</a></span>" +
-                            // "<span class='feedback'><a target='_blank' href='https://github.com/qxinGitHub/searchEngineJump'>·´À¡ GitHub</a></span>" +                           
-                            "<span id='xin-reset' title='É÷µã£¬³ö³§ÖØÖÃ'>Çå¿ÕÉèÖÃ</span>" +
-                            "<span id='xin-modification' title='edit ·ÖÏí×Ô¼ºµÄÅäÖÃ»òÇå¿ÕÅäÖÃ'>ÅäÖÃÎÄ¼ş</span>" +
-                            "<span id='iqxin-debugS' title='¶ÔÉèÖÃ²Ëµ¥ÓĞÒ»¶¨µÄÓ°Ïì'>" +
+                            // "<span class='feedback' title='å·²ç„¶çœ‹ä¸æ‡‚è‡ªå·±å†™çš„ä»£ç '><a target='_blank' href='https://greasyfork.org/zh-CN/scripts/27752-searchenginejump'>åé¦ˆ greasyfork</a></span>" +
+                            // "<span class='feedback'><a target='_blank' href='https://github.com/qxinGitHub/searchEngineJump'>åé¦ˆ GitHub</a></span>" +                           
+                            "<span id='xin-reset' title='æ…ç‚¹ï¼Œå‡ºå‚é‡ç½®'>æ¸…ç©ºè®¾ç½®</span>" +
+                            "<span id='xin-modification' title='edit åˆ†äº«è‡ªå·±çš„é…ç½®æˆ–æ¸…ç©ºé…ç½®'>é…ç½®æ–‡ä»¶</span>" +
+                            "<span id='iqxin-debugS' title='å¯¹è®¾ç½®èœå•æœ‰ä¸€å®šçš„å½±å“'>" +
                                 "<label>debug<input id='iqxin-debug' type='checkbox' name='' " +
                                     debug_checked +
                                 " style='vertical-align:middle;'></label>" +
                             "</span>" +
-                            "<span id='xin-listSort'>ÁĞ±íÅÅĞò</span>" +
+                            "<span id='xin-listSort'>åˆ—è¡¨æ’åº</span>" +
                             "<span id='xin-foldlists'>" +
-                                "<label>ÕÛµşµ±Ç°ËÑË÷·ÖÀà<input id='iqxin-foldlist' type='checkbox' name='' " +
+                                "<label>æŠ˜å å½“å‰æœç´¢åˆ†ç±»<input id='iqxin-foldlist' type='checkbox' name='' " +
                                     foldlist_checked +
                                 " style='vertical-align:middle;'></label>" +
                             "</span>" +
                             "<span id='iqxin-fixedTopS' title='fixedTop'>" +
-                                "<label>¹Ì¶¨µ½¶¥¶Ë<input id='iqxin-fixedTop' type='checkbox' name='' " +
+                                "<label>å›ºå®šåˆ°é¡¶ç«¯<input id='iqxin-fixedTop' type='checkbox' name='' " +
                                     fixedTop_checked +
                                 " style='vertical-align:middle;'></label>" +
                             "</span>" +
-                            "<span id='xin-setBtnOpacity' title='ÉèÖÃ°´Å¥Í¸Ã÷¶È'>ÉèÖÃ°´Å¥Í¸Ã÷¶È <input type='range' step='0.01'  min='0' max='1' value='"+ getSettingData.setBtnOpacity +"' id='setBtnOpacityRange'><i style='display:inline-block;width:3em;text-align:center;' class='iqxin-setBtnOpacityRangeValue'></i></span>" +
+                            "<span id='xin-setBtnOpacity' title='è®¾ç½®æŒ‰é’®é€æ˜åº¦'>è®¾ç½®æŒ‰é’®é€æ˜åº¦ <input type='range' step='0.01'  min='0' max='1' value='"+ getSettingData.setBtnOpacity +"' id='setBtnOpacityRange'><i style='display:inline-block;width:3em;text-align:center;' class='iqxin-setBtnOpacityRangeValue'></i></span>" +
                             
                             "</div>";
                 btnEle2.innerHTML = btnStr2;
                 this.ele.appendChild(btnEle2);
 
 
-                // Ìí¼Ó°´Å¥
+                // æ·»åŠ æŒ‰é’®
                 var btnEle = document.createElement("div");
                 btnEle.id = "btnEle"
 
                 var btnStr = "<div class='btnEleLayer'>" +
-                            "<span class='feedback' title='ÒÑÈ»¿´²»¶®×Ô¼ºĞ´µÄ´úÂë'><a target='_blank' href='https://greasyfork.org/zh-CN/scripts/27752-searchenginejump'>·´À¡ greasyfork</a></span>" +
-                            "<span class='feedback'><a target='_blank' href='https://github.com/qxinGitHub/searchEngineJump'>·´À¡ GitHub</a></span>" +                           
-                            // "<span id='xin-reset' title='É÷µã£¬»Ö¸´µ½×î³õ×´Ì¬£¬Ò»ÇĞ¸Ä±ä½«²»¸´´æÔÚ'>¸´Ô­</span>" +
-                            "<span id='moreSet' title='more set'>¸ü¶àÉèÖÃ</span>" +
-                            "<span id='xin-newtab' title='open newtab ÊÇ·ñ²ÉÓÃĞÂ±êÇ©Ò³´ò¿ªµÄ·½Ê½'>´ò¿ª·½Ê½£º" +
+                            "<span class='feedback' title='å·²ç„¶çœ‹ä¸æ‡‚è‡ªå·±å†™çš„ä»£ç '><a target='_blank' href='https://greasyfork.org/zh-CN/scripts/27752-searchenginejump'>åé¦ˆ greasyfork</a></span>" +
+                            "<span class='feedback'><a target='_blank' href='https://github.com/qxinGitHub/searchEngineJump'>åé¦ˆ GitHub</a></span>" +                           
+                            // "<span id='xin-reset' title='æ…ç‚¹ï¼Œæ¢å¤åˆ°æœ€åˆçŠ¶æ€ï¼Œä¸€åˆ‡æ”¹å˜å°†ä¸å¤å­˜åœ¨'>å¤åŸ</span>" +
+                            "<span id='moreSet' title='more set'>æ›´å¤šè®¾ç½®</span>" +
+                            "<span id='xin-newtab' title='open newtab æ˜¯å¦é‡‡ç”¨æ–°æ ‡ç­¾é¡µæ‰“å¼€çš„æ–¹å¼'>æ‰“å¼€æ–¹å¼ï¼š" +
                                 "<select id='iqxin-globalNewtab'>" +
-                                    "<option value='globalDef'>Ä¬ÈÏÒ³Ãæ ¨Œ</option>" +
-                                    "<option value='globalNewtab'>ĞÂ±êÇ©Ò³ ¨Œ</option>" +
+                                    "<option value='globalDef'>é»˜è®¤é¡µé¢ â–½</option>" +
+                                    "<option value='globalNewtab'>æ–°æ ‡ç­¾é¡µ â–½</option>" +
                                 "</select>" +
                             "</span> " +
                             // "<span id='xin-foldlists'>" +
-                            //     "<label>ÕÛµşµ±Ç°ËÑË÷·ÖÀà<input id='iqxin-foldlist' type='checkbox' name='' " +
+                            //     "<label>æŠ˜å å½“å‰æœç´¢åˆ†ç±»<input id='iqxin-foldlist' type='checkbox' name='' " +
                             //         foldlist_checked +
                             //     " style='vertical-align:middle;'></label>" +
                             // "</span>" +
-                            // "<span id='xin-modification' title='edit ·ÖÏí×Ô¼ºµÄÉèÖÃ»òÇå¿ÕÉèÖÃ'>¸ß¼¶</span> " +
-                            "<span id='xin-addDel' title='add & del Ôö¼ÓĞÂµÄ»òÕßÉ¾³ıÏÖÓĞµÄËÑË÷'>Ôö¼Ó / É¾³ı</span> " +
-                            "<span id='xin-save' title='save & close'>±£´æ²¢¹Ø±Õ</span>" +
+                            // "<span id='xin-modification' title='edit åˆ†äº«è‡ªå·±çš„è®¾ç½®æˆ–æ¸…ç©ºè®¾ç½®'>é«˜çº§</span> " +
+                            "<span id='xin-addDel' title='add & del å¢åŠ æ–°çš„æˆ–è€…åˆ é™¤ç°æœ‰çš„æœç´¢'>å¢åŠ  / åˆ é™¤</span> " +
+                            "<span id='xin-save' title='save & close'>ä¿å­˜å¹¶å…³é—­</span>" +
                             "</div>";
                 btnEle.innerHTML = btnStr;
                 this.ele.appendChild(btnEle);
 
-                // Ôö¼ÓËÑË÷ÁĞ±í
+                // å¢åŠ æœç´¢åˆ—è¡¨
                 var nSearchList = document.createElement("div");
                 nSearchList.id = "nSearchList";
                 nSearchList.style.cssText = "visibility:hidden;opacity:0;transition:0.3s;position:absolute;bottom:10%;right:5%;padding:5px 10px;border-radius:4px;border:1px solid #EC6D51;color:#ec6d51;cursor:pointer;background:#fff;";
-                nSearchList.innerHTML = "Ôö¼ÓĞÂµÄËÑË÷ÁĞ±í";
+                nSearchList.innerHTML = "å¢åŠ æ–°çš„æœç´¢åˆ—è¡¨";
                 this.ele.appendChild(nSearchList);
 
-                // ¹Ø±Õ°´Å¥
+                // å…³é—­æŒ‰é’®
                 var closebtnELe = document.createElement("span");
                 closebtnELe.id = "xin-close";
-                closebtnELe.setAttribute("title","close ¹Ø±Õ");
+                closebtnELe.setAttribute("title","close å…³é—­");
                 this.ele.appendChild(closebtnELe);
             },
             show: function(){
@@ -2826,7 +2835,7 @@
                 }, 30);
             },
             hide: function(){
-                this.allBoxClose(); // ¹Ø±ÕËùÓĞ´Î¼¶´°¿Ú¡¢²Ëµ¥
+                this.allBoxClose(); // å…³é—­æ‰€æœ‰æ¬¡çº§çª—å£ã€èœå•
 
                 var style = this.mask.style;
                 this.ele.style.transform = "translateY(20%)";
@@ -2837,19 +2846,19 @@
                 }, 500);
             },
             reset: function(){
-                if(confirm("½«»áÉ¾³ıÓÃ»§ÉèÖÃ£¡")){
+                if(confirm("å°†ä¼šåˆ é™¤ç”¨æˆ·è®¾ç½®ï¼")){
                     GM_deleteValue("searchEngineJumpData");
                     window.location.reload();
                 }
             },
-            // Ôö¼Ó ¡°Ìí¼ÓÉ¾³ı¿ò¡±
+            // å¢åŠ  â€œæ·»åŠ åˆ é™¤æ¡†â€
             addDel: function(e){
                 // console.log("addDel",this);
                 if (e.target.classList.contains("iqxin-btn-active")){
                     this.addDelremove();
                 } else {
                     // this.addDelremove();
-                    // console.log("²»´æÔÚ£¬Ôö¼ÓÔö¼Ó");
+                    // console.log("ä¸å­˜åœ¨ï¼Œå¢åŠ å¢åŠ ");
                     var obtn = document.querySelector("#xin-addDel");
                     obtn.classList.add("iqxin-btn-active");
 
@@ -2859,27 +2868,27 @@
                         div.classList.add("iqxin-set-active");
                     }); 
 
-                    // ±êÌâÌí¼ÓÉ¾³ı¿ò
+                    // æ ‡é¢˜æ·»åŠ åˆ é™¤æ¡†
                     var odom = document.querySelectorAll(".iqxin-set-title-del");
                     [].forEach.call(odom,function(div){
                         // console.log(div);
                         div.classList.add("iqxin-set-active");
                     });
 
-                    // Ôö¼Óµ¥¸öËÑË÷
+                    // å¢åŠ å•ä¸ªæœç´¢
                     var oitemAdd = document.querySelectorAll(".iqxin-additem");
                     [].forEach.call(oitemAdd,function(div){
                         // console.log(div);
                         div.classList.add("iqxin-set-active");
                     });
 
-                    // Ìí¼ÓËÑË÷ÁĞ±í
+                    // æ·»åŠ æœç´¢åˆ—è¡¨
                     var olistAdd = document.querySelector("#nSearchList");
                     olistAdd.classList.add("iqxin-set-active");
 
                 }
             },
-            // ¹Ø±Õ ¡°Ìí¼ÓÉ¾³ı¿ò¡±
+            // å…³é—­ â€œæ·»åŠ åˆ é™¤æ¡†â€
             addDelremove: function(bool){
                 var obtn = document.querySelector(".iqxin-btn-active");
                 if(obtn){
@@ -2898,7 +2907,7 @@
                 this.addItemBoxRemove();
             },
 
-            // ½çÃæ£¬¿ò£ºÌí¼ÓĞÂµÄËÑË÷
+            // ç•Œé¢ï¼Œæ¡†ï¼šæ·»åŠ æ–°çš„æœç´¢
             addItemBox: function(bool){
                 this.isOnline();
                 this.addItemBoxRemove();
@@ -2906,26 +2915,26 @@
                 var newDiv = document.createElement("div");
                 newDiv.id= "newSearchBox";
                 newDiv.innerHTML=""+
-                    "<span>±ê&nbsp;&nbsp;&nbsp&nbsp&nbsp&nbsp&nbspÌâ : </span><input id='iqxin-newTitle' placeholder='±ØÌî' onfocus='this.select()' /> <br/><br/>" +
-                    "<span>Á´&nbsp;&nbsp;&nbsp&nbsp&nbsp&nbsp&nbsp½Ó : </span><input id='iqxin-newLink' placeholder='±ØÌî' onfocus='this.select()' /> <br/><br/>" +
-                    "<span>Í¼&nbsp;&nbsp;&nbsp&nbsp&nbsp&nbsp&nbsp±ê : </span><input id='iqxin-newIcon' placeholder='Ñ¡Ìî£¬Áô¿ÕÔò×Ô¶¯»ñÈ¡' onfocus='this.select()' /> <br/><br/>" +
-                    "<span>´ò¿ª·½Ê½ : " +
+                    "<span>æ ‡&nbsp;&nbsp;&nbsp&nbsp&nbsp&nbsp&nbspé¢˜ : </span><input id='iqxin-newTitle' placeholder='å¿…å¡«' onfocus='this.select()' /> <br/><br/>" +
+                    "<span>é“¾&nbsp;&nbsp;&nbsp&nbsp&nbsp&nbsp&nbspæ¥ : </span><input id='iqxin-newLink' placeholder='å¿…å¡«' onfocus='this.select()' /> <br/><br/>" +
+                    "<span>å›¾&nbsp;&nbsp;&nbsp&nbsp&nbsp&nbsp&nbspæ ‡ : </span><input id='iqxin-newIcon' placeholder='é€‰å¡«ï¼Œç•™ç©ºåˆ™è‡ªåŠ¨è·å–' onfocus='this.select()' /> <br/><br/>" +
+                    "<span>æ‰“å¼€æ–¹å¼ : " +
                         '<select id="iqxin-newTarget" style="border-radius: 4px;border: none;padding: 2px 0 2px 2px"> ' +
-                        '<option value="default">ĞÂ±êÇ©Ò³´ò¿ª</option> ' +
-                        '<option value="newtab">µ±Ç°Ò³´ò¿ª</option> ' +
+                        '<option value="default">æ–°æ ‡ç­¾é¡µæ‰“å¼€</option> ' +
+                        '<option value="newtab">å½“å‰é¡µæ‰“å¼€</option> ' +
                         '<select> ' +
                     "</span>" +
                     "<br/><br/>" +
-                    "<span style=''><a target='_blank' style='color:#999;' href='https://greasyfork.org/zh-CN/scripts/27752-searchenginejump'>Ïà¹ØÊ¹ÓÃËµÃ÷</a></span>" +
+                    "<span style=''><a target='_blank' style='color:#999;' href='https://greasyfork.org/zh-CN/scripts/27752-searchenginejump'>ç›¸å…³ä½¿ç”¨è¯´æ˜</a></span>" +
                     "&nbsp;&nbsp;&nbsp&nbsp&nbsp&nbsp&nbsp;" +
-                    "<button id='addItemBoxEnter' class='addItemBoxEnter addItemBoxBtn'>È·¶¨</button>&nbsp;&nbsp;&nbsp&nbsp&nbsp;&nbsp" +
-                    "<button id='addItemBoxCancel' class='addItemBoxCancel addItemBoxBtn'>È¡Ïû</button>" +
+                    "<button id='addItemBoxEnter' class='addItemBoxEnter addItemBoxBtn'>ç¡®å®š</button>&nbsp;&nbsp;&nbsp&nbsp&nbsp;&nbsp" +
+                    "<button id='addItemBoxCancel' class='addItemBoxCancel addItemBoxBtn'>å–æ¶ˆ</button>" +
                     "";
 
                 this.ele.appendChild(newDiv);
                 document.querySelector("#iqxin-newTitle").focus();
             },
-            // ÄÚ²¿Âß¼­£¬£ºÌí¼ÓĞÂµÄËÑË÷
+            // å†…éƒ¨é€»è¾‘ï¼Œï¼šæ·»åŠ æ–°çš„æœç´¢
             addItemEnger: function(){
                 var otitle,olink,oimg,oblank;
                 otitle = document.querySelector("#iqxin-newTitle").value;
@@ -2936,7 +2945,7 @@
                 if (!oimg){
                     var uri = parseUri(olink);
                     var ohttp = uri.protocol?uri.protocol:"http";
-                    debug("ÄÜ·ñÁ¬½ÓÖÁgoogle£º",this.online);
+                    debug("èƒ½å¦è¿æ¥è‡³googleï¼š",this.online);
                     if (this.online){
                         oimg = 'https://www.google.com/s2/favicons?domain=' + uri.host;
                     } else {
@@ -2950,10 +2959,10 @@
                             ' data-iqxinlink="$link$" ' +
                             ' data-iqxintarget="$blank$" ' +
                             '><img src="$favicon$" class="sej-engine-icon" />$name$</span>' +
-                            '<span class="iqxin-set-edit" title="±à¼­ Edit">' +
+                            '<span class="iqxin-set-edit" title="ç¼–è¾‘ Edit">' +
                                 '<img class="sej-engine-icon" src="' + icon.edit + '">' +
                             '</span> ' +
-                            '<span class="iqxin-set-del iqxin-set-active" title="É¾³ı Delete">' +
+                            '<span class="iqxin-set-del iqxin-set-active" title="åˆ é™¤ Delete">' +
                                 '<img class="sej-engine-icon" src="' + icon.del + '">' +
                             '</span>' ;
 
@@ -2976,7 +2985,7 @@
 
                 this.parentNode.insertBefore(ospan,this.parentNode.lastChild);
 
-                // Ìí¼ÓÍê³É£¬ÒÆ³ıÌí¼Ó¿ò
+                // æ·»åŠ å®Œæˆï¼Œç§»é™¤æ·»åŠ æ¡†
                 this.addItemBoxRemove();
             },
             addItemBoxRemove: function(){
@@ -2992,7 +3001,7 @@
                 }
             },
 
-            // ½çÃæ£¬ ¿ò: Ìí¼ÓĞÂµÄËÑË÷ÁĞ±í
+            // ç•Œé¢ï¼Œ æ¡†: æ·»åŠ æ–°çš„æœç´¢åˆ—è¡¨
             addSearchListBox: function(){
                 var odiv = document.querySelector("#newSearchListBox");
                 if (odiv){
@@ -3006,12 +3015,12 @@
                 var hash = "user" + myDate.getDate() + myDate.getHours() +myDate.getMinutes()+myDate.getSeconds();
 
                 newDiv.innerHTML=""+
-                    "<span>ÁĞ±íÃû³Æ: </span><input id='iqxin-newSearchListName' onfocus='this.select()'>" +
+                    "<span>åˆ—è¡¨åç§°: </span><input id='iqxin-newSearchListName' onfocus='this.select()'>" +
                     "<br><br>" +
-                    "<span>ÄÚ²¿Ãû³Æ: </span><input id='iqxin-newSearchListInnerName' onfocus='this.select()' value='" + hash + "'>" +
+                    "<span>å†…éƒ¨åç§°: </span><input id='iqxin-newSearchListInnerName' onfocus='this.select()' value='" + hash + "'>" +
                     "<br><br>" +
-                    "<button id='addSearchListBoxEnter' class='addSearchListBoxEnter addItemBoxBtn'>È·¶¨</button>&nbsp;&nbsp;&nbsp&nbsp&nbsp;&nbsp" +
-                    "<button id='addSearchListBoxCancel' class='addSearchListBoxCancel addItemBoxBtn'>È¡Ïû</button>" +
+                    "<button id='addSearchListBoxEnter' class='addSearchListBoxEnter addItemBoxBtn'>ç¡®å®š</button>&nbsp;&nbsp;&nbsp&nbsp&nbsp;&nbsp" +
+                    "<button id='addSearchListBoxCancel' class='addSearchListBoxCancel addItemBoxBtn'>å–æ¶ˆ</button>" +
                     "";
                 this.ele.appendChild(newDiv);
 
@@ -3022,7 +3031,7 @@
                 var innerName = document.querySelector("#iqxin-newSearchListInnerName").value;
 
                 if(innerName.length===0){
-                    alert("ÄÚ²¿Ãû³Æ²»ÄÜÎª¿Õ");
+                    alert("å†…éƒ¨åç§°ä¸èƒ½ä¸ºç©º");
                     return;
                 }
                 if(name.length===0){
@@ -3035,10 +3044,10 @@
                 odiv.innerHTML = "" +
                     '<div class="sejtitle" data-iqxintitle="' + innerName + '" data-xin="99">' +
                         '<span class="iqxin-pointer-events">'+ name +'</span>' +
-                        '<span class="iqxin-title-edit" title="±à¼­ Edit">' +
+                        '<span class="iqxin-title-edit" title="ç¼–è¾‘ Edit">' +
                             '<img class="sej-engine-icon" src="' + icon.edit + '">' +
                         '</span> ' +
-                        '<span class="iqxin-set-title-del iqxin-set-active" title="É¾³ı Delete">' +
+                        '<span class="iqxin-set-title-del iqxin-set-active" title="åˆ é™¤ Delete">' +
                             '<img class="sej-engine-icon" src="' + icon.del + '">' +
                         '</span>' +
                     '</div>' +
@@ -3061,7 +3070,7 @@
                 }
             },
 
-            // ½çÃæ ¿ò£ºĞŞ¸Ä¿ò
+            // ç•Œé¢ æ¡†ï¼šä¿®æ”¹æ¡†
             addEditBox: function(e){
                 this.addItemBoxRemove();
 
@@ -3077,9 +3086,9 @@
 
                 var strblank;
                 if(otarget){
-                    strblank = '<option value="default">ĞÂ±êÇ©Ò³´ò¿ª</option><option value="newtab">µ±Ç°Ò³´ò¿ª</option> ';
+                    strblank = '<option value="default">æ–°æ ‡ç­¾é¡µæ‰“å¼€</option><option value="newtab">å½“å‰é¡µæ‰“å¼€</option> ';
                 } else{
-                    strblank = '<option value="default">ĞÂ±êÇ©Ò³´ò¿ª</option><option value="newtab" selected="selected">µ±Ç°Ò³´ò¿ª</option>';
+                    strblank = '<option value="default">æ–°æ ‡ç­¾é¡µæ‰“å¼€</option><option value="newtab" selected="selected">å½“å‰é¡µæ‰“å¼€</option>';
                 }
 
                 var strdisable = "";
@@ -3090,19 +3099,19 @@
                 var newDiv = document.createElement("div");
                 newDiv.id= "newSearchBox";
                 var innerHTML=""+
-                    "<span>±ê&nbsp;&nbsp;&nbsp&nbsp&nbsp&nbsp&nbspÌâ : </span><input id='iqxin-newTitle' placeholder='±ØÌî' onfocus='this.select()' value='"+ otitle +"' /> <br/><br/>" +
-                    "<span>Á´&nbsp;&nbsp;&nbsp&nbsp&nbsp&nbsp&nbsp½Ó : </span><input id='iqxin-newLink' placeholder='±ØÌî' onfocus='this.select()' value='"+ olink +"' /> <br/><br/>" +
-                    "<span>Í¼&nbsp;&nbsp;&nbsp&nbsp&nbsp&nbsp&nbsp±ê : </span><input id='iqxin-newIcon' placeholder='Ñ¡Ìî£¬Áô¿ÕÔò×Ô¶¯»ñÈ¡' onfocus='this.select()' value='"+ oicon +"' /> <br/><br/>" +
-                    "<span>´ò¿ª·½Ê½ : " +
+                    "<span>æ ‡&nbsp;&nbsp;&nbsp&nbsp&nbsp&nbsp&nbspé¢˜ : </span><input id='iqxin-newTitle' placeholder='å¿…å¡«' onfocus='this.select()' value='"+ otitle +"' /> <br/><br/>" +
+                    "<span>é“¾&nbsp;&nbsp;&nbsp&nbsp&nbsp&nbsp&nbspæ¥ : </span><input id='iqxin-newLink' placeholder='å¿…å¡«' onfocus='this.select()' value='"+ olink +"' /> <br/><br/>" +
+                    "<span>å›¾&nbsp;&nbsp;&nbsp&nbsp&nbsp&nbsp&nbspæ ‡ : </span><input id='iqxin-newIcon' placeholder='é€‰å¡«ï¼Œç•™ç©ºåˆ™è‡ªåŠ¨è·å–' onfocus='this.select()' value='"+ oicon +"' /> <br/><br/>" +
+                    "<span>æ‰“å¼€æ–¹å¼ : " +
                         '<select id="iqxin-newTarget" style="border-radius: 4px;border: none;padding: 2px 0 2px 2px"> ' +
                             '$strblank$' +
                         '<select> ' +
                     "</span>" +
                     "<br/><br/>" +
-                    "<span style=''><label>½ûÓÃ£º<input type='checkbox' name='' id='iqxin-newDisabled' $checked$ style='vertical-align:middle;'></label></span>" +
+                    "<span style=''><label>ç¦ç”¨ï¼š<input type='checkbox' name='' id='iqxin-newDisabled' $checked$ style='vertical-align:middle;'></label></span>" +
                     "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
-                    "<button id='editItemBoxEnter' class='editItemBoxEnter addItemBoxBtn'>È·¶¨</button>&nbsp;&nbsp;&nbsp&nbsp&nbsp;&nbsp" +
-                    "<button id='addItemBoxCancel' class='addItemBoxCancel addItemBoxBtn'>È¡Ïû</button>" +
+                    "<button id='editItemBoxEnter' class='editItemBoxEnter addItemBoxBtn'>ç¡®å®š</button>&nbsp;&nbsp;&nbsp&nbsp&nbsp;&nbsp" +
+                    "<button id='addItemBoxCancel' class='addItemBoxCancel addItemBoxBtn'>å–æ¶ˆ</button>" +
                     "";
 
                 newDiv.innerHTML = innerHTML.replace("$strblank$", strblank)
@@ -3120,30 +3129,30 @@
                 odisabled = document.querySelector("#iqxin-newDisabled").checked;
 
                 this.editTemp.dataset.iqxintitle = otitle;
-                this.editTemp.lastChild.innerText = otitle;  //ÎÄ±¾½Úµã
+                this.editTemp.lastChild.innerText = otitle;  //æ–‡æœ¬èŠ‚ç‚¹
                 
                 this.editTemp.dataset.iqxinlink = olink;
                 this.editTemp.dataset.iqxinimg = oimg;
                 this.editTemp.firstChild.src = oimg;
 
-                // ÊÇ·ñĞÂ±êÇ©Ò³´ò¿ª
+                // æ˜¯å¦æ–°æ ‡ç­¾é¡µæ‰“å¼€
                 if (oblank){
                     this.editTemp.removeAttribute("data-iqxintarget");
                 } else {
                     this.editTemp.dataset.iqxintarget = "_blank";
                 }
-                // ÊÇ·ñ½ûÓÃ
+                // æ˜¯å¦ç¦ç”¨
                 if (odisabled){
                     this.editTemp.dataset.iqxindisabled = "true";
                 } else{
                     this.editTemp.removeAttribute("data-iqxindisabled");
                 }
 
-                // ĞŞ¸ÄÍê³É£¬ÒÆ³ıÌí¼Ó¿ò
+                // ä¿®æ”¹å®Œæˆï¼Œç§»é™¤æ·»åŠ æ¡†
                 this.addItemBoxRemove();
             },
 
-            // ±êÌâ±à¼­
+            // æ ‡é¢˜ç¼–è¾‘
             addTitleEditBox: function(e){
                 this.addItemBoxRemove();
 
@@ -3152,7 +3161,7 @@
 
                 var flag = document.querySelector("#titleEdit");
                 if(flag){
-                    element.innerHTML = element.firstChild.value?element.firstChild.value:"¿Õ";
+                    element.innerHTML = element.firstChild.value?element.firstChild.value:"ç©º";
                     element.classList.add("iqxin-pointer-events");
                 }else{                       
                     var oldhtml = element.innerHTML;
@@ -3180,13 +3189,13 @@
             addTitleEditBoxRemove:function(){
                 var odiv = document.querySelector("#titleEdit");
                 if(odiv){
-                    odiv.parentNode.innerHTML = odiv.value?odiv.value:"¿Õ";
+                    odiv.parentNode.innerHTML = odiv.value?odiv.value:"ç©º";
                 }
             },
 
-            // ¸ß¼¶²Ëµ¥£¬ÅäÖÃÎÄ¼ş±à¼­½çÃæ
+            // é«˜çº§èœå•ï¼Œé…ç½®æ–‡ä»¶ç¼–è¾‘ç•Œé¢
             editCodeBox: function(){
-                console.log("Ô­Ê¼Êı¾İ£º ",getSettingData);
+                console.log("åŸå§‹æ•°æ®ï¼š ",getSettingData);
                 var userSetting = GM_getValue("searchEngineJumpData")
                 var editbox = document.createElement("div");
                 // var sData = 
@@ -3199,14 +3208,14 @@
                     "padding:10px 20px;" ;
                 var innerH = " "+
                     "<p><span style='color:red;font-size:1.2em;'>! ! !</span></br>"+
-                    "´Ë´¦ÓĞ¸ü¶àµÄÉèÖÃÑ¡Ïî£¬×ÔÓÉ¶È¸ü¸ß£¬</br>"+
-                    "µ«ÉèÖÃ´íÎó»áµ¼ÖÂ½Å±¾ÎŞ·¨ÔËĞĞ"+
+                    "æ­¤å¤„æœ‰æ›´å¤šçš„è®¾ç½®é€‰é¡¹ï¼Œè‡ªç”±åº¦æ›´é«˜ï¼Œ</br>"+
+                    "ä½†è®¾ç½®é”™è¯¯ä¼šå¯¼è‡´è„šæœ¬æ— æ³•è¿è¡Œ"+
                     "</p>" +
                     "<textarea wrap='off' cols='45' rows='20' style='overflow:auto;border-radius:4px;'>" + JSON.stringify(userSetting,false,4) + "</textarea>" + 
                     "<br>" +
-                    "<button id='xin-reset'>Çå¿ÕÉèÖÃ</button> &nbsp;&nbsp;&nbsp;" +
-                    "<button id='codeboxclose'>¹Ø±Õ</button> &nbsp;&nbsp;&nbsp;" +
-                    "<button id='xin-codeboxsave'>±£´æ</button>" +
+                    "<button id='xin-reset'>æ¸…ç©ºè®¾ç½®</button> &nbsp;&nbsp;&nbsp;" +
+                    "<button id='codeboxclose'>å…³é—­</button> &nbsp;&nbsp;&nbsp;" +
+                    "<button id='xin-codeboxsave'>ä¿å­˜</button>" +
                 "";
                 // console.log(JSON.stringify(getSettingData,4));
                 // console.log(JSON.stringify(getSettingData,null,4));
@@ -3219,12 +3228,12 @@
                     // console.log(JSON.parse(codevalue));
                     GM_setValue("searchEngineJumpData",JSON.parse(codevalue));
                     // console.log(GM_getValue("searchEngineJumpData"));
-                    // Ë¢ĞÂÒ³Ãæ
+                    // åˆ·æ–°é¡µé¢
                     setTimeout(function(){
                         window.location.reload();
                     },300);
                 } else {
-                    // alert("ÊäÈëÎª¿Õ");
+                    // alert("è¾“å…¥ä¸ºç©º");
                     this.reset();
                 }
             },
@@ -3235,7 +3244,7 @@
                 }
             },
 
-            // ËÑË÷ÁĞ±íÅÅĞò
+            // æœç´¢åˆ—è¡¨æ’åº
             searchListSortBox:function(){
 
                 GM_addStyle('' +
@@ -3264,7 +3273,7 @@
 
                 var innerH = " ";
                
-                // »ñÈ¡µ±Ç°·ÖÀàÇé¿ö
+                // è·å–å½“å‰åˆ†ç±»æƒ…å†µ
                 var odetails = document.querySelectorAll(".sejtitle");
                 var odetailsLength = odetails.length;
                 for(let i=0;i<odetailsLength;i++){
@@ -3274,8 +3283,8 @@
                     innerH += "<p draggable='true' class='iqxin-listDrag'><span style='pointer-events:none;' data-iqxintitle='"+  odetails[i].dataset.iqxintitle +"' data-iqxindisabledlist='"+ iqxinDisabledList  +"'>"+ odetails[i].firstChild.innerHTML + "</span></p>";
                 }
 
-                // Ìí¼Ó±£´æ¹Ø±Õ°´Å¥
-                innerH += "<br><p><button class='iqxin-listDragClose'>¹Ø±Õ</button> <button class='iqxin-listDragSave'>±£´æ</button></p>"
+                // æ·»åŠ ä¿å­˜å…³é—­æŒ‰é’®
+                innerH += "<br><p><button class='iqxin-listDragClose'>å…³é—­</button> <button class='iqxin-listDragSave'>ä¿å­˜</button></p>"
                 sortBox.innerHTML = innerH;
                 this.ele.appendChild(sortBox);
 
@@ -3291,10 +3300,10 @@
                 });
             },
             searchListSortEnger:function(){
-                // ·ÖÀàÃû³Æ
+                // åˆ†ç±»åç§°
                 var engineDetails=[]; 
                 
-                // ·ÖÀàÅÅĞò
+                // åˆ†ç±»æ’åº
                 var odetails = document.querySelectorAll(".iqxin-listDrag");
                 var odetailsLength = odetails.length;
                 for(let i=0;i<odetailsLength;i++){
@@ -3305,7 +3314,7 @@
                     engineDetails[i][2] = odetailsChild.dataset.iqxindisabledlist === 'true'?true:false;
                 };
 
-                //±£´æÊı¾İ
+                //ä¿å­˜æ•°æ®
                 var getData = GM_getValue("searchEngineJumpData");
                 
                 // console.info('before: ');
@@ -3322,70 +3331,70 @@
                 }
             },
 
-            // ±êÌâµã»÷ £¨¿ª¹ØËÑË÷ÁĞ±í£©£¨¿ÉÒÔ²¢Èëµ½ÏÂÃæµÄµã»÷ÊÂ¼ş£©
+            // æ ‡é¢˜ç‚¹å‡» ï¼ˆå¼€å…³æœç´¢åˆ—è¡¨ï¼‰ï¼ˆå¯ä»¥å¹¶å…¥åˆ°ä¸‹é¢çš„ç‚¹å‡»äº‹ä»¶ï¼‰
             titleClick: function(e){
                 var target = e.target;
                 target.dataset.xin = -parseInt(target.dataset.xin);
             },
-            // µã»÷ÊÂ¼ş   ´Ë´¦µÄ if ĞèÒª¸ù¾İÊµ¼ÊÇé¿öÌæ»»³É elseif (switch)
+            // ç‚¹å‡»äº‹ä»¶   æ­¤å¤„çš„ if éœ€è¦æ ¹æ®å®é™…æƒ…å†µæ›¿æ¢æˆ elseif (switch)
             domClick: function(e){
                 var targetClass = e.target.className;
                 var targetid = e.target.id;
-                debug("µã»÷ÊÂ¼ş£º%o, ID: %o, class: %o, e: %o",e.target,targetid,targetClass,e)
+                debug("ç‚¹å‡»äº‹ä»¶ï¼š%o, ID: %o, class: %o, e: %o",e.target,targetid,targetClass,e)
 
-                // É¾³ıËÑË÷
+                // åˆ é™¤æœç´¢
                 if(~e.target.className.indexOf("iqxin-set-del")){
                     // console.log(e.target);
                     e.target.parentNode.parentNode.removeChild(e.target.parentNode);
                 };
-                // É¾³ıËÑË÷ÁĞ±í
+                // åˆ é™¤æœç´¢åˆ—è¡¨
                 if(~e.target.className.indexOf("iqxin-set-title-del")){
                     // console.log(e.target, e.target.parentNode.parentNode);
                     e.target.parentNode.parentNode.parentNode.removeChild(e.target.parentNode.parentNode);
                 };
 
                 if(~e.target.className.indexOf("iqxin-additem")){
-                    // console.log("´Ë´¦»áÓĞ¸öµ¯¿òÌí¼ÓĞÂËÑË÷");
+                    // console.log("æ­¤å¤„ä¼šæœ‰ä¸ªå¼¹æ¡†æ·»åŠ æ–°æœç´¢");
                     this.parentNode = e.target.parentNode;
                     this.addItemBox();
                     // console.log(this);
                 };
                 if(e.target.className==="sej-engine"){
-                    console.log("sej-engine ±»µã»÷");
+                    console.log("sej-engine è¢«ç‚¹å‡»");
                     e.target.dataset.iqxindisabled = e.target.dataset.iqxindisabled?"":"true";
                 };
                 if(~targetClass.indexOf("addItemBoxCancel")){
                     this.addItemBoxRemove();
                 };
-                // Ìí¼ÓĞÂµÄËÑË÷ È·¶¨
+                // æ·»åŠ æ–°çš„æœç´¢ ç¡®å®š
                 if(~targetClass.indexOf("addItemBoxEnter")){
                     this.addItemEnger();
                 };
-                // Ìí¼ÓĞÂµÄËÑË÷ÁĞ±í È·¶¨
+                // æ·»åŠ æ–°çš„æœç´¢åˆ—è¡¨ ç¡®å®š
                 if(targetid === "nSearchList"){
-                    debug("Ìí¼ÓĞÂµÄËÑË÷ÁĞ±í");
+                    debug("æ·»åŠ æ–°çš„æœç´¢åˆ—è¡¨");
                     this.addSearchListBox();
                 };
                 if(targetid === "addSearchListBoxEnter"){
-                    debug("ÏòÍøÒ³Ìí¼ÓÔªËØ");
+                    debug("å‘ç½‘é¡µæ·»åŠ å…ƒç´ ");
                     this.addSearchListEnger();
                 };
                 if(targetid === "addSearchListBoxCancel"){
-                    debug("ÒÆ³ıºĞ×Ó");
+                    debug("ç§»é™¤ç›’å­");
                     this.boxClose("#newSearchListBox");
                 };
 
-                // ĞŞ¸ÄËÑË÷ È·¶¨
+                // ä¿®æ”¹æœç´¢ ç¡®å®š
                 if(~targetClass.indexOf("editItemBoxEnter")){
                     // console.log(e);
                     this.addEditBoxEnger();
                 };
 
-                // ±à¼­¿ò
+                // ç¼–è¾‘æ¡†
                 if(~e.target.className.indexOf("iqxin-set-edit")){
                     this.addEditBox(e);
                 }
-                // ±êÌâ±à¼­¿ò
+                // æ ‡é¢˜ç¼–è¾‘æ¡†
                 if(~targetClass.indexOf("iqxin-title-edit")){
                     e.stopPropagation();
                     this.addTitleEditBox(e);
@@ -3393,7 +3402,7 @@
                 if(~targetClass.indexOf("sejtitle")){
                     this.titleClick(e);
                 }
-                // codebox  Ô´´úÂë±à¼­¿ò
+                // codebox  æºä»£ç ç¼–è¾‘æ¡†
                 if(targetid ==="codeboxclose"){
                     this.editCodeBoxClose();
                 } else if(targetid==="xin-reset"){
@@ -3402,14 +3411,14 @@
                     this.editCodeBoxSave();
                 }
 
-                //  µã»÷¸ü¶à²Ëµ¥
+                //  ç‚¹å‡»æ›´å¤šèœå•
                 if(targetid ==="moreSet"){
                     document.querySelector("#btnEle2").classList.toggle("btnEle2active");
                     // iqxin-btn-active
                     e.target.classList.toggle("iqxin-btn-active");
                 }
 
-                //  ÁĞ±íÅÅĞò
+                //  åˆ—è¡¨æ’åº
                 if(targetid ==="xin-listSort"){
                     this.searchListSortBox();
                 }
@@ -3420,30 +3429,30 @@
                     this.boxClose("#iqxin-sortBox"); 
                 };
 
-                // ¿Õ°×µØ·½µã»÷
+                // ç©ºç™½åœ°æ–¹ç‚¹å‡»
                 if(~targetClass.indexOf("iqxin-items") || targetid === "settingLayer" || targetClass==="btnEleLayer"){
-                    // this.addItemBoxRemove(); // ĞÂµÄËÑË÷Ìí¼Ó¿ò
-                    // this.addDelremove();  //  Ôö¼Ó/É¾³ı½çÃæ
-                    // this.editCodeBoxClose(); // code±à¼­¿ò
-                    // this.addTitleEditBoxRemove(); //±êÌâ±à¼­¿ò
-                    // this.boxClose("#newSearchListBox"); // Ìí¼ÓĞÂµÄËÑË÷ÁĞ±í
-                    // document.querySelector("#btnEle2").classList.remove("btnEle2active"); // ¸ü¶àÉèÖÃ
+                    // this.addItemBoxRemove(); // æ–°çš„æœç´¢æ·»åŠ æ¡†
+                    // this.addDelremove();  //  å¢åŠ /åˆ é™¤ç•Œé¢
+                    // this.editCodeBoxClose(); // codeç¼–è¾‘æ¡†
+                    // this.addTitleEditBoxRemove(); //æ ‡é¢˜ç¼–è¾‘æ¡†
+                    // this.boxClose("#newSearchListBox"); // æ·»åŠ æ–°çš„æœç´¢åˆ—è¡¨
+                    // document.querySelector("#btnEle2").classList.remove("btnEle2active"); // æ›´å¤šè®¾ç½®
                     this.allBoxClose();
                 }
             },
 
-            // ¹Ø±ÕËùÓĞ´Î¼¶´°¿Ú¡¢²Ëµ¥
+            // å…³é—­æ‰€æœ‰æ¬¡çº§çª—å£ã€èœå•
             allBoxClose: function(){
-                this.addItemBoxRemove(); // ĞÂµÄËÑË÷Ìí¼Ó¿ò
-                this.addDelremove();  //  Ôö¼Ó/É¾³ı½çÃæ
-                this.editCodeBoxClose(); // code±à¼­¿ò
-                this.addTitleEditBoxRemove(); //±êÌâ±à¼­¿ò
-                this.boxClose("#newSearchListBox"); // Ìí¼ÓĞÂµÄËÑË÷ÁĞ±í
-                this.boxClose("#iqxin-sortBox"); // ËÑË÷ÁĞ±íÅÅĞò
-                document.querySelector("#btnEle2").classList.remove("btnEle2active"); // ¸ü¶àÉèÖÃ
+                this.addItemBoxRemove(); // æ–°çš„æœç´¢æ·»åŠ æ¡†
+                this.addDelremove();  //  å¢åŠ /åˆ é™¤ç•Œé¢
+                this.editCodeBoxClose(); // codeç¼–è¾‘æ¡†
+                this.addTitleEditBoxRemove(); //æ ‡é¢˜ç¼–è¾‘æ¡†
+                this.boxClose("#newSearchListBox"); // æ·»åŠ æ–°çš„æœç´¢åˆ—è¡¨
+                this.boxClose("#iqxin-sortBox"); // æœç´¢åˆ—è¡¨æ’åº
+                document.querySelector("#btnEle2").classList.remove("btnEle2active"); // æ›´å¤šè®¾ç½®
             },
 
-            // ÍÏ¶¯
+            // æ‹–åŠ¨
             domdragstart:function (e) {
                 if(~this.className.indexOf("sejtitle")){
                     dragEl = this.parentNode;
@@ -3491,11 +3500,11 @@
                     var that = _this.parentNode;
                 }
 
-                // ·ÀÖ¹¿çÇøÓòÒÆ¶¯
+                // é˜²æ­¢è·¨åŒºåŸŸç§»åŠ¨
                 if(dragEl.className != that.className){
                     return;
                 }
-                // Èç¹ûÒÆ¶¯±êÌâ£¬ĞèÒªË³´ø½»»»id /µ¥¶ÀÄÃ³öÀ´ÊÇÎªÁËÉÏÃæµÄ·ÀÖ¹¿çÇøÓòÒÆ¶¯µÄÎÊÌâ
+                // å¦‚æœç§»åŠ¨æ ‡é¢˜ï¼Œéœ€è¦é¡ºå¸¦äº¤æ¢id /å•ç‹¬æ‹¿å‡ºæ¥æ˜¯ä¸ºäº†ä¸Šé¢çš„é˜²æ­¢è·¨åŒºåŸŸç§»åŠ¨çš„é—®é¢˜
                 if(~_this.className.indexOf("sejtitle")){
                     var temp = dragEl.id;
                     dragEl.id = that.id;
@@ -3524,7 +3533,7 @@
                 return false;
             },
 
-            // ÅĞ¶ÏÊÇ·ñÄÜÁ¬½ÓÖÁgoogle
+            // åˆ¤æ–­æ˜¯å¦èƒ½è¿æ¥è‡³google
             isOnline: function(){
                 console.log("this.online",this.online);
                 if(this.online)return;
@@ -3533,18 +3542,18 @@
                 var myImage = new Image;
                 myImage.src = 'https://www.google.com/s2/favicons?domain=www.baidu.com&' + Math.random() ;
                 setTimeout(function(){
-                    // console.log("È¡Ïû¼ÓÔØ");
+                    // console.log("å–æ¶ˆåŠ è½½");
                     console.log(myImage.width);
                     if(myImage.width){
                         that.online = true;
                     }else{
                         myImage.src = undefined;
-                        // that.online = "¹ş¹ş";
+                        // that.online = "å“ˆå“ˆ";
                     };
                 },2000);
             },
 
-            // ÉèÖÃ°´Å¥Í¸Ã÷¶ÈÉèÖÃ
+            // è®¾ç½®æŒ‰é’®é€æ˜åº¦è®¾ç½®
             rangeChange: function(bool){
                 // console.log(this);
                 if(bool){
@@ -3557,7 +3566,7 @@
                     document.querySelector(".iqxin-setBtnOpacityRangeValue").innerHTML = this.value;
                 }
             },
-            // ´°¿Ú´óĞ¡¸Ä±ä
+            // çª—å£å¤§å°æ”¹å˜
             windowResize: function(){
                 // var settingLayer = document.querySelector("#settingLayer");
                 // console.log(this);
@@ -3569,7 +3578,7 @@
 
                 var maskStyle = this.mask.style;
 
-                // console.log("¿í£º",w,ww);
+                // console.log("å®½ï¼š",w,ww);
 
                 if(w>=ww){
                     maskStyle.justifyContent = "stretch";
@@ -3584,7 +3593,7 @@
             },
             saveData: function(){
                 // 
-                this.addTitleEditBoxRemove(); //±êÌâÀ¸´¦ÓÚ±à¼­×´Ì¬
+                this.addTitleEditBoxRemove(); //æ ‡é¢˜æ å¤„äºç¼–è¾‘çŠ¶æ€
 
                 var obj = {};
                 var parentdiv = document.querySelectorAll("#settingLayer .iqxin-items");
@@ -3611,10 +3620,10 @@
                     }
                 }
 
-                // ·ÖÀàÃû³Æ
+                // åˆ†ç±»åç§°
                 var engineDetails=[]; 
                 
-                // ·ÖÀàÅÅĞò
+                // åˆ†ç±»æ’åº
                 var odetails = document.querySelectorAll(".sejtitle");
                 var odetailsLength = odetails.length;
                 for(let i=0;i<odetailsLength;i++){
@@ -3627,11 +3636,11 @@
                     // details[i] = odetails[i].dataset.xin;
                 }
 
-                // ĞÂ±êÇ©Ò³È«¾ÖÉèÖÃ
+                // æ–°æ ‡ç­¾é¡µå…¨å±€è®¾ç½®
                 var onewtab = document.querySelector("#iqxin-globalNewtab").selectedIndex;
                 var foldlist = document.querySelector("#iqxin-foldlist").checked;
 
-                // ÒÔ·À²»²â£¬ÖØĞÂ»ñÈ¡±¾µØÅäÖÃÎÄ¼ş
+                // ä»¥é˜²ä¸æµ‹ï¼Œé‡æ–°è·å–æœ¬åœ°é…ç½®æ–‡ä»¶
                 var getData = GM_getValue("searchEngineJumpData");
                 getData.newtab = onewtab;
                 getData.foldlist = foldlist;
@@ -3641,7 +3650,7 @@
                 getData.engineDetails = engineDetails;
                 getData.engineList = obj;
 
-                debug('½«Òª±£´æµÄÊı¾İ£º',getData);
+                debug('å°†è¦ä¿å­˜çš„æ•°æ®ï¼š',getData);
                 GM_setValue("searchEngineJumpData",getData);
             },
             addGlobalStyle: function(){
@@ -3909,7 +3918,7 @@
                     "#titleEdit{" +
                         "width:6em;" +
                     "}" +
-                    // ¹Ø±Õ°´Å¥
+                    // å…³é—­æŒ‰é’®
                     "#xin-close{" +
                         "background:white;" +
                         "color:#3ABDC1;" +
@@ -3936,30 +3945,30 @@
                         "color: #fff;" +
                         // "transform: rotate(180deg);" +
                     "}" +
-                    // type[range] Ğ§¹û
+                    // type[range] æ•ˆæœ
                     "input[type=range] {" +
                         "outline: none;" +
                         "-webkit-appearance: none;" +
                         "background:-webkit-linear-gradient(left,#3ABDC1,#83e7ea) no-repeat, #fff;" +
-                        "border-radius: 10px; /*Õâ¸öÊôĞÔÉèÖÃÊ¹Ìî³ä½ø¶ÈÌõÊ±µÄÍ¼ĞÎÎªÔ²½Ç*/" +
+                        "border-radius: 10px; /*è¿™ä¸ªå±æ€§è®¾ç½®ä½¿å¡«å……è¿›åº¦æ¡æ—¶çš„å›¾å½¢ä¸ºåœ†è§’*/" +
                     "}" +
                     "input[type=range]::-webkit-slider-thumb {" +
                         "-webkit-appearance: none;" +
                     "} " +
                     "input[type=range]::-webkit-slider-runnable-track {" +
                         "height: 10px;" +
-                        "border-radius: 10px; /*½«¹ìµÀÉèÎªÔ²½ÇµÄ*/" +
-                        "box-shadow: 0 1px 1px #def3f8, inset 0 .125em .125em #0d1112; /*¹ìµÀÄÚÖÃÒõÓ°Ğ§¹û*/" +
+                        "border-radius: 10px; /*å°†è½¨é“è®¾ä¸ºåœ†è§’çš„*/" +
+                        "box-shadow: 0 1px 1px #def3f8, inset 0 .125em .125em #0d1112; /*è½¨é“å†…ç½®é˜´å½±æ•ˆæœ*/" +
                     "}" +
                     "input[type=range]::-webkit-slider-thumb {" +
                         "-webkit-appearance: none;" +
                         "height: 18px;" +
                         "width: 18px;" +
-                        "margin-top: -5px; /*Ê¹»¬¿é³¬³ö¹ìµÀ²¿·ÖµÄÆ«ÒÆÁ¿ÏàµÈ*/" +
+                        "margin-top: -5px; /*ä½¿æ»‘å—è¶…å‡ºè½¨é“éƒ¨åˆ†çš„åç§»é‡ç›¸ç­‰*/" +
                         "background: #fff; " +
-                        "border-radius: 50%; /*Íâ¹ÛÉèÖÃÎªÔ²ĞÎ*/" +
-                        "border: solid 0.125em rgba(205, 224, 230, 0.5); /*ÉèÖÃ±ß¿ò*/" +
-                        "box-shadow: 0 .125em .125em #3b4547; /*Ìí¼Óµ×²¿ÒõÓ°*/" +
+                        "border-radius: 50%; /*å¤–è§‚è®¾ç½®ä¸ºåœ†å½¢*/" +
+                        "border: solid 0.125em rgba(205, 224, 230, 0.5); /*è®¾ç½®è¾¹æ¡†*/" +
+                        "box-shadow: 0 .125em .125em #3b4547; /*æ·»åŠ åº•éƒ¨é˜´å½±*/" +
                     "}" +
                     "";
                 head = document.getElementsByTagName('head')[0];
@@ -3970,7 +3979,7 @@
             }
         };
 
-        // Ôö¼ÓÉèÖÃ°´Å¥
+        // å¢åŠ è®¾ç½®æŒ‰é’®
         if (~getSettingData.setBtnOpacity){
             var setBtn = document.createElement("span");
             setBtn.id = "setBtn";
@@ -4012,7 +4021,7 @@
             });
         };
 
-        // »ñÈ¡´æ´¢µÄÊı¾İĞÅÏ¢
+        // è·å–å­˜å‚¨çš„æ•°æ®ä¿¡æ¯
         function get_data(){
             setData = GM_getValue("searchEngineJumpData");
         }
@@ -4025,7 +4034,7 @@
 
 
 
-    // ´Ó´Ë´¦¿ªÊ¼Ö´ĞĞ
+    // ä»æ­¤å¤„å¼€å§‹æ‰§è¡Œ
     var debug;
     function reloadDebug(bool) {
         debug = bool ? console.info.bind(console) : function() {};
@@ -4035,24 +4044,24 @@
     // }
 
 
-    // hash-query  ²»Ë¢ĞÂÒ³ÃæµÄËÑË÷
-        // hashchange ºÍ popstate ¶¼ÎŞ·¨¼ì²âµ½¹È¸èºÍ°Ù¶ÈËÑË÷Ê±ÍøÖ·µÄ±ä»¯£¬²»Àí½â
+    // hash-query  ä¸åˆ·æ–°é¡µé¢çš„æœç´¢
+        // hashchange å’Œ popstate éƒ½æ— æ³•æ£€æµ‹åˆ°è°·æ­Œå’Œç™¾åº¦æœç´¢æ—¶ç½‘å€çš„å˜åŒ–ï¼Œä¸ç†è§£
     if (window.self != window.top) return;
-    // ÏÂÃæÕâÖÖ·½·¨°Ù¶ÈÒ»Ö±±¨´íÎŞ·¨Ê¹ÓÃ£¬ËìÓÃ¶¨Ê±Æ÷
+    // ä¸‹é¢è¿™ç§æ–¹æ³•ç™¾åº¦ä¸€ç›´æŠ¥é”™æ— æ³•ä½¿ç”¨ï¼Œé‚ç”¨å®šæ—¶å™¨
     // if (true) {
-    //     console.log('iqxinÌí¼Ó±êÌâ½Úµã¼àÊÓÆ÷: title');
+    //     console.log('iqxinæ·»åŠ æ ‡é¢˜èŠ‚ç‚¹ç›‘è§†å™¨: title');
 
     //     var watch = document.querySelector('title');
     //     console.log("titile: ",watch);
     //     console.log("titile: ",document.title);
     //     new (window.MutationObserver || window.WebKitMutationObserver)(function(mutations){
-    //         console.log('iqxin±êÌâ·¢ÉúÁË±ä»¯', document.title);
+    //         console.log('iqxinæ ‡é¢˜å‘ç”Ÿäº†å˜åŒ–', document.title);
     //         if(!document.querySelector('sejspan')){
     //          runInPageContext(contentScript);
     //         }
     //     }).observe(watch, {childList: true, subtree: true, characterData: true});
     // }
-    // ¸ø¹È¸èºÍ°Ù¶ÈËÑË÷µÄÖ÷Ò³µ¥¶À¼Ó¸öÁĞ±í
+    // ç»™è°·æ­Œå’Œç™¾åº¦æœç´¢çš„ä¸»é¡µå•ç‹¬åŠ ä¸ªåˆ—è¡¨
     var url = window.location.href;
 
     var hashList = [
@@ -4068,21 +4077,21 @@
         var oldTitle = document.title;
         var newTitle = "";
         var timer = setInterval(function(){
-             // console.log("Ñ­»·ÖĞ",newTitle,oldTitle);
+             // console.log("å¾ªç¯ä¸­",newTitle,oldTitle);
             newTitle = document.title;
             if (document.querySelector("#appbar") && !document.querySelector("sejspan")){
                 console.log("new");
                 iqxinstart();
             } else if (document.querySelector("sejspan")){
-                // console.log("ÒÑ´æÔÚ");
+                // console.log("å·²å­˜åœ¨");
                 clearInterval(timer);
             }else if (oldTitle!=newTitle){
-                // console.log("²»´æÔÚ¿ªÊ¼²åÈë");
+                // console.log("ä¸å­˜åœ¨å¼€å§‹æ’å…¥");
                 iqxinstart();
             }
         },1000)
     } else {
-        // console.log("ÆÕÍ¨²åÈë");
+        // console.log("æ™®é€šæ’å…¥");
         iqxinstart();
     }
 })();
