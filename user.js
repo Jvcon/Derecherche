@@ -177,5 +177,88 @@
 					where:'afterEnd',
 				},
 			},
-			
+			{name:"Bing",
+				url: /^https?:\/\/[^.]*\.bing\.com\/search/,
+                enabled: true,
+                engineList: "web",
+                style: "\
+                    padding-left:100px;\
+                    margin-top:3px;\
+                	",
+                insertIntoDoc: {
+                    keyword: 'css;#sb_form_q',
+                    target: 'css;#b_content',
+                    where: 'beforeBegin',
+                },
+			},
+			{name:"DDG,
+				url: /^https?:\/\/duckduckgo\.com\/[^.]*/i,
+                enabled: true,
+                engineList: "web",
+                style: '\
+                    padding-left:95px;\
+                    margin-top:5px;\
+                ',
+                insertIntoDoc: {
+                    keyword: '//input[@name="q"]',
+                    target: 'css;#header_wrapper',
+                    where: 'afterEnd',
+                },
+			},
+			{name:"Yahoo",
+				url:/^https?:\/\/search\.yahoo\.com\/search/i,
+                engineList:"web",
+                enabled:true,
+                fixedTop:72,
+                style:"\
+                    margin-left:122px;\
+                    margin-bottom:-4px;\
+                    padding-top:6px;\
+                ",
+                insertIntoDoc:{
+                    keyword:'css;#yschsp',
+                    target:'css;#horizontal-bar',
+                    where:'afterBegin',
+                },
+			},
+			{name:"Yahoo-tw",
+				url:/^https?:\/\/tw\.search\.yahoo\.com\/search/i,
+                engineList:"web",
+                enabled:true,
+                fixedTop:52,
+                style:"\
+                    margin-left:-10px;\
+                    margin-bottom:10px;\
+                ",
+                insertIntoDoc:{
+                    keyword:'css;#yschsp',
+                    target:'css;#results',
+                    where:'afterBegin',
+                },
+			},
+			{name:"searx",
+                url:/^https?:\/\/searx\.me\/\?q/i,
+                engineList:"web",
+                enabled:true,
+                style:"\
+                    margin-left:-10px;\
+                    margin-bottom:10px;\
+                ",
+                insertIntoDoc:{
+                    keyword:'css;#q',
+                    target:'css;#categories',
+                    where:'beforeBegin',
+                },
+            },
+			{name: "SimilarSiteSearch",
+				url: /^https?:\/\/www\.similarsitesearch\.com/i,
+				enabled:true,
+				engineList:"web",
+				sytle:"z-index:99;",
+				insertIntoDoc:{
+					keyword:"css;#main_URL",
+					target:"css;#main",
+					where:"beforeBegin",
+				},
+			},
 		]
