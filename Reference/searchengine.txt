@@ -1,0 +1,35 @@
+
+
+w: http://www.wikipedia.org/w/index.php?title=Special:Search&search=%s Wikipedia
+
+bd: https://www.baidu.com/s?wd=%s Baidu
+b: https://www.bing.com/search?q=%s Bing
+g: http://www.google.com/search?q=%s Google
+
+tb: http://s.taobao.com/search?q=%s Taobao
+jd: http://search.jd.com/Search?keyword=%s JD
+az: http://www.amazon.com/s/?field-keywords=%s Amazon
+
+bl: http://search.bilibili.com/all?keyword=%s Bilibili
+yk: http://www.soku.com/search_video/q_%s Youku
+
+apps: http://appshopper.com/search?search=%s
+greasy: https://greasyfork.org/zh-CN/scripts/search?q=%s GreasyFork
+tpf: http://www.portablefreeware.com/?q=%s Portablefreeware
+pa: http://portableapps.com/search/node/%s
+xc: http://xclient.info/search/s/%s
+at: http://alternativeto.net/software/%s
+sf: https://sourceforge.net/directory/os:windows/?q=%s
+
+muo: http://www.makeuseof.com/?s=%s MakeUseOf
+makez: http://makezine.com/?s=%s Make:
+is: http://www.instructables.com/howto/%s
+thing: http://www.thingiverse.com/search?q=%s
+sgf: https://segmentfault.com/search?q=%s SegmentFault
+wh: http://www.wikihow.com/wikiHowTo?search=%s
+
+bppt: http://www.tretars.com/?s=%s 逼格PPT
+rf: http://readfree.me/search/?q=%s
+
+note: http://notepad.live/paps/%s
+time: http://e.ggtimer.com/%s

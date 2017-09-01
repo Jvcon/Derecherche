@@ -1,0 +1,128 @@
+<div id="search">
+		            <div class="search-list">
+		                <input
+		                    type="radio"
+		                    name="type"
+		                    id="type-baidu"
+		                    value="https://www.baidu.com/s?wd="
+		                    data-placeholder="百度一下"
+		                    hidden
+                    		data-i="0"
+		                >
+		                <label for="type-baidu"><span style="color:#2100E0">百度</span></label>
+
+		                 <input
+		                    type="radio"
+		                    name="type"
+		                    id="type-google"
+		                    value="http://www.google.com.hk/search?q="
+		                    data-placeholder="Google search"
+		                    hidden
+                    		data-i="1"
+		                >
+		                <label for="type-google"><span style="color:#3B83FA">G</span><span style="color:#F3442C">o</span><span style="color:#FFC300">o</span><span style="color:#4696F8">g</span><span style="color:#2CAB4E">l</span><span style="color:#F54231">e</span></label>
+
+		                 <input
+		                    type="radio"
+		                    name="type"
+		                    id="type-dribbble"
+		                    value="https://dribbble.com/search?q="
+		                    data-placeholder="Dribbble search"
+		                    hidden
+                    		data-i="2"
+		                >
+		                <label for="type-dribbble"><span style="color:#EC4989">Dribbble</span></label>
+
+		                 <input
+		                    type="radio"
+		                    name="type"
+		                    id="type-behance"
+		                    value="https://www.behance.net/search?search="
+		                    data-placeholder="Behance search"
+		                    hidden
+                    		data-i="3"
+		                >
+		                <label for="type-behance"><span style="color:#0055FF">Behance</span></label>
+
+		                 <input
+		                    type="radio"
+		                    name="type"
+		                    id="type-easyicon"
+		                    value="http://www.easyicon.net/iconsearch/"
+		                    data-placeholder="icon search"
+		                    hidden
+                    		data-i="4"
+		                >
+		                <label for="type-easyicon"><span style="color:#383331">Icon</span></label>
+
+		                 <input
+		                    type="radio"
+		                    name="type"
+		                    id="type-huaban"
+		                    value="http://huaban.com/search/?q="
+		                    data-placeholder="搜索花瓣网"
+		                    hidden
+                    		data-i="5"
+		                >
+		                <label for="type-huaban"><span style="color:#E35452">花瓣</span></label>
+
+		                 <input
+		                    type="radio"
+		                    name="type"
+		                    id="type-g"
+		                    value="https://www.pinterest.com/search/pins/?q="
+		                    data-placeholder="搜索 Pinterest"
+		                    hidden
+                    		data-i="6"
+		                >
+		                <label for="type-g"><span style="color:#bd081c">Pinterest</span></label>
+
+		                 <input
+		                    type="radio"
+		                    name="type"
+		                    id="type-freepik"
+		                    value="http://www.freepik.com/index.php?goto=2&searchform=1&k="
+		                    data-placeholder="freepik search"
+		                    hidden
+                    		data-i="7"
+		                >
+		                <label for="type-freepik"><span style="color:#448CD6">freepik</span></label>
+
+		                 <input
+		                    type="radio"
+		                    name="type"
+		                    id="type-pexels"
+		                    value="https://www.pexels.com/search/"
+		                    data-placeholder="免版税图库(请用英文关键字搜索)"
+		                    hidden
+                    		data-i="8"
+		                >
+		                <label for="type-pexels"><span style="color:#262626">PEXELS</span></label>
+
+		                <input
+		                    type="radio"
+		                    name="type"
+		                    id="type-b"
+		                    value="http://www.baidu.com/s?tn=baidulocal&wd="
+		                    data-placeholder="使用「百度纯净版」搜索"
+		                    hidden
+                    		data-i="9"
+		                >
+		                <label for="type-b"><span style="color:#2100E0">纯</span></label>
+
+		                <input
+		                    type="radio"
+		                    name="type"
+		                    id="type-fanyi"
+		                    value="http://translate.google.cn/?hl=cn#zh-CN/en/"
+		                    data-placeholder="请输入要翻译的文字(中->英)"
+		                    hidden
+                    		data-i="10"
+		                >
+		                <label for="type-fanyi"><span>译</span></label>
+		            </div>
+		            <form action="https://www.baidu.com/s?wd=" method="get">
+		                <input type="text" id="search-text" placeholder="百度一下" style="outline:none" autofocus />
+		                <button type="submit"><i class="fa fa-search"></i></button>
+		            </form>
+		        </div><!-- ./ search -->
