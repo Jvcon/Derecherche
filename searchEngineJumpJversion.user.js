@@ -6,7 +6,7 @@
 // @version 1.1708.29.0
 // @created 2017-08-29
 // @lastUpdated 2017-08-29
-// @include *
+
 // @namespace
 // @homepage https://github.com/Jvcon/SEJ-jversion
 
@@ -15,9 +15,20 @@
 // @include        *google*
 // @include        *baidu.com*
 // @include        *bing.com*
+// @include        *yahoo.com*
+// @include        *sogou.com*
 // @include        *duckduckgo.com*
-// @include        *youdao.com*
-// @include        *so.com*
+// @include        *so.com* 
+// @include        *youdao.com* 
+// @include        *cnki.net* 
+// @include        *zdic.net* 
+// @include        *wikipedia.com* 
+// @include        *wikiwand.com*
+// @include        *moegirl.com*
+// @include        *zhihu.com*
+// @include        *guokr.com*
+// @include        *baike.com*
+// @include        *docin.com*
 
 
 // @grant       GM_getValue
@@ -35,14 +46,14 @@
         // 根据规则把搜索引擎列表插入到指定网站
         var rules = [
             // web list - 网页列表
-            {name: "google",// 你要加载的网站的名字(方便自己查找)
+            {name: "google",
                 // 是否启用.
                 enabled: true,
                 // 在哪个网站上加载,正则.
                 url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^?]+\?(?:&?q=|(?:[^#](?!&tbm=))+?&q=)(?:.(?!&tbm=))*$/,
                 // 加载哪个类型的列表:
                 // ['web'|'music'|'video'|'image'|'download'|'shopping'|'translate'|'knowledge'|'sociality']
-                engineList: 'web',
+                engineList: "web",
                 // 给引擎列表的样式
                 style: '\
                     margin-left: 142px;\
@@ -73,7 +84,7 @@
             {name: "google-hash-query",// 不刷新页面显示搜索结果的google
                 enabled: true,
                 url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^#]*#(?:&?q=|.+?&q=).+/,
-                engineList: 'web',
+                engineList: "web",
                 style: '\
                     margin-left: 138px;\
                     z-index: 100;\
@@ -88,17 +99,43 @@
                     where: 'beforeBegin',
                 },
                 stylish: 'body.vasq #hdtbMenus.hdtb-td-o{top:100px !important}'
+            }, 
+            {name:"google-mirror-glgoo",
+                enabled:true,
+                url:/^https?:\/\/www\.glgoo\.com\/search\?q/i,
+                engineList:"web",
+                style:"padding-left:135px;",
+                insertIntoDoc:{
+                    keyword:'css;input[name=q]',
+                    target:'css;.search-submenus',
+                    where:'afterEnd',
+                },
+            },    
+            {name:"google-mirror-gg2",
+                enabled:true,
+                url:/^https?:\/\/gg2\/firstguo\.com/i,
+                engineList:"web",
+                style:'\
+                    border-bottom:1px solid #E5E5E5;\
+                    border=top: 1px solid #E5E5E5;\
+                    padding-left:135px;\
+                    ',
+                insertIntoDoc:{
+                    keyword:'//input[@name="q"]',
+                    target:'css;#rcnt',
+                    where:'beforeBegin',
+                },
             },
-            {name: "百度网页搜索",
+            {name: "baidu",
                 url: /^https?:\/\/www\.baidu\.com\/(?:s|baidu)/,
                 enabled: true,
                 engineList: "web",
                 fixedTop:56,
                 style: '\
+                    padding-left:113px;\
                     margin-top:8px;\
                     margin-bottom: -5px;\
                     z-index: 99;\
-                    margin-left: 113px;\
                 ',
                 insertIntoDoc: {
                     keyword: 'css;input#kw',
@@ -106,15 +143,13 @@
                     where: 'afterEnd',
                 },
             },
-            {name: "必应网页搜索",
+            {name: "bing",
                 url: /^https?:\/\/[^.]*\.bing\.com\/search/,
                 enabled: true,
                 engineList: "web",
                 style: '\
-                    padding-left:15px;\
-                    margin-top:10px;\
-                    margin-left: 100px;\
-                    margin-bottom:-20px;\
+                    padding-left:100px;\
+                    margin-top:3px;\
                 ',
                 insertIntoDoc: {
                     keyword: 'css;#sb_form_q',
@@ -122,8 +157,8 @@
                     where: 'beforeBegin',
                 },
             },
-            {name: "DDG",
-                url: /^https?:\/\/duckduckgo\.com\/*/i,
+            {name: "ddg",
+                url: /^https?:\/\/duckduckgo\.com\/[^.]*/i,
                 enabled: true,
                 engineList: "web",
                 style: '\
@@ -136,7 +171,7 @@
                     where: 'afterEnd',
                 },
             },
-            {name:"雅虎网页搜索",
+            {name:"yahoo",
                 url:/^https?:\/\/search\.yahoo\.com\/search/i,
                 engineList:"web",
                 enabled:true,
@@ -152,7 +187,7 @@
                     where:'afterBegin',
                 },
             },
-            {name:"台湾雅虎网页搜索",
+            {name:"yahoo-tw",
                 url:/^https?:\/\/tw\.search\.yahoo\.com\/search/i,
                 engineList:"web",
                 enabled:true,
@@ -181,32 +216,161 @@
                     where:'beforeBegin',
                 },
             },
-            {name: "搜狗",
+            {name: "sogou",
 	            url: /^https?:\/\/www\.sogou\.com\/sogou\?/,
 	            enabled: true,
 	            engineList: "web",
                 fixedTop:60,
 	            style: "top:100px;padding-left:114px;z-index:99;",
 	            insertIntoDoc: {
-		            keyword: "css;#upquery",
-		            target: "css;.header",
-		            where: "afterEnd",
+		            keyword: 'css;#upquery',
+		            target: 'css;.header',
+		            where: 'afterEnd',
 	            },
             },
+            {name: "similarsite",
+                url: /^https?:\/\/www\.similarsitesearch\.com/i,
+				enabled:true,
+				engineList:"web",
+				sytle:"z-index:99;",
+                insertIntoDoc:{
+                    keyword:'css;#main_URL',
+                    target:'css;#main',
+                    where:'beforeBegin',
+                },
+            },
+            
+            //translate list - 翻译列表
+            {name: "google-translate",
+                url: /^https?:\/\/translate\.google(?:\.\D{1,4}){1,2}/i,
+                enabled: true,
+                engineList: "translate",
+                style: '\
+                    padding-left:1px;\
+                    margin:-1px 0 0 20px;\
+                ',
+                insertIntoDoc: {
+                    keyword: 'css;#source',
+                    target: 'css;#gba',
+                    where: 'afterEnd',
+                },
+            },  
+            {name: "baidu-translate",
+                url: /^https?:\/\/fanyi\.baidu\.com/i,
+                enabled: true,
+                engineList: "translate",
+                style: '\
+                    padding-left:1px;\
+                    margin:0px auto;\
+                    width:1220px;\
+                ',
+                insertIntoDoc: {
+                    // keyword: 'css;#baidu_translate_input',
+                    keyword: function(){
+                        return document.querySelector("#baidu_translate_input").value;
+                    },
+                    target: 'css;.header',
+                    where: 'afterEnd',
+                },
+            },
+            {name: "bing-translate",
+                url: /^https?:\/\/.*\.bing\.com\/dict\/search\?q\=/i,
+                enabled: true,
+                engineList: "translate",
+                style: '\
+                    padding-left:110px;\
+                    margin-top:-0px;\
+                ',
+                insertIntoDoc: {
+                    keyword: 'css;#sb_form_q',
+                    target: 'css;#b_header',
+                    where: 'beforeEnd',
+                },
+            },
+            {name: "youdao-translate",
+                url: /^https?:\/\/dict\.youdao\.com\/search/i,
+                enabled: true,
+                engineList: "translate",
+                style: '\
+                    padding-left:0px;\
+                    margin-top:2px;\
+                    text-align:center;\
+                ',
+                insertIntoDoc: {
+                    keyword: 'css;#query',
+                    target: 'css;.c-topbar-wrapper',
+                    where: 'beforeEnd',
+                },
+            },  
+            {name: "youdao-translate-item",
+                url: /^https?:\/\/dict\.youdao\.com\/w/i,
+                enabled: true,
+                engineList: "translate", 
+                fixedTop:91,
+                style: '\
+                    padding-left:0px;\
+                    border-top:1px solid #D9E1F7;\
+                    border-bottom:1px solid #D9E1F7;\
+                    text-align:center;\
+                ',
+                insertIntoDoc: {
+                    keyword: 'css;#query',
+                    target: 'css;#container',
+                    where: 'beforeBegin',
+                },
+            },
+            {name:"cnki-dict",
+                url:/^https?:\/\/dict\.cnki\.net/i,
+                enabled:true,
+                engineList:"translate",
+                style:'\
+                    padding-top:0px;\
+                    ',
+                insertIntoDoc:{
+                    keyword:'css;#txt2',
+                    target:'css;body',
+                    where: 'afterBegin',
+                },
+            },
+            {name:"汉典",
+                url:/^http?:\/\/www\.zdic\.net/i,
+                enabled:true,
+                engineList:"translate",
+                style:'\
+                    text-align:center;\
+                    ',
+                insertIntoDoc:{
+                    keyword:'css;input#q',
+                    target:'css;#topmenu',
+                    where:'afterEnd',
+                },
+            },  
+            {name:"forvo",
+                url:/^https?:\/\/\D[2,5]\.forvo\.com/i,
+                enabled:true,
+                engineList:"translate",
+                style:'\
+                    margin-left:10px;\
+                    ',
+                insertIntoDoc:{
+                    keyword:function(){
+                        var url = window.location.href.substring(window.location.href.lastIndexOf("/")+1);
+                        return decodeURIComponent(url);
+                    },
+                    target:'css;.content',
+                    where:'beforeBegin',
+                },
+            },
 
-
-
-            // 知识               
-            {name: "百度百科词条",
-                url: /^https?:\/\/baike\.baidu\.com\/(?:sub)?view\//,
+            //knowledge list - 知识列表               
+            {name: "baidu-baike-item",
+                url: /^https?:\/\/baike\.baidu\.com\/item/i,
                 engineList: "knowledge",
                 enabled: true,
+                fixedTop:56,
                 style: "\
-                    border-top: 1px solid #2B6DAE;\
-                    text-align: center;\
+                    padding-left:260px;\
                     z-index: 999999;\
-                    border-bottom: 1px solid #2B6DAE;\
-                    margin-bottom: 10px;\
                 ",
                 insertIntoDoc: {
                     keyword: 'css;#query',
@@ -214,56 +378,22 @@
                     where: 'beforeBegin',
                 },
             },
-            {name: "百度百科搜索",
-                url: /^https?:\/\/baike\.baidu\.com\/search\?word/i,
+            {name: "baidu-baike",
+                url: /^https?:\/\/baike\.baidu\.com\/search/,
                 engineList: "knowledge",
                 enabled: true,
                 style: "\
-                    border-top: 1px solid #e5e5e5;\
-                    text-align: center;\
+                    padding-left: 113px;\
                     border-bottom: 1px solid #e5e5e5;\
                     margin-bottom: 1px;\
-                    margin-top: -10px;\
                 ",
                 insertIntoDoc: {
                     keyword: 'css;#query',
-                    target: 'css;.headTab',
+                    target: 'css;.header-wrapper',
                     where: 'afterEnd',
                 },
             },
-            {name: "百度文库",
-                url: /^https?:\/\/wenku\.baidu\.com\/search/i,
-                engineList: "knowledge",
-                enabled: true,
-                style: "\
-                    border-top: 1px solid #e5e5e5;\
-                    text-align: center;\
-                    border-bottom: 1px solid #e5e5e5;\
-                    margin-bottom: 1px;\
-                ",
-                insertIntoDoc: {
-                    keyword: 'css;#kw',
-                    target: 'css;#hd',
-                    where: 'afterEnd',
-                },
-            },
-            {name: "百度知道",
-                url: /^https?:\/\/zhidao\.baidu\.com\/search/i,
-                engineList: "knowledge",
-                enabled: true,
-                style: "\
-                    border-top: 1px solid #e5e5e5;\
-                    border-bottom: 1px solid #e5e5e5;\
-                    margin-bottom: 1px;\
-                    margin-left:112px;\
-                ",
-                insertIntoDoc: {
-                    keyword: 'css;#kw',
-                    target: 'css;#header',
-                    where: 'afterEnd',
-                },
-            },
-            {name: "维基百科",
+            {name: "wikipedia",
                 url: /^https?:\/\/\D{2,5}\.wikipedia\.org\/wiki/i,
                 engineList: "knowledge",
                 enabled: true,
@@ -280,7 +410,53 @@
                     where: 'afterBegin',
                 },
             },
-            {name: "知乎",
+            {name: "wikiwand",
+                url: /^https?:\/\/www\.wikiwand\.com\/\D{2,5}/,
+                engineList: "knowledge",
+                enabled: true,
+                style: "\
+                    text-align: left;\
+                    margin-top: 50px;\
+                    ",
+                insertIntoDoc: {
+                    keyword: function(){
+                        var url = window.location.href.substring(window.location.href.lastIndexOf("/")+1);
+                        return decodeURIComponent(url);
+                    },
+                target: 'css;#content',
+                where: 'afterBegin',
+                },
+            },
+            {name:"moegirl",
+                url:/^https?:\/\/\D{2,5}\.moegirl\.org/i,
+                engineList:"knowledge",
+                enabled:true,
+                style:"\
+                    text-align:center;\
+                    ",
+                insertIntoDoc:{
+                    keyword:'css;#searchInput',
+                    target:'css;.mw-body',
+                    where:'afterBegin',
+                },
+            },
+            {name:"zhihu (search by Sogou)",
+                url:/^https?:\/\/zhihu\.sogou\.com\/zhihu/,
+                enabled: true,
+                engineList: 'web',
+                fixedTop:55,
+                style: "\
+                    margin: auto;\
+                    width:1000px;\
+                    z-index:99;\
+                    ",
+                insertIntoDoc:{
+                    keyword:'css;#upquery',
+                    target:'css;#header',
+                    where:'afterEnd',
+                },
+            },
+            {name: "zhihu",
                 url: /^https?:\/\/www\.zhihu\.com\/search\?/i,
                 engineList: "knowledge",
                 enabled: true,
@@ -297,13 +473,38 @@
                 },
                 stylish:".zu-main:padding-top:0px;!important",
             },
-            {name: "互动百科搜索页",
+            {name:"mbalib-wiki",
+                url:/^http?:\/\/wiki\.mbalib\.com\/wiki/i,
+                engineList:"knowledge",
+                enabled:true,
+                style:"\
+                    text-align:left;\
+                    ",
+                insertIntoDoc:{
+                    keyword:'css;#searchInput',
+                    target:'css;.firstHeading',
+                    where:'afterBegin',
+                },
+            },
+            {name:"guokr",
+                url: /^http?:\/\/www\.guokr\.com\/search/i,
+                engineList:"knowledge",
+                enabled:true,
+                style:"\
+                    text-align:center;\
+                    ",
+                insertIntoDoc:{
+                    keyword:'css;#searchTxt',
+                    target:'css;.gheader-wp',
+                    where:'afterEnd',
+                },
+            },
+            {name: "baike",
                 url: /^https?:\/\/so\.baike\.com\/doc/i,
                 engineList: "knowledge",
                 enabled: true,
                 style: "\
                     border-top: 1px solid #e5e5e5;\
-                    text-align: center;\
                     border-bottom: 1px solid #e5e5e5;\
                     margin-bottom: 1px;\
                 ",
@@ -313,12 +514,11 @@
                     where: 'afterEnd',
                 },
             },
-            {name: "互动百科词条页",
+            {name: "baike-item",
                 url: /^https?:\/\/www\.baike\.com\/wiki/i,
                 engineList: "knowledge",
                 enabled: true,
                 style: "\
-                    border-top: 1px solid #e5e5e5;\
                     text-align: center;\
                     border-bottom: 1px solid #e5e5e5;\
                     margin-bottom: 1px;\
@@ -329,9 +529,84 @@
                     where: 'afterEnd',
                 },
             },
-            {name: "豆丁文档",
+            
+            // instruction list - 教程列表
+            {name: "baidu-zhidao",
+                url: /^https?:\/\/zhidao\.baidu\.com\/search/i,
+                engineList: "instruction",
+                enabled: true,
+                style: "\
+                    padding-left: 113px;\
+                    border-bottom: 1px solid #e5e5e5;\
+                    margin-bottom: 1px;\
+                ",
+                insertIntoDoc: {
+                    keyword: 'css;#kw',
+                    target: 'css;#header',
+                    where: 'afterEnd',
+                },
+            },
+            {name:"segmentfault",
+                url:/^https?:\/\/segmentfault\.com\/search\?q=/i,
+                engineList:"instruction",
+                enabled:true,
+                style:"\
+                    text-align:center;\
+                    ",
+                insertIntoDoc:{
+                    keyword:'css;input[name=q]',
+                    target:'css;#searchPage',
+                    where:'afterBegin',
+                },
+            },
+            {name:"wikihow",
+                url:/^https?:\/\/www\.wikihow\.com\/wikiHowTo\?search=/i,
+                engineList:"instruction",
+                enabled:true,
+                fixedTop:39,
+                style:"\
+                    text-align:left;\
+                    ",
+                insertIntoDoc:{
+                    keyword:'css;.search_box',
+                    target:'css;#container',
+                    where:'afterBegin',
+                },
+            },
+            {name:"stackoverflow",
+                url:/^https?:\/\/stackoverflow\.com\/search\?q=/i,
+                engineList:"instruction",
+                enabled:true,
+                fixedTop:60,
+                style:"\
+                    padding-left:2px;\
+                    ",
+                insertIntoDoc:{
+                    keyword:'css;input[name="q"]',
+                    target:'css;#content',
+                    where:'afterBegin',
+                },
+            },
+            
+            //scholar list - 学术列表
+            {name: "baidu-wenku",
+                url: /^https?:\/\/wenku\.baidu\.com\/search/i,
+                engineList: "scholar",
+                enabled: true,
+                style: "\
+                    padding-left:113px;\
+                    border-bottom: 1px solid #e5e5e5;\
+                    margin-bottom: 1px;\
+                ",
+                insertIntoDoc: {
+                    keyword: 'css;#kw',
+                    target: 'css;#hd',
+                    where: 'afterEnd',
+                },
+            },
+            {name: "docin",
                 url: /^https?:\/\/www\.docin\.com\/search\.do/,
-                engineList: "knowledge",
+                engineList: "scholar",
                 enabled: true,
                 style: "\
                     text-align: center;\
@@ -346,24 +621,136 @@
                     where: 'afterEnd',
                 },
             },
-            {name: "知乎(搜狗)",
-                   url: /^https?:\/\/zhihu\.sogou\.com\/zhihu/,
-                   enabled: true,
-                   engineList: 'web',
-                   fixedTop:55,
-                   style: "\
-                      margin: auto;\
-                      width: 1000px;\
-                      z-index:99;\
-                   ",
-                   insertIntoDoc: {
-                      keyword: 'css;#upquery',
-                      target: 'css;#header',
-                      where: 'afterEnd',
-                   },
-                   stylish: '.header{ margin-bottom: 5px; }'
+            {name: "baidu-scholar",
+                url: /^https?:\/\/xueshu\.baidu\.com\/(?:s|baidu)/,
+                enabled: true,
+                engineList: "scholar",
+                style: '\
+                    border-top:1px solid #D9E1F7;\
+                    border-bottom:1px solid #D9E1F7;\
+                    text-align: center;\
+                    margin:0px;\
+                    top:0px;\
+                    z-index:99999;\
+                    ',
+                insertIntoDoc: {
+                    keyword: 'css;input#kw',
+                    target: 'css;#topnav',
+                    where: 'afterEnd',
+                },
             },
-            {name: "微信搜狗",
+            {name: "google-scholar",
+                enabled: true,
+                url: /^https?:\/\/scholar\.google(?:\.\D{1,3}){1,2}\/scholar\?/,
+                engineList: "scholar",
+                style: '\
+                    border-bottom:1px solid #E5E5E5;\
+                    border-top:1px solid #E5E5E5;\
+                    z-index:999;\
+                    position:relative;\
+                ',
+                insertIntoDoc: {
+                    target: 'css;#gs_ab',
+                    keyword: '//input[@name="q"]',
+                    where: 'beforeBegin'
+                }
+            },
+            {name: "cnki",
+                url: /^http:\/\/search\.cnki\.net\/search\.aspx/i,
+                enabled: true,
+                engineList: "scholar",
+                style: '\
+                    padding-left:15px;\
+                    border-top:1px solid #D9E1F7;\
+                    border-bottom:1px solid #D9E1F7;\
+                    margin-top:-1px;\
+                    ',
+                insertIntoDoc: {
+                    keyword:'css;#txtSearchKey',
+                    target:'css;.main',
+                    where:'afterBegin',
+                },
+            },      
+            {name: "cnki-epub",
+                enabled: true,
+                url: /^http:\/\/epub\.cnki\.net\/kns\/brief\/default_result\.aspx/i,
+                engineList: "scholar",
+                style: '\
+                    border-bottom:1px solid #E5E5E5;\
+                    border-top:1px solid #E5E5E5;\
+                    z-index:999;\
+                    position:relative;\
+                    ',
+                insertIntoDoc: {
+                    keyword:'css;#txt_1_value1',
+                    target:'css;#TopSearchBar',
+                    where:'afterEnd',
+                }
+            },
+            {name: "万方",
+                enabled: true,
+                url: /^https?:\/\/s\.g\.wanfangdata\.com\.cn\/Paper\.aspx/i,
+                engineList: "scholar",
+                style: '\
+                    border-bottom:1px solid #E5E5E5;\
+                    border-top:1px solid #E5E5E5;\
+                    z-index:999;\
+                    position:relative;\
+                    ',
+                insertIntoDoc: {
+                    keyword:'css;#queryBox',
+                    target:'css;#content',
+                    where:'beforeBegin',
+                }
+            },
+            {name: "EBSCO",
+                enabled: true,
+                url: /^http:\/\/.*?ebscohost\.com\/.*?results/i,
+                engineList: "scholar",
+                style: '\
+                    border-bottom:1px solid #E5E5E5;\
+                    border-top:1px solid #E5E5E5;\
+                    position:relative;\
+                    ',
+                insertIntoDoc: {
+                    keyword:'css;#SearchTerm1',
+                    target:'css;#findFieldOuter',
+                    where:'afterend',
+                }
+            },
+            {name: "Springer",
+                enabled: true,
+                url: /^http:\/\/link\.springer\.com\/search\?query=/i,
+                engineList: "scholar",
+                style: '\
+                    border-bottom:1px solid #E5E5E5;\
+                    border-top:1px solid #E5E5E5;\
+                    position:relative;\
+                    ',
+                insertIntoDoc: {
+                    keyword:'css;#query',
+                    target:'css;#content',
+                    where:'beforeBegin',
+                }
+            },
+            {name: "JSTOR",
+                enabled: true,
+                url: /^https?:.*?jstor.org\/action\/doAdvancedSearch/i,
+                engineList: "scholar",
+                style: '\
+                    border-bottom:1px solid #E5E5E5;\
+                    border-top:1px solid #E5E5E5;\
+                    position:relative;\
+                   ',
+                insertIntoDoc: {
+                    keyword:'css;#searchBox',
+                    target:'css;.tabs-search-results',
+                    where:'beforeBegin',
+                }
+            },
+            
+            //
+            {name: "Weixin (search by Sogou)",
 	            url: /^https?:\/\/weixin\.sogou\.com\/weixin\?/,
 	            enabled: true,
 	            engineList: "web",
@@ -376,6 +763,7 @@
             	},
             },
             
+ //////////////////////////////////////////////
             
             
             // 视频网站
@@ -757,87 +1145,7 @@
                 },
             },
                 
-            
-            //翻译词典
-            {name: "谷歌翻译",
-                url: /^https?:\/\/translate\.google(?:\.\D{1,4}){1,2}/i,
-                enabled: true,
-                engineList: "translate",
-                style: '\
-                    padding-left:1px;\
-                    margin:-1px 0 0 20px;\
-                ',
-                insertIntoDoc: {
-                    keyword: 'css;#source',
-                    target: 'css;#gba',
-                    where: 'afterEnd',
-                },
-            },  
-            {name: "百度翻译",
-                url: /^https?:\/\/fanyi\.baidu\.com/i,
-                enabled: true,
-                engineList: "translate",
-                style: '\
-                    padding-left:1px;\
-                    margin:0px auto;\
-                    width:1220px;\
-                ',
-                insertIntoDoc: {
-                    // keyword: 'css;#baidu_translate_input',
-                    keyword: function(){
-                        return document.querySelector("#baidu_translate_input").value;
-                    },
-                    target: 'css;.header',
-                    where: 'afterEnd',
-                },
-            },
-            {name: "必应翻译",
-                url: /^https?:\/\/.*\.bing\.com\/dict\/search\?q\=/i,
-                enabled: true,
-                engineList: "translate",
-                style: '\
-                    padding-left:110px;\
-                    margin-top:-0px;\
-                ',
-                insertIntoDoc: {
-                    keyword: 'css;#sb_form_q',
-                    target: 'css;#b_header',
-                    where: 'beforeEnd',
-                },
-            },
-            {name: "有道翻译",
-                url: /^https?:\/\/dict\.youdao\.com\/search/i,
-                enabled: true,
-                engineList: "translate",
-                style: '\
-                    padding-left:0px;\
-                    margin-top:2px;\
-                    text-align:center;\
-                ',
-                insertIntoDoc: {
-                    keyword: 'css;#query',
-                    target: 'css;.c-topbar-wrapper',
-                    where: 'beforeEnd',
-                },
-            },  
-            {name: "有道翻译",
-                url: /^https?:\/\/dict\.youdao\.com\/w/i,
-                enabled: true,
-                engineList: "translate",
-                style: '\
-                    padding-left:0px;\
-                    border-top:1px solid #D9E1F7;\
-                    border-bottom:1px solid #D9E1F7;\
-                    margin-top:0px;\
-                    text-align:center;\
-                ',
-                insertIntoDoc: {
-                    keyword: 'css;#query',
-                    target: 'css;#scontainer',
-                    where: 'beforeBegin',
-                },
-            },
-                
+  
             // 购物
             {name: "淘宝搜索",
                 url: /^https?:\/\/s\.taobao\.com\/search/,
@@ -988,134 +1296,7 @@
                 },
             },
                                     
-            //学术搜索列表
-            {name: "百度学术",
-                url: /^https?:\/\/xueshu\.baidu\.com\/(?:s|baidu)/,
-                enabled: true,
-                engineList: "scholar",
-                style: '\
-                    border-top:1px solid #D9E1F7;\
-                    border-bottom:1px solid #D9E1F7;\
-                    text-align: center;\
-                    margin:0px;\
-                    top:0px;\
-                    z-index:99999;\
-                    ',
-                insertIntoDoc: {
-                    keyword: 'css;input#kw',
-                    target: 'css;#topnav',
-                    where: 'afterEnd',
-                },
-            },
-            {name: "谷歌学术",
-                enabled: true,
-                url: /^https?:\/\/scholar\.google(?:\.\D{1,3}){1,2}\/scholar\?/,
-                engineList: "scholar",
-                style: '\
-                    border-bottom:1px solid #E5E5E5;\
-                    border-top:1px solid #E5E5E5;\
-                    z-index:999;\
-                    position:relative;\
-                ',
-                insertIntoDoc: {
-                    target: 'css;#gs_ab',
-                    keyword: '//input[@name="q"]',
-                    where: 'beforeBegin'
-                }
-            },
-            {name: "cnki",
-                url: /^http:\/\/search\.cnki\.net\/search\.aspx/i,
-                enabled: true,
-                engineList: "scholar",
-                style: '\
-                    padding-left:15px;\
-                    border-top:1px solid #D9E1F7;\
-                    border-bottom:1px solid #D9E1F7;\
-                    margin-top:-1px;\
-                    ',
-                insertIntoDoc: {
-                    keyword:'css;#txtSearchKey',
-                    target:'css;.main',
-                    where:'afterBegin',
-                },
-            },      
-            {name: "知网",
-                enabled: true,
-                url: /^http:\/\/epub\.cnki\.net\/kns\/brief\/default_result\.aspx/i,
-                engineList: "scholar",
-                style: '\
-                    border-bottom:1px solid #E5E5E5;\
-                    border-top:1px solid #E5E5E5;\
-                    z-index:999;\
-                    position:relative;\
-                    ',
-                insertIntoDoc: {
-                    keyword:'css;#txt_1_value1',
-                    target:'css;#TopSearchBar',
-                    where:'afterEnd',
-                }
-            },
-            {name: "万方",
-                enabled: true,
-                url: /^https?:\/\/s\.g\.wanfangdata\.com\.cn\/Paper\.aspx/i,
-                engineList: "scholar",
-                style: '\
-                    border-bottom:1px solid #E5E5E5;\
-                    border-top:1px solid #E5E5E5;\
-                    z-index:999;\
-                    position:relative;\
-                    ',
-                insertIntoDoc: {
-                    keyword:'css;#queryBox',
-                    target:'css;#content',
-                    where:'beforeBegin',
-                }
-            },
-            {name: "EBSCO",
-                enabled: true,
-                url: /^http:\/\/.*?ebscohost\.com\/.*?results/i,
-                engineList: "scholar",
-                style: '\
-                    border-bottom:1px solid #E5E5E5;\
-                    border-top:1px solid #E5E5E5;\
-                    position:relative;\
-                    ',
-                insertIntoDoc: {
-                    keyword:'css;#SearchTerm1',
-                    target:'css;#findFieldOuter',
-                    where:'afterend',
-                }
-            },
-            {name: "Springer",
-                enabled: true,
-                url: /^http:\/\/link\.springer\.com\/search\?query=/i,
-                engineList: "scholar",
-                style: '\
-                    border-bottom:1px solid #E5E5E5;\
-                    border-top:1px solid #E5E5E5;\
-                    position:relative;\
-                    ',
-                insertIntoDoc: {
-                    keyword:'css;#query',
-                    target:'css;#content',
-                    where:'beforeBegin',
-                }
-            },
-            {name: "JSTOR",
-                enabled: true,
-                url: /^https?:.*?jstor.org\/action\/doAdvancedSearch/i,
-                engineList: "scholar",
-                style: '\
-                    border-bottom:1px solid #E5E5E5;\
-                    border-top:1px solid #E5E5E5;\
-                    position:relative;\
-                   ',
-                insertIntoDoc: {
-                    keyword:'css;#searchBox',
-                    target:'css;.tabs-search-results',
-                    where:'beforeBegin',
-                }
-            },
+           
 
             //html 列表
             {name: "w3c",
