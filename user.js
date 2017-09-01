@@ -80,23 +80,23 @@
 
 // ==/UserScript==
 
-(function () {
-    'use strict';
-    
-    function iqxinstart(){ 
-        // 根据规则把搜索引擎列表插入到指定网站
-        var rules = [
-            // web - Web List - 网页列表
-            {name: "google",
-                enabled: true,
-                url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^?]+\?(?:&?q=|(?:[^#](?!&tbm=))+?&q=)(?:.(?!&tbm=))*$/,
-                engineList: 'web',
-                style: '\
-                    margin-left: 142px;\
-                    z-index: 100;\
-                    margin-top:5px;\
-                ',
-                // 插入文档,相关
+（function() {
+	'use strict';
+	
+	function iqxinstart(){
+		// 根据规则把搜索引擎列表插入到指定网站
+		var rules=[
+			//web - Web List - 网页列表
+			{name: "google,
+			 	enable:true,
+			 	url:/^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^?]+\?(?:&?q=|(?:[^#](?!&tbm=))+?&q=)(?:.(?!&tbm=))*$/,
+			 	enginelist:'web',
+			 	style:'\
+					margin-left:142px;\
+					z-index:100;\
+					margin-top:5px;\
+					',
+			 	// 插入文档,相关
                 // target 将引擎跳转工具栏插入到文档的某个元素
                     // (请使用xpath匹配,比如: '//*[@id="subform_ctrl"]'  或者 css匹配(请加上 'css;' 的前缀),比如: 'css;#subform_ctrl' );
                 // keyword 使用 xpath 或者 css选中一个form input元素 或者 该项是一个函数，使用返回值
@@ -105,329 +105,76 @@
                     // 'afterBegin'(作为给定元素的第一个子元素) ; 
                     // 'beforeEnd' (作为给定元素的最后一个子元素) ; 
                     // 'afterEnd'(插入到给定元素的后面);.
-                insertIntoDoc: {
-                    target: 'css;#appbar',
-                    // keyword: function () {
+			 	insertIntoDoc:{
+					target:'css;#appbar',
+			 		// keyword: function () {
                         // var input = document.getElementById('lst-ib');
                         // if (input) return input.value;
                     // },
-                    keyword: '//input[@name="q"]',
-                    where: 'beforeBegin',
-                },
-                stylish: 'body.vasq #hdtbMenus.hdtb-td-o{top:100px !important}'
-            },
-            {name: "google-hash-query",// 不刷新页面显示搜索结果的google
-                enabled: true,
-                url: /^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^#]*#(?:&?q=|.+?&q=).+/,
-                engineList: 'web',
-                style: '\
-                    margin-left: 138px;\
-                    z-index: 100;\
-                    margin-top:5px;\
-                ',
-                insertIntoDoc: {
-                    target: 'css;#appbar',
-                    keyword: function () {
-                        var input = document.getElementById('lst-ib');
-                        if (input) return input.value;
-                    },
-                    where: 'beforeBegin',
-                },
-                stylish: 'body.vasq #hdtbMenus.hdtb-td-o{top:100px !important}'
-            },
-            {name: "Baidu",
-                url: /^https?:\/\/www\.baidu\.com\/(?:s|baidu)/,
-                enabled: true,
-                engineList: "web",
-                fixedTop:56,
-                style: "\
-					margin-left: 113px;\
+			 		keyword:'//input[@name="q"]',
+			 		where:'beforBegin',
+				},
+				sytlish:'body.vasq #hdtbMenus.hdtb-td-o{top:100px !important}'
+			},
+			{name:"google-hash-query",//不刷新页面显示搜索结果
+				enabled:true,
+				url:/^https?:\/\/www\.google(?:\.[A-z]{2,3}){1,2}\/[^#]*#(?:&?q=|.+?&q=).+/,
+				engineList:'web',
+				style:'\
+					margin-left:138px;\
+					z-index:100;\
+					margin-top:5px;\
+					',
+				insertIntoDoc:{
+					target:'css;#appbar',
+					keyword:function(){
+						var input = document.getElementById('lst-ib');
+						if (input) return input.value;
+					},
+					where:'beforeBegin',
+				},
+				stylish:'body.vasq #hdtbMenus.hdtb-td-o{top:100px !important}'
+			},
+			{name:"google-mirror-glgoo",
+				enabled:true,
+				url:/^https?:\/\/www\.glgoo\.com\/search\?q/i,
+				engineList:"web",
+				style:"padding-left:135px;",
+				insertIntoDoc:{
+					keyword:'css;input[name=q]',
+					target:'css;.search-submenus',
+					where:'afterEnd',
+				},
+			},
+			{name:"google-mirror-gg2",
+				enabled:true,
+				url:/^https?:\/\/gg2\.firstguo\.com\//i,
+				engineList:"web",
+				style:'\
+					border-bottom: 1px solid #E5E5E5;\
+					border-top: 1px solid #E5E5E5;\
+					padding-left: 135px;\
+					',
+				insertIntoDoc:{
+					keyword:'//input[@name="q"]',
+					target:'css;#rcnt',
+					where:'beforeBegin',
+				},
+			{name:"Baidu",
+				enabled:true,
+				url:/^https?:\/\/www\.baidu\.com\/(?:s|baidu|)/,
+				engineList:"web",
+				fixedTop:56,
+				style:'\
+					padding-left:113px;\
 					margin-top:8px;\
-                    margin-bottom: -5px;\
-                    z-index: 99;\
-					",
-                insertIntoDoc: {
-                    keyword: 'css;input#kw',
-                    target: 'css;#s_tab',
-                    where: 'afterEnd',
-                },
-            },
-            {name: "Bing",
-                url: /^https?:\/\/[^.]*\.bing\.com\/search/,
-                enabled: true,
-                engineList: "web",
-                style: "\
-                    padding-left:100px;\
-                    margin-top:3px;\
-                	",
-                insertIntoDoc: {
-                    keyword: 'css;#sb_form_q',
-                    target: 'css;#b_content',
-                    where: 'beforeBegin',
-                },
-            },
-            {name: "DDG",
-                url: /^https?:\/\/duckduckgo\.com\/[^.]*/i,
-                enabled: true,
-                engineList: "web",
-                style: '\
-                    padding-left:95px;\
-                    margin-top:5px;\
-                ',
-                insertIntoDoc: {
-                    keyword: '//input[@name="q"]',
-                    target: 'css;#header_wrapper',
-                    where: 'afterEnd',
-                },
-            },
-            {name:"Yahoo",
-                url:/^https?:\/\/search\.yahoo\.com\/search/i,
-                engineList:"web",
-                enabled:true,
-                fixedTop:72,
-                style:"\
-                    margin-left:122px;\
-                    margin-bottom:-4px;\
-                    padding-top:6px;\
-                ",
-                insertIntoDoc:{
-                    keyword:'css;#yschsp',
-                    target:'css;#horizontal-bar',
-                    where:'afterBegin',
-                },
-            },
-            {name:"Yahoo-tw",
-                url:/^https?:\/\/tw\.search\.yahoo\.com\/search/i,
-                engineList:"web",
-                enabled:true,
-                fixedTop:52,
-                style:"\
-                    margin-left:-10px;\
-                    margin-bottom:10px;\
-                ",
-                insertIntoDoc:{
-                    keyword:'css;#yschsp',
-                    target:'css;#results',
-                    where:'afterBegin',
-                },
-            },
-            {name:"searx",
-                url:/^https?:\/\/searx\.me\/\?q/i,
-                engineList:"web",
-                enabled:true,
-                style:"\
-                    margin-left:-10px;\
-                    margin-bottom:10px;\
-                ",
-                insertIntoDoc:{
-                    keyword:'css;#q',
-                    target:'css;#categories',
-                    where:'beforeBegin',
-                },
-            },
-            {name: "Sogou",
-	            url: /^https?:\/\/www\.sogou\.com\/web\?/,
-	            enabled: true,
-	            engineList: "web",
-                fixedTop:60,
-	            style: "top:100px;padding-left:114px;z-index:99;",
-	            insertIntoDoc: {
-		            keyword: "css;#upquery",
-		            target: "css;.header",
-		            where: "afterEnd",
-	            },
-            },
-
-
-
-            // knowledge - Knowledge List - 知识列表
-            {name: "Baidu-baike-item",
-                url: /^https?:\/\/baike\.baidu\.com\/item/i,
-                engineList: "knowledge",
-                enabled: true,
-                fixedTop:56,
-                style: "\
-                    padding-left: 260px;\
-                    z-index: 999999;\
-                ",
-                insertIntoDoc: {
-                    keyword: 'css;#query',
-                    target: 'css;.navbar-wrapper',
-                    where: 'beforeBegin',
-                },
-            },
-            {name: "Baidu-baike",
-                url: /^https?:\/\/baike\.baidu\.com\/search/,
-                engineList: "knowledge",
-                enabled: true,
-                style: "\
-                    padding-left: 113px;\
-                    border-bottom: 1px solid #e5e5e5;\
-                    margin-bottom: 1px;\
-                ",
-                insertIntoDoc: {
-                    keyword: 'css;#query',
-                    target: 'css;.header-wrapper',
-                    where: 'afterEnd',
-                },
-            },
-            {name: "Baidu-zhidao",
-                url: /^https?:\/\/zhidao\.baidu\.com\/search/i,
-                engineList: "knowledge",
-                enabled: true,
-                style: "\
-                    padding-left: 113px;\
-                    border-bottom: 1px solid #e5e5e5;\
-                    margin-bottom: 1px;\
-                ",
-                insertIntoDoc: {
-                    keyword: 'css;#kw',
-                    target: 'css;#header',
-                    where: 'afterEnd',
-                },
-            },
-            {name: "Wikipedia",
-                url: /^https?:\/\/\D{2,5}\.wikipedia\.org\/wiki/i,
-                engineList: "knowledge",
-                enabled: true,
-                style: "\
-                        position: absolute;\
-                        padding-left: 14em;\
-                ",
-                insertIntoDoc: {
-                    keyword: function(){
-                        var url = window.location.href.substring(window.location.href.lastIndexOf("/")+1);
-                        return decodeURIComponent(url);
-                        },
-                    target: 'css;#mw-head',
-                    where: 'afterBegin',
-                },
-            },
-            {name: "Wikiwand",
-                url: /^https?:\/\/www\.wikiwand\.com\/\D{2,5}/,
-                engineList: "knowledge",
-                enabled: true,
-                style: "\
-                        text-align: left;\
-                        margin-top: 50px;\
-                ",
-                insertIntoDoc: {
-                    keyword: function(){
-                        var url = window.location.href.substring(window.location.href.lastIndexOf("/")+1);
-                        return decodeURIComponent(url);
-                        },
-                    target: 'css;#content',
-                    where: 'afterBegin',
-                },
-            },
-            {name: "Zhihu(Sogou)",
-                   url: /^https?:\/\/zhihu\.sogou\.com\/zhihu/,
-                   enabled: true,
-                   engineList: 'web',
-                   fixedTop:55,
-                   style: "\
-                      margin: auto;\
-                      width: 1000px;\
-                      z-index:99;\
-                   ",
-                   insertIntoDoc: {
-                      keyword: 'css;#upquery',
-                      target: 'css;#header',
-                      where: 'afterEnd',
-                   },
-                   stylish: '.header{ margin-bottom: 5px; }'
-            },
-            {name: "Zhihu",
-                url: /^https?:\/\/www\.zhihu\.com\/search\?/i,
-                engineList: "knowledge",
-                enabled: true,
-                fixedTop:46,
-                style: "\
-                    z-index:19;\
-                ",
-                insertIntoDoc: {
-                    keyword: 'css;#q',
-                    target:"css;.zg-wrap",
-                    where: 'afterEnd',
-                },
-                stylish:".zu-main:padding-top:0px;!important",
-            },
-            {name: "Baike",
-                url: /^https?:\/\/so\.baike\.com\/doc/i,
-                engineList: "knowledge",
-                enabled: true,
-                style: "\
-                    border-top: 1px solid #e5e5e5;\
-                    border-bottom: 1px solid #e5e5e5;\
-                    margin-bottom: 1px;\
-                ",
-                insertIntoDoc: {
-                    keyword: 'css;.ac_input',
-                    target: 'css;.bk-head',
-                    where: 'afterEnd',
-                },
-            },
-            {name: "Baike-item",
-                url: /^https?:\/\/www\.baike\.com\/wiki/i,
-                engineList: "knowledge",
-                enabled: true,
-                fixedTop:58,
-                style: "\
-                    text-align: center;\
-                    border-bottom: 1px solid #e5e5e5;\
-                    margin-bottom:-20px;\
-                ",
-                insertIntoDoc: {
-                    keyword: 'css;.ac_input',
-                    target: 'css;.header-search',
-                    where: 'afterEnd',
-                },
-            },
-            
-            //academic - Academic List - 学术列表
-            {name: "Baidu-wenku",
-                url: /^https?:\/\/wenku\.baidu\.com\/search/i,
-                engineList: "knowledge",
-                enabled: true,
-                style: "\
-                    padding-left: 113px;\
-                    border-bottom: 1px solid #e5e5e5;\
-                    margin-bottom: 1px;\
-                ",
-                insertIntoDoc: {
-                    keyword: 'css;#kw',
-                    target: 'css;#hd',
-                    where: 'afterEnd',
-                },
-            },
-            {name: "Docin",
-                url: /^https?:\/\/www\.docin\.com\/search\.do/,
-                engineList: "knowledge",
-                enabled: true,
-                style: "\
-                    text-align: center;\
-                    margin:0 auto;\
-                    padding-top:1px;\
-                    border-top:1px solid #00000;\
-                    border-bottom:1px solid #D9E1F7;\
-                ",
-                insertIntoDoc: {
-                    keyword: 'css;#topsearch',
-                    target: 'css;.doc_hd_mini',
-                    where: 'afterEnd',
-                },
-            },
-            
-            //
-            {name: "微信搜狗",
-	            url: /^https?:\/\/weixin\.sogou\.com\/weixin\?/,
-	            enabled: true,
-	            engineList: "web",
-                fixedTop:55,
-	            style: "width: 1000px;margin: 8px auto -5px;z-index:99;",
-	            insertIntoDoc: {
-	            	keyword: "//input[@name='query']",
-	            	target: "css;.header-box",
-	            	where: "afterEnd",
-            	},
-            },
+					margin-bottom:-5px;\
+					z-index:99;\
+					',
+				insertIntoDoc:{
+					keyword:'css;input#kw',
+					target: 'css;#s_tab',
+					where:'afterEnd',
+				},
+			},
+		]
