@@ -677,6 +677,21 @@
                     where: 'afterEnd',
                 },
             },
+            {name: "mablif-doc",
+                url: /^https?:\/\/doc\.mbalib\.com\/search\?q\=/i,
+                engineList: "scholar",
+                enabled: true,
+                style: "\
+                    text-align: center;\
+                    margin:0 auto;\
+                    padding-top:1px;\
+                ",
+                insertIntoDoc: {
+                    keyword: 'css;input[name=q]',
+                    target: 'css;.container',
+                    where: 'beforeEnd',
+                },
+            },
             {name: "baidu-scholar",
                 url: /^https?:\/\/xueshu\.baidu\.com\/(?:s|baidu)/,
                 enabled: true,
