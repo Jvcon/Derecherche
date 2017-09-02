@@ -3,20 +3,25 @@ A library of Search Engine. Inspired by [qxinGitHub/searchEngineJump](https://gi
 
 ## Category
 
-- De Recherche
-  - Web
-  - Translate
-  - Knowledge
-  - Development (complex)
-  - Video
-  - Picture (wallpaper, hd-picture, inspiration)
-  - Material (complex)
-  - Instruction
-  - Music
-  - Life
-  - Social
-  - Shopping
-  - Scholar
+- Web
+- Translate
+- Knowledge
+- Development (complex)
+- Video
+- Picture (wallpaper, hd-picture, inspiration)
+- Material (complex)
+  - Template
+  - Vector
+  - Icon
+  - Font
+  - Clips
+  - Sound
+- Instruction
+- Music
+- Life
+- Social
+- Shopping
+- Scholar
 
 ## Contributor
 
