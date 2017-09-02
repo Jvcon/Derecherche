@@ -587,6 +587,62 @@
                     where:'afterBegin',
                 },
             },
+            {name:"instructables",
+                url:/^https?:\/\/www\.instructables\.com\/howto/i,
+                engineList:"instruction",
+                enabled:true,
+                fixedTop:110,
+                style:"\
+                    text-align:center;\
+                    ",
+                insertIntoDoc:{
+                    keyword:'css;input[name=q]',
+                    target:'css;.search-header',
+                    where:'afterEnd',
+                },
+            },
+            {name:"makeuseof",
+                url:/^https?:\/\/www\.makeuseof\.com\/\?s=/i,
+                engineList:"instruction",
+                enabled:true,
+                fixedTop:60,
+                style:"\
+                    margin-bottom:1px;\
+                    ",
+                insertIntoDoc:{
+                    keyword:function(){
+                        var url = window.location.href.substring(window.location.href.lastIndexOf("=")+1);
+                        return decodeURIComponent(url);
+                    },
+                    target:'css;.container-wrap',
+                    where:'afterBegin',
+                },
+            },
+            {name:"makezine",
+                url:/^https?:\/\/makezion\.com\/\?s=/i,
+                engineList:"instruction",
+                enabled:true,
+                fixedTop:51,
+                style:"\
+                    text-aligin:center;\
+                    ",
+                insertIntoDoc:{
+                    keyword:'css;input#s',
+                    target:'css;.single',
+                    where:'afterBegin'.
+                },
+            },
+            {name:"thingiverse",
+                url:/^https?:\/\/www\.thingiverse\.com\/search/i,
+                engineList:"instruction",
+                enabled:true,
+                style:"text-align:center;",
+                insertIntoDoc:{
+                    keyword:'css;input',
+                    target:'css;.header',
+                    where:'afterEnd',
+                },
+            },
             
             //scholar list - 学术列表
             {name: "baidu-wenku",
