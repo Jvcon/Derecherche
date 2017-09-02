@@ -288,13 +288,29 @@
                 },
             },
             {name: "youdao-translate",
+                url: /^https?:\/\/fanyi\.youdao\.com\/\?keyfrom/i,
+                enabled: true,
+                engineList: "translate",
+                style: '\
+                    margin:0px auto;\
+                    padding-left:10px;\
+                    width:1200px;\
+                    z-index:999;\
+                ',
+                insertIntoDoc: {
+                    keyword: 'css;#inputOriginal',
+                    target: 'css;.fanyi__nav',
+                    where: 'beforeBegin',
+                },
+            },
+            {name: "youdao-dict",
                 url: /^https?:\/\/dict\.youdao\.com\/search/i,
                 enabled: true,
                 engineList: "translate",
                 style: '\
-                    padding-left:0px;\
-                    margin-top:2px;\
-                    text-align:center;\
+                    margin:0px auto;\
+                    padding-left:10px;\
+                    width:1200px;\
                 ',
                 insertIntoDoc: {
                     keyword: 'css;#query',
@@ -302,16 +318,15 @@
                     where: 'beforeEnd',
                 },
             },  
-            {name: "youdao-translate-item",
+            {name: "youdao-dict",
                 url: /^https?:\/\/dict\.youdao\.com\/w/i,
                 enabled: true,
                 engineList: "translate", 
                 fixedTop:91,
                 style: '\
-                    padding-left:0px;\
-                    border-top:1px solid #D9E1F7;\
-                    border-bottom:1px solid #D9E1F7;\
-                    text-align:center;\
+                    margin:0px auto;\
+                    padding-left:10px;\
+                    width:1200px;\
                 ',
                 insertIntoDoc: {
                     keyword: 'css;#query',
@@ -432,7 +447,7 @@
                 engineList:"knowledge",
                 enabled:true,
                 style:"\
-                    text-align:center;\
+                    margin:0px auto;\
                     ",
                 insertIntoDoc:{
                     keyword:'css;#searchInput',

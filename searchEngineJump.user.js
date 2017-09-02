@@ -388,10 +388,12 @@
                 enabled: true,
                 style: "\
                     text-align: center;\
+                    padding-left:1px;\
                     margin:0 auto;\
                     padding-top:1px;\
                     border-top:1px solid #00000;\
                     border-bottom:1px solid #D9E1F7;\
+
                 ",
                 insertIntoDoc: {
                     keyword: 'css;#topsearch',
