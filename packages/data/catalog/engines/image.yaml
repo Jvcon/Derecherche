@@ -1,0 +1,53 @@
+schemaVersion: 1
+catalogVersion: "2026.10.0"
+
+engines:
+  - id: google-images
+    providerId: google
+    name: Google Images
+    category: image-search
+    tags: [image, picture, 图片, 搜图]
+    triggers: [image, images, 图片, 搜图]
+    url: https://www.google.com/search?tbm=isch&q={q}
+    regions: [global]
+    status: active
+
+  - id: bing-images
+    providerId: bing
+    name: Bing Images
+    category: image-search
+    tags: [image, picture, 图片, 搜图]
+    triggers: [image, images, 图片, 搜图]
+    url: https://www.bing.com/images/search?q={q}
+    regions: [global]
+    status: active
+
+  - id: baidu-images
+    providerId: baidu
+    name: 百度图片
+    category: image-search
+    tags: [image, picture, 图片, 搜图]
+    triggers: [image, 图片, 搜图]
+    url: https://image.baidu.com/search/index?tn=baiduimage&word={q}
+    regions: [cn]
+    status: active
+
+  - id: unsplash
+    providerId: unsplash
+    name: Unsplash
+    category: image-stock
+    tags: [stock, photo, 图库, 高清]
+    triggers: [unsplash, photo, 图库]
+    url: https://unsplash.com/s/photos/{q}
+    regions: [global]
+    status: active
+
+  - id: wallhaven
+    providerId: wallhaven
+    name: Wallhaven
+    category: image-wallpaper
+    tags: [wallpaper, 壁纸]
+    triggers: [wallpaper, 壁纸]
+    url: https://wallhaven.cc/search?q={q}
+    regions: [global]
+    status: active

@@ -1,0 +1,14 @@
+{
+  "name": "@derecherche/data",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Derecherche search engine catalog and validation",
+  "scripts": {
+    "validate": "node scripts/validate.mjs"
+  },
+  "devDependencies": {
+    "ajv": "^8.17.1",
+    "yaml": "^2.8.1"
+  }
+}

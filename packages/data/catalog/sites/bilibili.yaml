@@ -1,0 +1,17 @@
+id: bilibili
+name: 哔哩哔哩搜索
+hosts:
+  - search.bilibili.com
+  - www.bilibili.com
+urlParams: [keyword]
+selectors:
+  query:
+    - 'input[name="keyword"]'
+    - 'input[type="text"]'
+defaultCategory: media-video
+capabilities: [url, dom, html]
+mount:
+  anchor: 'input[type="text"]'
+  placement: below
+  offset: 8
+notes: Selector is best-effort; verify on both search and video pages.

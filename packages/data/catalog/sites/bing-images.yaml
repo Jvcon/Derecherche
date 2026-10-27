@@ -1,0 +1,20 @@
+id: bing-images
+name: Bing Images
+hosts:
+  - www.bing.com
+  - cn.bing.com
+  - bing.com
+pathPattern: "^/images/search$"
+urlParams: [q]
+selectors:
+  query:
+    - '#sb_form_q'
+    - 'input[name="q"]'
+defaultCategory: image-search
+capabilities: [url, dom, html]
+priority: 20
+mount:
+  anchor: '#sb_form_q'
+  placement: below
+  offset: 8
+notes: More specific than the host-only bing adapter.

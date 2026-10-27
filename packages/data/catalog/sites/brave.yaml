@@ -1,0 +1,14 @@
+id: brave
+name: Brave Search
+hosts:
+  - search.brave.com
+urlParams: [q]
+selectors:
+  query:
+    - 'input[name="q"]'
+defaultCategory: web-general
+capabilities: [url, dom, html]
+mount:
+  anchor: 'input[name="q"]'
+  placement: below
+  offset: 8

@@ -1,0 +1,16 @@
+id: github
+name: GitHub Search
+hosts:
+  - github.com
+  - www.github.com
+urlParams: [q]
+selectors:
+  query:
+    - 'input[name="q"]'
+    - '#query-builder-test'
+defaultCategory: dev-code
+capabilities: [url, dom, html]
+mount:
+  anchor: 'input[name="q"]'
+  placement: below
+  offset: 8

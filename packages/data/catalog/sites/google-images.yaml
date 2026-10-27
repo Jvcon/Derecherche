@@ -1,0 +1,22 @@
+id: google-images
+name: Google Images
+hosts:
+  - www.google.com
+  - google.com
+  - "*.google.com"
+pathPattern: "^/search$"
+paramMatches:
+  tbm: isch
+urlParams: [q]
+selectors:
+  query:
+    - 'input[name="q"]'
+    - 'textarea[name="q"]'
+defaultCategory: image-search
+capabilities: [url, dom, html]
+priority: 20
+mount:
+  anchor: 'input[name="q"]'
+  placement: below
+  offset: 8
+notes: More specific than the host-only google adapter; path and tbm must both match.

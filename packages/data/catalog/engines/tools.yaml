@@ -1,0 +1,13 @@
+schemaVersion: 1
+catalogVersion: "2026.10.0"
+
+engines:
+  - id: internet-archive
+    providerId: archive
+    name: Internet Archive
+    category: tools-download
+    tags: [archive, download, 下载, 存档]
+    triggers: [archive, 下载, 存档]
+    url: https://archive.org/search?query={q}
+    regions: [global]
+    status: active

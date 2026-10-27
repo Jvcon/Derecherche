@@ -1,0 +1,298 @@
+schemaVersion: 1
+catalogVersion: "2026.10.0"
+
+# Category taxonomy v1.
+# Rules:
+#   - At most two category levels: category -> subcategory.
+#   - An engine has exactly one primary category; use tags for cross-discovery.
+#   - Aim for at least three engines before a subcategory becomes visible.
+#     Phase 0 may keep planned placeholders; the UI hides empty branches.
+#   - Category ids are stable; display names may change.
+categories:
+  - id: web
+    name: 网页
+    order: 10
+    aliases: [web, search, 搜索, 综合]
+    description: 通用网页搜索与新闻。
+    children:
+      - id: web-general
+        name: 综合
+        order: 10
+        aliases: [general, 综合搜索]
+      - id: web-news
+        name: 新闻
+        order: 20
+        aliases: [news, 资讯]
+      - id: web-meta
+        name: 元搜索
+        order: 30
+        aliases: [meta, metasearch, 聚合]
+
+  - id: knowledge
+    name: 知识
+    order: 20
+    aliases: [knowledge, learn, 学习, 百科]
+    description: 百科、问答、词典、翻译与教程。
+    children:
+      - id: knowledge-encyclopedia
+        name: 百科
+        order: 10
+        aliases: [encyclopedia, wiki, 维基]
+      - id: knowledge-qa
+        name: 问答
+        order: 20
+        aliases: [qa, question, 问答社区]
+      - id: knowledge-dictionary
+        name: 词典
+        order: 30
+        aliases: [dictionary, dict, 字典]
+      - id: knowledge-translate
+        name: 翻译
+        order: 40
+        aliases: [translate, translation, 翻译]
+      - id: knowledge-howto
+        name: 教程
+        order: 50
+        aliases: [tutorial, howto, guide, 指南]
+
+  - id: academic
+    name: 学术
+    order: 30
+    aliases: [academic, scholar, paper, 论文, 学术]
+    description: 学术搜索、论文库、引用与预印本。
+    children:
+      - id: academic-search
+        name: 学术搜索
+        order: 10
+        aliases: [scholar, academic search, 学术搜索]
+      - id: academic-papers
+        name: 论文库
+        order: 20
+        aliases: [paper, preprint, 论文, 文献]
+      - id: academic-citation
+        name: 引用/预印本
+        order: 30
+        aliases: [citation, reference, preprint, 引用]
+      - id: academic-data
+        name: 学术数据
+        order: 40
+        aliases: [dataset, data, 数据]
+
+  - id: development
+    name: 开发
+    order: 40
+    aliases: [development, dev, code, programming, 编程, 代码]
+    description: 代码托管、文档、包管理、排错与在线运行。
+    children:
+      - id: dev-code
+        name: 代码托管
+        order: 10
+        aliases: [code, repo, git, 仓库]
+      - id: dev-docs
+        name: 文档/API
+        order: 20
+        aliases: [docs, api, documentation, 文档]
+      - id: dev-packages
+        name: 包管理
+        order: 30
+        aliases: [package, registry, dependency, 包]
+      - id: dev-qa
+        name: 排错/问答
+        order: 40
+        aliases: [debug, error, stackoverflow, 报错]
+      - id: dev-playground
+        name: 在线运行
+        order: 50
+        aliases: [playground, sandbox, repl, 在线运行]
+
+  - id: design
+    name: 设计
+    order: 50
+    aliases: [design, inspiration, 灵感, 设计]
+    description: 设计灵感、作品集、配色与设计教程。
+    children:
+      - id: design-inspiration
+        name: 灵感
+        order: 10
+        aliases: [inspiration, idea, 灵感]
+      - id: design-portfolio
+        name: 作品集
+        order: 20
+        aliases: [portfolio, showcase, 作品]
+      - id: design-color
+        name: 配色
+        order: 30
+        aliases: [color, palette, 配色]
+      - id: design-tutorial
+        name: 设计教程
+        order: 40
+        aliases: [tutorial, design tutorial, 教程]
+
+  - id: assets
+    name: 素材
+    order: 60
+    aliases: [assets, material, resource, 资源, 素材]
+    description: 模板、矢量、图标、字体、视频素材与音效。
+    children:
+      - id: assets-template
+        name: 模板
+        order: 10
+        aliases: [template, 模板]
+      - id: assets-vector
+        name: 矢量
+        order: 20
+        aliases: [vector, svg, 矢量]
+      - id: assets-icon
+        name: 图标
+        order: 30
+        aliases: [icon, icons, 图标]
+      - id: assets-font
+        name: 字体
+        order: 40
+        aliases: [font, typeface, 字体]
+      - id: assets-clip
+        name: 视频素材
+        order: 50
+        aliases: [clip, footage, video asset, 视频素材]
+      - id: assets-sound
+        name: 音效
+        order: 60
+        aliases: [sound, sfx, audio, 音效]
+
+  - id: image
+    name: 图片
+    order: 70
+    aliases: [image, picture, photo, 图片, 壁纸]
+    description: 图片搜索、壁纸与高清图库。
+    children:
+      - id: image-search
+        name: 图片搜索
+        order: 10
+        aliases: [image search, 搜图]
+      - id: image-wallpaper
+        name: 壁纸
+        order: 20
+        aliases: [wallpaper, 壁纸]
+      - id: image-stock
+        name: 高清图库
+        order: 30
+        aliases: [stock, photo, 图库]
+
+  - id: media
+    name: 影音
+    order: 80
+    aliases: [media, video, music, audio, 视频, 音乐]
+    description: 视频、音乐、音频/播客与直播。
+    children:
+      - id: media-video
+        name: 视频
+        order: 10
+        aliases: [video, 视频]
+      - id: media-music
+        name: 音乐
+        order: 20
+        aliases: [music, 音乐]
+      - id: media-audio
+        name: 音频/播客
+        order: 30
+        aliases: [audio, podcast, 播客]
+      - id: media-live
+        name: 直播
+        order: 40
+        aliases: [live, stream, 直播]
+
+  - id: shopping
+    name: 购物
+    order: 90
+    aliases: [shopping, shop, buy, 购物, 电商]
+    description: 综合电商、比价、二手与设计商品。
+    children:
+      - id: shopping-general
+        name: 综合电商
+        order: 10
+        aliases: [ecommerce, 电商]
+      - id: shopping-compare
+        name: 比价
+        order: 20
+        aliases: [compare, price, 比价]
+      - id: shopping-secondhand
+        name: 二手
+        order: 30
+        aliases: [secondhand, used, 二手]
+      - id: shopping-design
+        name: 设计商品
+        order: 40
+        aliases: [design goods, 设计商品]
+
+  - id: community
+    name: 社区
+    order: 100
+    aliases: [community, social, forum, 社区, 社交]
+    description: 综合社区、技术社区、问答与论坛。
+    children:
+      - id: community-general
+        name: 综合社区
+        order: 10
+        aliases: [social, 综合社区]
+      - id: community-tech
+        name: 技术社区
+        order: 20
+        aliases: [tech community, 技术社区]
+      - id: community-qa
+        name: 问答
+        order: 30
+        aliases: [qa, question, 问答]
+      - id: community-forum
+        name: 论坛
+        order: 40
+        aliases: [forum, bbs, 论坛]
+
+  - id: life
+    name: 生活
+    order: 110
+    aliases: [life, daily, 生活, 日常]
+    description: 地图、美食、健康、政务与旅行。
+    children:
+      - id: life-map
+        name: 地图/出行
+        order: 10
+        aliases: [map, travel, 地图, 出行]
+      - id: life-food
+        name: 美食
+        order: 20
+        aliases: [food, recipe, 美食]
+      - id: life-health
+        name: 健康
+        order: 30
+        aliases: [health, medical, 健康]
+      - id: life-gov
+        name: 政务
+        order: 40
+        aliases: [government, 政务]
+      - id: life-travel
+        name: 旅行
+        order: 50
+        aliases: [travel, trip, 旅行]
+
+  - id: tools
+    name: 工具
+    order: 120
+    aliases: [tools, utility, 工具, 在线工具]
+    description: 下载、转换、在线工具与网盘。
+    children:
+      - id: tools-download
+        name: 下载
+        order: 10
+        aliases: [download, 下载]
+      - id: tools-convert
+        name: 转换
+        order: 20
+        aliases: [convert, converter, 转换]
+      - id: tools-online
+        name: 在线工具
+        order: 30
+        aliases: [online tool, utility, 在线工具]
+      - id: tools-cloud
+        name: 网盘
+        order: 40
+        aliases: [cloud, drive, 网盘]

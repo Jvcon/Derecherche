@@ -1,0 +1,33 @@
+schemaVersion: 1
+catalogVersion: "2026.10.0"
+
+engines:
+  - id: taobao
+    providerId: taobao
+    name: 淘宝
+    category: shopping-general
+    tags: [shopping, 购物, 淘宝]
+    triggers: [taobao, 淘宝, 购物]
+    url: https://s.taobao.com/search?q={q}
+    regions: [cn]
+    status: active
+
+  - id: jd
+    providerId: jd
+    name: 京东
+    category: shopping-general
+    tags: [shopping, 购物, 京东]
+    triggers: [jd, 京东, 购物]
+    url: https://search.jd.com/Search?keyword={q}
+    regions: [cn]
+    status: active
+
+  - id: amazon
+    providerId: amazon
+    name: Amazon
+    category: shopping-general
+    tags: [shopping, 购物, amazon]
+    triggers: [amazon, 亚马逊, 购物]
+    url: https://www.amazon.com/s?k={q}
+    regions: [global]
+    status: active

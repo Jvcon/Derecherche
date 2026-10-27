@@ -1,0 +1,33 @@
+schemaVersion: 1
+catalogVersion: "2026.10.0"
+
+engines:
+  - id: figma-community
+    providerId: figma
+    name: Figma Community
+    category: assets-template
+    tags: [template, figma, 模板]
+    triggers: [figma, template, 模板]
+    url: https://www.figma.com/community/search?query={q}
+    regions: [global]
+    status: active
+
+  - id: iconify
+    providerId: iconify
+    name: Iconify
+    category: assets-icon
+    tags: [icon, svg, 图标]
+    triggers: [icon, icons, 图标]
+    url: https://icon-sets.iconify.design/?query={q}
+    regions: [global]
+    status: active
+
+  - id: google-fonts
+    providerId: google
+    name: Google Fonts
+    category: assets-font
+    tags: [font, typeface, 字体]
+    triggers: [font, 字体]
+    url: https://fonts.google.com/?query={q}
+    regions: [global]
+    status: active

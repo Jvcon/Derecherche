@@ -1,0 +1,17 @@
+id: youtube
+name: YouTube Search
+hosts:
+  - www.youtube.com
+  - youtube.com
+  - m.youtube.com
+urlParams: [search_query]
+selectors:
+  query:
+    - 'input#search'
+    - 'input[name="search_query"]'
+defaultCategory: media-video
+capabilities: [url, dom, html]
+mount:
+  anchor: 'input#search'
+  placement: below
+  offset: 8

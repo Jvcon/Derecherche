@@ -1,0 +1,23 @@
+schemaVersion: 1
+catalogVersion: "2026.10.0"
+
+engines:
+  - id: reddit
+    providerId: reddit
+    name: Reddit
+    category: community-general
+    tags: [community, forum, 社区, 论坛]
+    triggers: [reddit, 社区]
+    url: https://www.reddit.com/search/?q={q}
+    regions: [global]
+    status: active
+
+  - id: github-issues
+    providerId: github
+    name: GitHub Issues
+    category: community-qa
+    tags: [issue, bug, qa, 报错, 讨论]
+    triggers: [issue, bug, github, 报错]
+    url: https://github.com/search?q={q}&type=issues
+    regions: [global]
+    status: active

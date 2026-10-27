@@ -1,0 +1,176 @@
+schemaVersion: 1
+catalogVersion: "2026.10.0"
+
+# Provider metadata only. Providers are not a navigation axis.
+# Engines reference a provider by id; provider icons may be used as fallbacks.
+providers:
+  - id: google
+    name: Google
+    homepage: https://www.google.com
+    regions: [global]
+
+  - id: bing
+    name: Bing
+    homepage: https://www.bing.com
+    regions: [global]
+
+  - id: baidu
+    name: 百度
+    homepage: https://www.baidu.com
+    regions: [cn]
+
+  - id: duckduckgo
+    name: DuckDuckGo
+    homepage: https://duckduckgo.com
+    regions: [global]
+
+  - id: brave
+    name: Brave Search
+    homepage: https://search.brave.com
+    regions: [global]
+
+  - id: wikipedia
+    name: Wikipedia
+    homepage: https://www.wikipedia.org
+    regions: [global]
+
+  - id: zhihu
+    name: 知乎
+    homepage: https://www.zhihu.com
+    regions: [cn]
+
+  - id: deepl
+    name: DeepL
+    homepage: https://www.deepl.com
+    regions: [global]
+
+  - id: semantic-scholar
+    name: Semantic Scholar
+    homepage: https://www.semanticscholar.org
+    regions: [global]
+
+  - id: researchindex
+    name: ResearchIndex
+    homepage: https://www.researchindex.com
+    regions: [global]
+    notes: Historical name; the URL must be re-verified before the engine is enabled.
+
+  - id: arxiv
+    name: arXiv
+    homepage: https://arxiv.org
+    regions: [global]
+
+  - id: cnki
+    name: 中国知网
+    homepage: https://www.cnki.net
+    regions: [cn]
+
+  - id: github
+    name: GitHub
+    homepage: https://github.com
+    regions: [global]
+
+  - id: stackoverflow
+    name: Stack Overflow
+    homepage: https://stackoverflow.com
+    regions: [global]
+
+  - id: mdn
+    name: MDN Web Docs
+    homepage: https://developer.mozilla.org
+    regions: [global]
+
+  - id: npm
+    name: npm
+    homepage: https://www.npmjs.com
+    regions: [global]
+
+  - id: pypi
+    name: PyPI
+    homepage: https://pypi.org
+    regions: [global]
+
+  - id: crates
+    name: crates.io
+    homepage: https://crates.io
+    regions: [global]
+
+  - id: dribbble
+    name: Dribbble
+    homepage: https://dribbble.com
+    regions: [global]
+
+  - id: behance
+    name: Behance
+    homepage: https://www.behance.net
+    regions: [global]
+
+  - id: pinterest
+    name: Pinterest
+    homepage: https://www.pinterest.com
+    regions: [global]
+
+  - id: unsplash
+    name: Unsplash
+    homepage: https://unsplash.com
+    regions: [global]
+
+  - id: iconify
+    name: Iconify
+    homepage: https://icon-sets.iconify.design
+    regions: [global]
+
+  - id: wallhaven
+    name: Wallhaven
+    homepage: https://wallhaven.cc
+    regions: [global]
+
+  - id: figma
+    name: Figma Community
+    homepage: https://www.figma.com/community
+    regions: [global]
+
+  - id: youtube
+    name: YouTube
+    homepage: https://www.youtube.com
+    regions: [global]
+
+  - id: bilibili
+    name: 哔哩哔哩
+    homepage: https://www.bilibili.com
+    regions: [cn]
+
+  - id: spotify
+    name: Spotify
+    homepage: https://open.spotify.com
+    regions: [global]
+
+  - id: taobao
+    name: 淘宝
+    homepage: https://www.taobao.com
+    regions: [cn]
+
+  - id: jd
+    name: 京东
+    homepage: https://www.jd.com
+    regions: [cn]
+
+  - id: amazon
+    name: Amazon
+    homepage: https://www.amazon.com
+    regions: [global]
+
+  - id: reddit
+    name: Reddit
+    homepage: https://www.reddit.com
+    regions: [global]
+
+  - id: openstreetmap
+    name: OpenStreetMap
+    homepage: https://www.openstreetmap.org
+    regions: [global]
+
+  - id: archive
+    name: Internet Archive
+    homepage: https://archive.org
+    regions: [global]

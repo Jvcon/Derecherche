@@ -1,0 +1,17 @@
+id: bing
+name: Bing Search
+hosts:
+  - www.bing.com
+  - cn.bing.com
+  - bing.com
+urlParams: [q]
+selectors:
+  query:
+    - '#sb_form_q'
+    - 'input[name="q"]'
+defaultCategory: web-general
+capabilities: [url, dom, html]
+mount:
+  anchor: '#sb_form_q'
+  placement: below
+  offset: 8

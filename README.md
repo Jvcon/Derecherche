@@ -1,34 +1,90 @@
-# De Recherche
-A library of Search Engine. Inspired by [qxinGitHub/searchEngineJump](https://github.com/qxinGitHub/searchEngineJump), according to my search habit and usual search website, which covers Web, Translate, Knowledge, Life, Development, Picture, Movie, Music, Scholar, Social, Shopping and so on.
+# Derecherche
 
-## Category
+A host-agnostic search routing engine: given a query context, resolve the query, choose an engine, and produce the target URL.
 
-- Web
-- Translate
-- Knowledge
-- Development (complex)
-- Video
-- Picture (wallpaper, hd-picture, inspiration)
-- Material (complex)
-  - Template
-  - Vector
-  - Icon
-  - Font
-  - Clips
-  - Sound
-- Instruction
-- Music
-- Life
-- Social
-- Shopping
-- Scholar
+Derecherche started as a search-engine jump userscript. The project is being rebuilt around a headless core so the same catalog and resolution logic can power:
 
-## Contributor
+1. **Phase 1 — Userscript** (Tampermonkey / Violentmonkey / qutebrowser Greasemonkey)
+2. **Phase 2 — Browser extension** (Chrome / Edge / Firefox)
+3. **Phase 3 — Headless CLI** (fzf, qutebrowser `:spawn --userscript`, Noctalia, DankMaterialShell)
 
-- SearchEnginJump: NLF,锐经,[iqxin](https://github.com/qxinGitHub)
-- [设计导航](http://hao.shejidaren.com/) made by [设计达人](http://www.shejidaren.com/)
-- [多搜搜](http://duososo.com/)
-- [虫部落](http://search.chongbuluo.com/)
-- [All The Free Stock](http://allthefreestock.com/)
-- [The Stock 2](http://thestocks.im/)
-- [DownloadSearch](https://github.com/JayXon/DownloadSearch)
+## Status
+
+Phase 0: data and interaction contracts.
+
+No runtime application is built yet. The current work is the catalog schema, taxonomy, site rules, and picker contract that all later hosts will share.
+
+## Repository layout
+
+```text
+.
+├─ packages/
+│  └─ data/                 # catalog, schemas, validation
+├─ docs/
+│  └─ contracts/            # interaction and data contracts
+├─ legacy/                  # archived reference code, not built
+├─ package.json
+└─ pnpm-workspace.yaml
+```
+
+Planned later:
+
+```text
+packages/
+├─ core/                    # query extraction, ranking, URL building
+├─ ui/                      # Shadow DOM InlineBar / SelectionBar / Palette
+├─ host-userscript/
+├─ host-extension/
+└─ host-cli/
+apps/
+├─ userscript/
+├─ extension/
+└─ cli/
+```
+
+## Phase 1 interaction decisions
+
+- Category → subcategory → engine, with at most two category levels.
+- Category is the primary navigation axis; provider is a display enhancement only.
+- Recommendation never reorders the stable engine list. It appears in a separate strip.
+- InlineBar appears only on result pages with a query.
+- SelectionBar appears automatically after text selection, and hides InlineBar while visible.
+- Default open mode is a new tab; `Ctrl+Enter` opens in the current tab.
+- Icons are bundled as a build-time sprite; no inline base64 in catalog entries.
+- Userscript delivery is Phase 1; `:spawn --userscript` is Phase 3.
+
+See:
+
+- [docs/contracts/picker-contract.md](docs/contracts/picker-contract.md) for the full interaction contract.
+- [docs/taxonomy.md](docs/taxonomy.md) for the category design and legacy mapping.
+- [docs/decisions/0001-phase-1-scope.md](docs/decisions/0001-phase-1-scope.md) for the accepted Phase 1 decisions.
+
+## Data
+
+The catalog is data, not code:
+
+```text
+packages/data/catalog/
+├─ categories.yaml
+├─ providers.yaml
+├─ engines/
+│  └─ *.yaml
+├─ sites/
+│  └─ *.yaml
+└─ icons/
+```
+
+Validate the catalog:
+
+```bash
+pnpm install
+pnpm data:validate
+```
+
+The data package is intentionally not published. The external contract for future integrations will be the CLI and JSON catalog, not an npm library.
+
+## Legacy code
+
+All pre-rewrite userscripts, templates, dumps, and references live under [`legacy/`](legacy/README.md). They are archived for historical reference and are not part of the build.
+
+The upstream `searchEngineJump` repository has no license file. Do not copy its code into the new runtime without clarifying permission. Engine names and URLs are factual data, but the old implementation should be treated as reference only.

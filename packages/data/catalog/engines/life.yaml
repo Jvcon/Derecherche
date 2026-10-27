@@ -1,0 +1,13 @@
+schemaVersion: 1
+catalogVersion: "2026.10.0"
+
+engines:
+  - id: openstreetmap
+    providerId: openstreetmap
+    name: OpenStreetMap
+    category: life-map
+    tags: [map, travel, 地图, 出行]
+    triggers: [map, 地图, 出行]
+    url: https://www.openstreetmap.org/search?query={q}
+    regions: [global]
+    status: active

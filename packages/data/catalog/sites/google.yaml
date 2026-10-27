@@ -1,0 +1,18 @@
+id: google
+name: Google Search
+hosts:
+  - www.google.com
+  - google.com
+  - "*.google.com"
+urlParams: [q]
+selectors:
+  query:
+    - 'input[name="q"]'
+    - 'textarea[name="q"]'
+defaultCategory: web-general
+capabilities: [url, dom, html]
+mount:
+  anchor: 'input[name="q"]'
+  placement: below
+  offset: 8
+notes: Google regional domains are matched by the wildcard host entry.

@@ -1,0 +1,55 @@
+schemaVersion: 1
+catalogVersion: "2026.10.0"
+
+engines:
+  - id: google-scholar
+    providerId: google
+    name: Google Scholar
+    category: academic-search
+    tags: [scholar, paper, citation, 学术, 论文]
+    triggers: [scholar, 学术, 论文, citation]
+    url: https://scholar.google.com/scholar?q={q}
+    regions: [global]
+    status: active
+
+  - id: semantic-scholar
+    providerId: semantic-scholar
+    name: Semantic Scholar
+    category: academic-search
+    tags: [scholar, paper, citation, 学术, 论文]
+    triggers: [semantic, scholar, 论文]
+    url: https://www.semanticscholar.org/search?q={q}
+    regions: [global]
+    status: active
+
+  - id: researchindex
+    providerId: researchindex
+    name: ResearchIndex
+    category: academic-search
+    tags: [scholar, paper, citation, 学术]
+    triggers: [researchindex]
+    url: https://www.researchindex.com/search?q={q}
+    regions: [global]
+    status: broken
+    notes: Historical name; URL must be verified before enabling.
+
+  - id: arxiv
+    providerId: arxiv
+    name: arXiv
+    category: academic-papers
+    tags: [paper, preprint, 论文, 预印本]
+    triggers: [arxiv, preprint, 论文]
+    url: https://arxiv.org/search/?query={q}&searchtype=all
+    regions: [global]
+    status: active
+
+  - id: cnki
+    providerId: cnki
+    name: 中国知网
+    category: academic-papers
+    tags: [paper, 论文, 文献]
+    triggers: [cnki, 知网, 论文]
+    url: https://kns.cnki.net/kns8s/defaultresult/index?kw={q}
+    regions: [cn]
+    status: active
+    notes: Search URL may change when CNKI redesigns its interface.

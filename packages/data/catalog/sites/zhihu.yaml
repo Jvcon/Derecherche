@@ -1,0 +1,17 @@
+id: zhihu
+name: 知乎搜索
+hosts:
+  - www.zhihu.com
+  - zhihu.com
+urlParams: [q]
+selectors:
+  query:
+    - 'input[name="q"]'
+    - 'input[type="text"]'
+defaultCategory: knowledge-qa
+capabilities: [url, dom, html]
+mount:
+  anchor: 'input[name="q"]'
+  placement: below
+  offset: 8
+notes: Selector is best-effort; verify against the current Zhihu search page.

@@ -1,0 +1,15 @@
+id: wikipedia
+name: Wikipedia Search
+hosts:
+  - "*.wikipedia.org"
+urlParams: [search]
+selectors:
+  query:
+    - 'input[name="search"]'
+    - '#searchInput'
+defaultCategory: knowledge-encyclopedia
+capabilities: [url, dom, html]
+mount:
+  anchor: '#searchInput'
+  placement: below
+  offset: 8

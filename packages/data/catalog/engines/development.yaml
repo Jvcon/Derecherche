@@ -1,0 +1,63 @@
+schemaVersion: 1
+catalogVersion: "2026.10.0"
+
+engines:
+  - id: github
+    providerId: github
+    name: GitHub
+    category: dev-code
+    tags: [code, repo, git, 代码, 仓库]
+    triggers: [github, repo, code, 代码]
+    url: https://github.com/search?q={q}&type=repositories
+    regions: [global]
+    status: active
+
+  - id: stackoverflow
+    providerId: stackoverflow
+    name: Stack Overflow
+    category: dev-qa
+    tags: [debug, error, qa, 报错, 问答]
+    triggers: [stackoverflow, error, debug, 报错]
+    url: https://stackoverflow.com/search?q={q}
+    regions: [global]
+    status: active
+
+  - id: mdn
+    providerId: mdn
+    name: MDN Web Docs
+    category: dev-docs
+    tags: [docs, web, api, 文档]
+    triggers: [mdn, docs, api, 文档]
+    url: https://developer.mozilla.org/zh-CN/search?q={q}
+    regions: [global]
+    status: active
+
+  - id: npm
+    providerId: npm
+    name: npm
+    category: dev-packages
+    tags: [package, js, node, 包]
+    triggers: [npm, package, 包]
+    url: https://www.npmjs.com/search?q={q}
+    regions: [global]
+    status: active
+
+  - id: pypi
+    providerId: pypi
+    name: PyPI
+    category: dev-packages
+    tags: [package, python, 包]
+    triggers: [pypi, python, 包]
+    url: https://pypi.org/search/?q={q}
+    regions: [global]
+    status: active
+
+  - id: crates
+    providerId: crates
+    name: crates.io
+    category: dev-packages
+    tags: [package, rust, 包]
+    triggers: [crates, rust, 包]
+    url: https://crates.io/search?q={q}
+    regions: [global]
+    status: active

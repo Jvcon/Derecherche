@@ -1,0 +1,63 @@
+schemaVersion: 1
+catalogVersion: "2026.10.0"
+
+engines:
+  - id: wikipedia-zh
+    providerId: wikipedia
+    name: 维基百科（中文）
+    category: knowledge-encyclopedia
+    tags: [wiki, encyclopedia, 百科]
+    triggers: [wiki, 维基, 百科]
+    url: https://zh.wikipedia.org/w/index.php?search={q}
+    languages: [zh]
+    status: active
+
+  - id: wikipedia-en
+    providerId: wikipedia
+    name: Wikipedia (English)
+    category: knowledge-encyclopedia
+    tags: [wiki, encyclopedia, 百科]
+    triggers: [wiki, wikipedia]
+    url: https://en.wikipedia.org/w/index.php?search={q}
+    languages: [en]
+    status: active
+
+  - id: baidu-baike
+    providerId: baidu
+    name: 百度百科
+    category: knowledge-encyclopedia
+    tags: [baike, encyclopedia, 百科]
+    triggers: [baike, 百科]
+    url: https://baike.baidu.com/search/word?word={q}
+    regions: [cn]
+    status: active
+
+  - id: zhihu-search
+    providerId: zhihu
+    name: 知乎
+    category: knowledge-qa
+    tags: [qa, 问答, 知乎]
+    triggers: [zhihu, 知乎]
+    url: https://www.zhihu.com/search?type=content&q={q}
+    regions: [cn]
+    status: active
+
+  - id: deepl
+    providerId: deepl
+    name: DeepL
+    category: knowledge-translate
+    tags: [translate, 翻译]
+    triggers: [deepl, 翻译]
+    url: https://www.deepl.com/translator#auto/zh/{q}
+    regions: [global]
+    status: active
+
+  - id: google-translate
+    providerId: google
+    name: Google Translate
+    category: knowledge-translate
+    tags: [translate, 翻译]
+    triggers: [translate, 翻译]
+    url: https://translate.google.com/?sl=auto&tl=zh-CN&text={q}&op=translate
+    regions: [global]
+    status: active

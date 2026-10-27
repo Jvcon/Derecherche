@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://derecherche.dev/schema/sites.schema.json",
+  "title": "Derecherche site adapter",
+  "type": "object",
+  "required": ["id", "name", "hosts", "defaultCategory"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "name": { "type": "string", "minLength": 1 },
+    "hosts": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "pathPattern": {
+      "type": "string",
+      "minLength": 1
+    },
+    "paramMatches": {
+      "type": "object",
+      "additionalProperties": { "type": "string", "minLength": 1 }
+    },
+    "priority": {
+      "type": "number"
+    },
+    "urlParams": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "selectors": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "query": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        }
+      }
+    },
+    "defaultCategory": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "capabilities": {
+      "type": "array",
+      "items": { "enum": ["url", "dom", "html"] },
+      "uniqueItems": true
+    },
+    "mount": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "anchor": { "type": "string", "minLength": 1 },
+        "container": { "type": "string", "minLength": 1 },
+        "placement": { "enum": ["below", "above", "floating"] },
+        "offset": { "type": "number" }
+      }
+    },
+    "notes": { "type": "string" }
+  }
+}

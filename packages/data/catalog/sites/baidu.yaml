@@ -1,0 +1,16 @@
+id: baidu
+name: 百度搜索
+hosts:
+  - www.baidu.com
+  - baidu.com
+urlParams: [wd]
+selectors:
+  query:
+    - '#kw'
+    - 'input[name="wd"]'
+defaultCategory: web-general
+capabilities: [url, dom, html]
+mount:
+  anchor: '#kw'
+  placement: below
+  offset: 8

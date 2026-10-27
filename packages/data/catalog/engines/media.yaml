@@ -1,0 +1,33 @@
+schemaVersion: 1
+catalogVersion: "2026.10.0"
+
+engines:
+  - id: youtube
+    providerId: youtube
+    name: YouTube
+    category: media-video
+    tags: [video, 视频]
+    triggers: [youtube, video, 视频]
+    url: https://www.youtube.com/results?search_query={q}
+    regions: [global]
+    status: active
+
+  - id: bilibili
+    providerId: bilibili
+    name: 哔哩哔哩
+    category: media-video
+    tags: [video, 视频, b站]
+    triggers: [bilibili, b站, 视频]
+    url: https://search.bilibili.com/all?keyword={q}
+    regions: [cn]
+    status: active
+
+  - id: spotify
+    providerId: spotify
+    name: Spotify
+    category: media-music
+    tags: [music, 音乐]
+    triggers: [spotify, music, 音乐]
+    url: https://open.spotify.com/search/{q}
+    regions: [global]
+    status: active

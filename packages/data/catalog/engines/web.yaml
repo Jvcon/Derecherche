@@ -1,0 +1,73 @@
+schemaVersion: 1
+catalogVersion: "2026.10.0"
+
+engines:
+  - id: google-web
+    providerId: google
+    name: Google
+    category: web-general
+    tags: [web, search, 谷歌]
+    triggers: [google, 谷歌]
+    url: https://www.google.com/search?q={q}
+    regions: [global]
+    status: active
+
+  - id: bing-web
+    providerId: bing
+    name: Bing
+    category: web-general
+    tags: [web, search, 必应]
+    triggers: [bing, 必应]
+    url: https://www.bing.com/search?q={q}
+    regions: [global]
+    status: active
+
+  - id: baidu-web
+    providerId: baidu
+    name: 百度
+    category: web-general
+    tags: [web, search, 百度]
+    triggers: [baidu, 百度]
+    url: https://www.baidu.com/s?wd={q}
+    regions: [cn]
+    status: active
+
+  - id: duckduckgo-web
+    providerId: duckduckgo
+    name: DuckDuckGo
+    category: web-general
+    tags: [web, search, privacy, 隐私]
+    triggers: [ddg, duckduckgo]
+    url: https://duckduckgo.com/?q={q}
+    regions: [global]
+    status: active
+
+  - id: brave-web
+    providerId: brave
+    name: Brave Search
+    category: web-general
+    tags: [web, search, privacy, 隐私]
+    triggers: [brave]
+    url: https://search.brave.com/search?q={q}
+    regions: [global]
+    status: active
+
+  - id: google-news
+    providerId: google
+    name: Google News
+    category: web-news
+    tags: [news, 新闻]
+    triggers: [news, 新闻]
+    url: https://news.google.com/search?q={q}
+    regions: [global]
+    status: active
+
+  - id: bing-news
+    providerId: bing
+    name: Bing News
+    category: web-news
+    tags: [news, 新闻]
+    triggers: [news, 新闻]
+    url: https://www.bing.com/news/search?q={q}
+    regions: [global]
+    status: active

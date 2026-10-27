@@ -1,0 +1,33 @@
+schemaVersion: 1
+catalogVersion: "2026.10.0"
+
+engines:
+  - id: dribbble
+    providerId: dribbble
+    name: Dribbble
+    category: design-inspiration
+    tags: [design, inspiration, 灵感, 设计]
+    triggers: [dribbble, design, 设计]
+    url: https://dribbble.com/search/{q}
+    regions: [global]
+    status: active
+
+  - id: behance
+    providerId: behance
+    name: Behance
+    category: design-portfolio
+    tags: [design, portfolio, 作品集, 设计]
+    triggers: [behance, portfolio, 作品]
+    url: https://www.behance.net/search/projects?search={q}
+    regions: [global]
+    status: active
+
+  - id: pinterest
+    providerId: pinterest
+    name: Pinterest
+    category: design-inspiration
+    tags: [design, inspiration, image, 灵感, 图片]
+    triggers: [pinterest, inspiration, 灵感]
+    url: https://www.pinterest.com/search/pins/?q={q}
+    regions: [global]
+    status: active
