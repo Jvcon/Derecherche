@@ -17,6 +17,7 @@ Phase 0 data and interaction contracts are in place. Foundation work is in progr
 ```text
 .
 ├─ packages/
+│  ├─ core/                 # host-agnostic query, settings, URL, storage primitives
 │  └─ data/                 # catalog, schemas, validation
 ├─ docs/
 │  └─ contracts/            # interaction and data contracts
@@ -29,7 +30,6 @@ Planned later:
 
 ```text
 packages/
-├─ core/                    # query extraction, ranking, URL building
 ├─ ui/                      # Shadow DOM InlineBar / SelectionBar / Palette
 ├─ host-userscript/
 ├─ host-extension/
