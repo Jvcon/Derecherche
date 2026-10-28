@@ -174,3 +174,168 @@ providers:
     name: Internet Archive
     homepage: https://archive.org
     regions: [global]
+
+  - id: so360
+    name: 360 搜索
+    homepage: https://www.so.com
+    regions: [cn]
+
+  - id: sogou
+    name: 搜狗
+    homepage: https://www.sogou.com
+    regions: [cn]
+
+  - id: yahoo
+    name: Yahoo Search
+    homepage: https://search.yahoo.com
+    regions: [global]
+
+  - id: youku
+    name: 优酷
+    homepage: https://www.youku.com
+    regions: [cn]
+
+  - id: tencent
+    name: 腾讯
+    homepage: https://www.tencent.com
+    regions: [cn]
+
+  - id: acfun
+    name: AcFun
+    homepage: https://www.acfun.cn
+    regions: [cn]
+
+  - id: niconico
+    name: ニコニコ
+    homepage: https://www.nicovideo.jp
+    regions: [global]
+
+  - id: iqiyi
+    name: 爱奇艺
+    homepage: https://www.iqiyi.com
+    regions: [cn]
+
+  - id: netease
+    name: 网易云音乐
+    homepage: https://music.163.com
+    regions: [cn]
+
+  - id: pixiv
+    name: Pixiv
+    homepage: https://www.pixiv.net
+    regions: [global]
+
+  - id: flickr
+    name: Flickr
+    homepage: https://www.flickr.com
+    regions: [global]
+
+  - id: huaban
+    name: 花瓣
+    homepage: https://huaban.com
+    regions: [cn]
+
+  - id: youdao
+    name: 有道
+    homepage: https://www.youdao.com
+    regions: [cn]
+
+  - id: forvo
+    name: Forvo
+    homepage: https://forvo.com
+    regions: [global]
+
+  - id: zdic
+    name: 汉典
+    homepage: https://www.zdic.net
+    regions: [cn]
+
+  - id: quora
+    name: Quora
+    homepage: https://www.quora.com
+    regions: [global]
+
+  - id: moegirl
+    name: 萌娘百科
+    homepage: https://zh.moegirl.org.cn
+    regions: [cn]
+
+  - id: guokr
+    name: 果壳
+    homepage: https://www.guokr.com
+    regions: [cn]
+
+  - id: docin
+    name: 豆丁
+    homepage: https://www.docin.com
+    regions: [cn]
+
+  - id: douban
+    name: 豆瓣
+    homepage: https://www.douban.com
+    regions: [cn]
+
+  - id: weibo
+    name: 微博
+    homepage: https://weibo.com
+    regions: [cn]
+
+  - id: wanfang
+    name: 万方数据
+    homepage: https://www.wanfangdata.com.cn
+    regions: [cn]
+
+  - id: springer
+    name: Springer
+    homepage: https://link.springer.com
+    regions: [global]
+
+  - id: jstor
+    name: JSTOR
+    homepage: https://www.jstor.org
+    regions: [global]
+
+  - id: cnn
+    name: CNN
+    homepage: https://edition.cnn.com
+    regions: [global]
+
+  - id: bbc
+    name: BBC
+    homepage: https://www.bbc.co.uk
+    regions: [global]
+
+  - id: toutiao
+    name: 今日头条
+    homepage: https://www.toutiao.com
+    regions: [cn]
+
+  - id: caniuse
+    name: Can I Use
+    homepage: https://caniuse.com
+    regions: [global]
+
+  - id: w3school
+    name: W3School
+    homepage: https://www.w3school.com.cn
+    regions: [cn]
+
+  - id: greasyfork
+    name: GreasyFork
+    homepage: https://greasyfork.org
+    regions: [global]
+
+  - id: suning
+    name: 苏宁
+    homepage: https://www.suning.com
+    regions: [cn]
+
+  - id: tmall
+    name: 天猫
+    homepage: https://www.tmall.com
+    regions: [cn]
+
+  - id: xianyu
+    name: 闲鱼
+    homepage: https://www.goofish.com
+    regions: [cn]

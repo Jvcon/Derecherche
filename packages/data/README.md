@@ -29,9 +29,18 @@ pnpm data:build
 - `generated/catalog.json` — merged catalog consumed by hosts
 - `generated/catalog.d.ts` — types for the generated data
 - `generated/index.js` — ESM entry point
-- `generated/icons.json` — icon manifest placeholder until the sprite exists
+- `generated/icons.svg` — Simple Icons provider sprite
+- `generated/icons.json` — icon manifest, license, and missing-provider list
 
 Generated files are committed and must not be edited by hand. CI should run `data:build` and fail if the generated diff is non-empty.
+
+## Legacy migration
+
+```bash
+pnpm data:legacy-report
+```
+
+Writes `docs/migration/legacy-engines.md` with migrated, merged, and skipped legacy engines. Migrated records live in `catalog/engines/legacy.yaml` and keep a `legacyId`.
 
 Validation checks:
 

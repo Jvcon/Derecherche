@@ -3,11 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "description": "Host-agnostic search routing engine",
+  "license": "GPL-3.0-only",
   "packageManager": "pnpm@12.10.1",
   "scripts": {
     "data:validate": "pnpm --filter @derecherche/data validate",
     "data:build": "pnpm --filter @derecherche/data build",
     "data:check": "pnpm data:build && git diff --exit-code -- packages/data/generated",
-    "data:check-links": "pnpm --filter @derecherche/data check-links"
+    "data:check-links": "pnpm --filter @derecherche/data check-links",
+    "data:legacy-report": "pnpm --filter @derecherche/data legacy:report"
   }
 }

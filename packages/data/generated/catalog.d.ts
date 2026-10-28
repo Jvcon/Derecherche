@@ -64,11 +64,21 @@ export interface Site {
   notes?: string;
 }
 
+export interface IconRef {
+  symbol: string;
+  slug: string;
+  title: string;
+}
+
 export interface IconManifest {
   schemaVersion: 1;
   catalogVersion: string;
   sprite: string | null;
-  icons: Record<string, string>;
+  source: string;
+  sourceUrl: string;
+  license: string;
+  icons: Record<string, IconRef>;
+  missing: string[];
 }
 
 export interface Catalog {

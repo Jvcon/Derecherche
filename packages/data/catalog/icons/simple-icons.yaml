@@ -1,0 +1,46 @@
+# Provider icon mapping for the generated sprite.
+#
+# Only brands available in Simple Icons are listed. Providers without a mapping
+# fall back to a generated letter mark. Do not add remote favicon URLs.
+source: Simple Icons
+sourceUrl: https://github.com/simple-icons/simple-icons
+license: CC0-1.0
+
+icons:
+  google: google
+  baidu: baidu
+  duckduckgo: duckduckgo
+  brave: brave
+  wikipedia: wikipedia
+  zhihu: zhihu
+  deepl: deepl
+  semantic-scholar: semanticscholar
+  arxiv: arxiv
+  github: github
+  stackoverflow: stackoverflow
+  mdn: mdnwebdocs
+  npm: npm
+  pypi: pypi
+  dribbble: dribbble
+  behance: behance
+  pinterest: pinterest
+  unsplash: unsplash
+  iconify: iconify
+  figma: figma
+  youtube: youtube
+  bilibili: bilibili
+  spotify: spotify
+  taobao: taobao
+  reddit: reddit
+  openstreetmap: openstreetmap
+  archive: internetarchive
+  sogou: sogou
+  niconico: niconico
+  pixiv: pixiv
+  flickr: flickr
+  quora: quora
+  douban: douban
+  cnn: cnn
+  greasyfork: greasyfork
+  netease: neteasecloudmusic
+  weibo: sinaweibo

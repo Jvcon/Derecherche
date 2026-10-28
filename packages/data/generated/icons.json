@@ -1,6 +1,227 @@
 {
   "schemaVersion": 1,
   "catalogVersion": "2026.10.0",
-  "sprite": null,
-  "icons": {}
+  "sprite": "icons.svg",
+  "source": "Simple Icons",
+  "sourceUrl": "https://github.com/simple-icons/simple-icons",
+  "license": "CC0-1.0",
+  "icons": {
+    "google": {
+      "symbol": "si-google",
+      "slug": "google",
+      "title": "Google"
+    },
+    "baidu": {
+      "symbol": "si-baidu",
+      "slug": "baidu",
+      "title": "Baidu"
+    },
+    "duckduckgo": {
+      "symbol": "si-duckduckgo",
+      "slug": "duckduckgo",
+      "title": "DuckDuckGo"
+    },
+    "brave": {
+      "symbol": "si-brave",
+      "slug": "brave",
+      "title": "Brave"
+    },
+    "wikipedia": {
+      "symbol": "si-wikipedia",
+      "slug": "wikipedia",
+      "title": "Wikipedia"
+    },
+    "zhihu": {
+      "symbol": "si-zhihu",
+      "slug": "zhihu",
+      "title": "Zhihu"
+    },
+    "deepl": {
+      "symbol": "si-deepl",
+      "slug": "deepl",
+      "title": "DeepL"
+    },
+    "semantic-scholar": {
+      "symbol": "si-semanticscholar",
+      "slug": "semanticscholar",
+      "title": "Semantic Scholar"
+    },
+    "arxiv": {
+      "symbol": "si-arxiv",
+      "slug": "arxiv",
+      "title": "arXiv"
+    },
+    "github": {
+      "symbol": "si-github",
+      "slug": "github",
+      "title": "GitHub"
+    },
+    "stackoverflow": {
+      "symbol": "si-stackoverflow",
+      "slug": "stackoverflow",
+      "title": "Stack Overflow"
+    },
+    "mdn": {
+      "symbol": "si-mdnwebdocs",
+      "slug": "mdnwebdocs",
+      "title": "MDN Web Docs"
+    },
+    "npm": {
+      "symbol": "si-npm",
+      "slug": "npm",
+      "title": "npm"
+    },
+    "pypi": {
+      "symbol": "si-pypi",
+      "slug": "pypi",
+      "title": "PyPI"
+    },
+    "dribbble": {
+      "symbol": "si-dribbble",
+      "slug": "dribbble",
+      "title": "Dribbble"
+    },
+    "behance": {
+      "symbol": "si-behance",
+      "slug": "behance",
+      "title": "Behance"
+    },
+    "pinterest": {
+      "symbol": "si-pinterest",
+      "slug": "pinterest",
+      "title": "Pinterest"
+    },
+    "unsplash": {
+      "symbol": "si-unsplash",
+      "slug": "unsplash",
+      "title": "Unsplash"
+    },
+    "iconify": {
+      "symbol": "si-iconify",
+      "slug": "iconify",
+      "title": "Iconify"
+    },
+    "figma": {
+      "symbol": "si-figma",
+      "slug": "figma",
+      "title": "Figma"
+    },
+    "youtube": {
+      "symbol": "si-youtube",
+      "slug": "youtube",
+      "title": "YouTube"
+    },
+    "bilibili": {
+      "symbol": "si-bilibili",
+      "slug": "bilibili",
+      "title": "Bilibili"
+    },
+    "spotify": {
+      "symbol": "si-spotify",
+      "slug": "spotify",
+      "title": "Spotify"
+    },
+    "taobao": {
+      "symbol": "si-taobao",
+      "slug": "taobao",
+      "title": "Taobao"
+    },
+    "reddit": {
+      "symbol": "si-reddit",
+      "slug": "reddit",
+      "title": "Reddit"
+    },
+    "openstreetmap": {
+      "symbol": "si-openstreetmap",
+      "slug": "openstreetmap",
+      "title": "OpenStreetMap"
+    },
+    "archive": {
+      "symbol": "si-internetarchive",
+      "slug": "internetarchive",
+      "title": "Internet Archive"
+    },
+    "sogou": {
+      "symbol": "si-sogou",
+      "slug": "sogou",
+      "title": "Sogou"
+    },
+    "niconico": {
+      "symbol": "si-niconico",
+      "slug": "niconico",
+      "title": "niconico"
+    },
+    "netease": {
+      "symbol": "si-neteasecloudmusic",
+      "slug": "neteasecloudmusic",
+      "title": "NetEase Cloud Music"
+    },
+    "pixiv": {
+      "symbol": "si-pixiv",
+      "slug": "pixiv",
+      "title": "pixiv"
+    },
+    "flickr": {
+      "symbol": "si-flickr",
+      "slug": "flickr",
+      "title": "Flickr"
+    },
+    "quora": {
+      "symbol": "si-quora",
+      "slug": "quora",
+      "title": "Quora"
+    },
+    "douban": {
+      "symbol": "si-douban",
+      "slug": "douban",
+      "title": "Douban"
+    },
+    "weibo": {
+      "symbol": "si-sinaweibo",
+      "slug": "sinaweibo",
+      "title": "Sina Weibo"
+    },
+    "cnn": {
+      "symbol": "si-cnn",
+      "slug": "cnn",
+      "title": "CNN"
+    },
+    "greasyfork": {
+      "symbol": "si-greasyfork",
+      "slug": "greasyfork",
+      "title": "Greasy Fork"
+    }
+  },
+  "missing": [
+    "acfun",
+    "amazon",
+    "bbc",
+    "bing",
+    "caniuse",
+    "cnki",
+    "crates",
+    "docin",
+    "forvo",
+    "guokr",
+    "huaban",
+    "iqiyi",
+    "jd",
+    "jstor",
+    "moegirl",
+    "researchindex",
+    "so360",
+    "springer",
+    "suning",
+    "tencent",
+    "tmall",
+    "toutiao",
+    "w3school",
+    "wallhaven",
+    "wanfang",
+    "xianyu",
+    "yahoo",
+    "youdao",
+    "youku",
+    "zdic"
+  ]
 }

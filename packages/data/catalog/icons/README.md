@@ -1,27 +1,28 @@
 # Icons
 
-Phase 0 does not ship icon files yet. The catalog references icons by id; the build will generate a sprite.
+Provider icons are generated from [Simple Icons](https://simpleicons.org/) at build time.
 
-Planned rules:
+## Source of truth
 
-- One SVG per icon id, stored in this directory.
-- Engine and category icons are separate namespaces if their ids collide.
-- Build step generates a single sprite plus a lookup map.
-- No remote favicon requests and no base64 inside engine records.
-- Every icon records its source and license in `icons/LICENSE.md`.
-- Missing icons fall back to the provider icon, then a generated letter mark.
+- Provider to slug mapping: [`simple-icons.yaml`](simple-icons.yaml)
+- License and provenance: [`LICENSE.md`](LICENSE.md)
 
-Suggested layout:
+## Build output
 
-```text
-icons/
-├─ LICENSE.md
-├─ providers/
-│  ├─ google.svg
-│  └─ github.svg
-└─ categories/
-   ├─ web.svg
-   └─ academic.svg
-```
+`pnpm data:build` produces:
 
-Do not add brand assets until their license/provenance is confirmed.
+- `packages/data/generated/icons.svg` — sprite with one `<symbol>` per mapped provider
+- `packages/data/generated/icons.json` — manifest with symbol ids, source, license, and missing providers
+
+## Rules
+
+- Do not add remote favicon URLs.
+- Do not add base64 icon data to engine records.
+- Do not add a logo without recording its source and license.
+- Providers without a mapping fall back to a generated letter mark.
+- A mapped slug must exist in the installed `simple-icons` package, or the build fails.
+- Do not map a provider to a different brand just to avoid a fallback.
+
+## Current coverage
+
+The first pass maps 37 providers. Thirty providers use the letter-mark fallback because Simple Icons does not carry their brand.

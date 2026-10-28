@@ -82,6 +82,8 @@ pnpm data:build
 
 The generated catalog lives in `packages/data/generated/`. It is committed and consumed by future hosts.
 
+See [`docs/migration/legacy-engines.md`](docs/migration/legacy-engines.md) for the legacy engine migration report.
+
 The data package is intentionally not published. The external contract for future integrations will be the CLI and JSON catalog, not an npm library.
 
 ## Legacy code
@@ -89,3 +91,7 @@ The data package is intentionally not published. The external contract for futur
 All pre-rewrite userscripts, templates, dumps, and references live under [`legacy/`](legacy/README.md). They are archived for historical reference and are not part of the build.
 
 The upstream `searchEngineJump` repository has no license file. Do not copy its code into the new runtime without clarifying permission. Engine names and URLs are factual data, but the old implementation should be treated as reference only.
+
+## License
+
+Derecherche is licensed under **GPL-3.0-only**. See [`LICENSE`](LICENSE) and [`docs/legal.md`](docs/legal.md) for the license, legacy audit, and icon provenance.

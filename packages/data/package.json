@@ -4,10 +4,12 @@
   "private": true,
   "type": "module",
   "description": "Derecherche search engine catalog and validation",
+  "license": "GPL-3.0-only",
   "scripts": {
     "validate": "node scripts/validate.mjs",
-    "build": "node scripts/validate.mjs && node scripts/build.mjs",
-    "check-links": "node scripts/check-links.mjs"
+    "build": "node scripts/validate.mjs && node scripts/build-icons.mjs && node scripts/build.mjs",
+    "check-links": "node scripts/check-links.mjs",
+    "legacy:report": "node scripts/inventory-legacy.mjs"
   },
   "main": "./generated/index.js",
   "types": "./generated/catalog.d.ts",
@@ -21,7 +23,9 @@
     "./icons.json": "./generated/icons.json"
   },
   "devDependencies": {
+    "acorn": "^8.19.0",
     "ajv": "^8.17.1",
+    "simple-icons": "^16.36.0",
     "yaml": "^2.8.1"
   }
 }
