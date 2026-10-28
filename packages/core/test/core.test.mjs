@@ -15,6 +15,7 @@ import {
   matchSite,
   normalizeQuery,
   normalizeSettings,
+  rankEngines,
   validateEngineTemplate,
 } from "../dist/index.js";
 
@@ -332,4 +333,111 @@ test("selection and clipboard are fallbacks", () => {
 
 test("extractQuery returns null when no query exists", () => {
   assert.equal(extractQuery({ url: "https://example.com/" }, []), null);
+});
+
+const bing = {
+  id: "bing",
+  providerId: "bing",
+  name: "Bing",
+  category: "web-general",
+  url: "https://www.bing.com/search?q={q}",
+  tags: ["web", "search"],
+  triggers: ["bing"],
+  status: "active",
+};
+
+const wolfram = {
+  id: "wolfram-alpha",
+  providerId: "wolframalpha",
+  name: "Wolfram Alpha",
+  category: "academic-data",
+  url: "https://www.wolframalpha.com/input?i={q}",
+  tags: ["knowledge", "math", "data"],
+  triggers: ["wolfram", "math", "计算"],
+  status: "active",
+};
+
+test("stable order is independent of query and frecency", () => {
+  const settings = normalizeSettings(
+    {
+      engines: {
+        "google-web": { pinned: true },
+        github: { order: 1 },
+      },
+    },
+    "2026.10.0"
+  );
+
+  const first = rankEngines([google, github, bing, wolfram], settings, {
+    query: "react",
+    now: 1000,
+  });
+  const second = rankEngines(
+    [google, github, bing, wolfram],
+    settings,
+    { query: "photosynthesis", now: 1000 },
+    { frecency: [{ engineId: "bing", count: 20, lastUsedAt: 1000 }] }
+  );
+
+  assert.deepEqual(
+    first.stable.map((engine) => engine.id),
+    second.stable.map((engine) => engine.id)
+  );
+  assert.deepEqual(
+    first.stable.map((engine) => engine.id),
+    ["google-web", "github", "bing", "wolfram-alpha"]
+  );
+});
+
+test("recommendations use triggers, category affinity, and frecency", () => {
+  const settings = normalizeSettings({}, "2026.10.0");
+
+  const byTrigger = rankEngines([google, github, bing], settings, {
+    query: "github react",
+    now: 1000,
+  });
+  assert.equal(byTrigger.recommended[0]?.id, "github");
+
+  const byCategory = rankEngines([google, github, wolfram], settings, {
+    query: "",
+    categoryId: "academic-data",
+    now: 1000,
+  });
+  assert.equal(byCategory.recommended[0]?.id, "wolfram-alpha");
+
+  const byFrecency = rankEngines(
+    [google, github, bing],
+    settings,
+    { query: "", now: 1000 },
+    { frecency: [{ engineId: "bing", count: 10, lastUsedAt: 1000 }] }
+  );
+  assert.equal(byFrecency.recommended[0]?.id, "bing");
+});
+
+test("recommendations are capped and exclude pinned/broken engines", () => {
+  const settings = normalizeSettings(
+    { engines: { "google-web": { pinned: true } } },
+    "2026.10.0"
+  );
+  const broken = { ...bing, id: "broken", status: "broken" };
+  const result = rankEngines([google, github, bing, wolfram, broken], settings, {
+    query: "web math github",
+    now: 1000,
+  }, { recommendedLimit: 2 });
+
+  assert.equal(result.recommended.length, 2);
+  assert.equal(result.recommended.some((engine) => engine.id === "google-web"), false);
+  assert.equal(result.recommended.some((engine) => engine.id === "broken"), false);
+});
+
+test("recommendation scoring is deterministic with a fixed clock", () => {
+  const settings = normalizeSettings({}, "2026.10.0");
+  const options = {
+    query: "math",
+    now: 1000,
+    frecency: [{ engineId: "bing", count: 3, lastUsedAt: 500 }],
+  };
+  const first = rankEngines([google, github, bing, wolfram], settings, options);
+  const second = rankEngines([google, github, bing, wolfram], settings, options);
+  assert.deepEqual(first.recommended.map((engine) => engine.id), second.recommended.map((engine) => engine.id));
 });

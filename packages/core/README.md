@@ -10,6 +10,9 @@ Headless core for Derecherche. It contains no DOM, userscript, extension, or CLI
 - `extractQuery(context, sites, options)` — resolves a query from URL params, live/DOM selectors, HTML snapshot selectors, selection, or clipboard.
 - `matchSite(url, sites)` — picks the most specific site adapter by host, path, params, and priority.
 - `extractFromUrl`, `extractFromDocument`, `extractFromSelection`, `extractFromClipboard` — individual extraction paths for tests and hosts.
+- `rankEngines(engines, settings, context, options)` — returns a stable list and a separate recommendation strip.
+- `recommendationScore(engine, context, frecency)` — local, deterministic recommendation score.
+- `FrecencyEntry` / `RankContext` / `RankedEngines` types.
 - `normalizeSettings(input, catalogVersion)` — sanitizes persisted settings and custom engines.
 - `applySettings(engines, settings)` — filters disabled engines and applies name/order/pinned overrides.
 - `applyCategorySettings(categories, settings)` — hides and orders categories without mutating the catalog.
@@ -23,7 +26,8 @@ Headless core for Derecherche. It contains no DOM, userscript, extension, or CLI
 - No network access.
 - Types from `@derecherche/data` are type-only imports.
 - Settings are user overrides; the bundled catalog is read-only.
-- `applySettings` preserves catalog order unless an explicit override is present. Ranking belongs in a separate core module.
+- `applySettings` preserves catalog order unless an explicit override is present.
+- `rankEngines` keeps the stable list independent of query and frecency. Recommendation is a separate list and must not reorder the stable list.
 
 ## Build and test
 
