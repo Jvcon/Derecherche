@@ -31,16 +31,18 @@ Changes inside `apps/playground/src` use Vite HMR.
 ## What to test
 
 - `Alt+J` or the floating Derecherche button opens the Palette.
-- On the search page, query extraction uses a simulated Google URL.
-- On the article page, select text to show the demo SelectionBar.
-- Input is empty: the Result Panel shows the configured common engines.
-- Typing filters the engine list and switches to Results mode.
-- `TAB`: enter category mode from the common/filter list. In category mode, `TAB` drills into the highlighted category.
-- `Enter`: open the current engine, or enter a highlighted category.
-- On an engine row, `TAB` is disabled; the status bar shows the disabled hint.
-- `⌘K` / `Ctrl+K`: open the action menu for an engine (copy URL, open current tab, edit query).
+- The extracted keyword is placed in the input bar.
+- The Result Panel starts on the configured common engines.
+- `TAB`: the keyword becomes a token (`[←] [keyword]`) and the Palette enters category mode.
+- In category mode, typing filters the current category list globally; `TAB` on a category appends it to the token trail:
+  - `[←] [keyword] [Category 1]`
+  - `[←] [keyword] [Category 1 / Category 2]`
+- `Enter` opens the current engine or enters a highlighted category.
+- `TAB` on an engine row is disabled; the status bar hint is dimmed.
+- Click the keyword token or go back at the root to return to keyword editing.
+- `⌘K` / `Ctrl+K`: open the action menu for an engine (copy URL, open current tab, edit keyword).
 - `↑/↓` move, `←` go back, `Esc` close.
-- `Alt+1`–`Alt+9` quick-pick the nth stable item. Plain digits are reserved for filtering.
+- `Alt+1`–`Alt+9` quick-pick the nth item.
 
 The UI is intentionally three rows: input bar, result panel, and status bar. The status bar keeps the Raycast-style hints visible: `Select Category TAB`, `Open Enter`, `Action ⌘K`.
 

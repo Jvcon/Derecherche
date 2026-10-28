@@ -28,7 +28,7 @@ interface EngineItem {
 }
 
 type Item = CategoryItem | EngineItem;
-type Mode = "common" | "filter" | "categories";
+type Mode = "query" | "category";
 
 interface Action {
   id: "copy" | "current" | "edit";
@@ -47,7 +47,7 @@ const DEFAULT_COMMON_ENGINE_IDS = [
 const ACTIONS: Action[] = [
   { id: "copy", label: "Copy target URL" },
   { id: "current", label: "Open in current tab" },
-  { id: "edit", label: "Edit query" },
+  { id: "edit", label: "Edit keyword" },
 ];
 
 const PALETTE_CSS = `
@@ -59,7 +59,7 @@ const PALETTE_CSS = `
   background: rgba(15, 18, 22, 0.42);
 }
 .panel {
-  width: min(760px, calc(100vw - 32px));
+  width: min(780px, calc(100vw - 32px));
   margin-top: 9vh;
   display: flex;
   flex-direction: column;
@@ -73,24 +73,64 @@ const PALETTE_CSS = `
 .input-bar {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
+  gap: 8px;
+  padding: 12px 14px;
   border-bottom: 1px solid var(--dr-border);
 }
-.search-icon {
+.back {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--dr-border);
+  border-radius: 7px;
+  background: transparent;
   color: var(--dr-muted);
-  font-size: 18px;
-  line-height: 1;
+  font: inherit;
+  cursor: pointer;
+}
+.back:hover {
+  background: var(--dr-hover);
+}
+.back[hidden] {
+  display: none;
+}
+.token {
+  flex: none;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border: 1px solid var(--dr-border);
+  border-radius: 7px;
+  padding: 5px 8px;
+  font-size: 12px;
+  background: var(--dr-hover);
+  color: var(--dr-fg);
+}
+.query-token {
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+}
+.query-token:hover {
+  outline: 1px solid var(--dr-border);
+}
+.category-token {
+  color: var(--dr-muted);
+  font-size: 12px;
 }
 .input {
   flex: 1;
-  min-width: 0;
+  min-width: 120px;
   border: 0;
   outline: 0;
   background: transparent;
   color: inherit;
   font: inherit;
   font-size: 16px;
+  padding: 6px 2px;
 }
 .input::placeholder {
   color: var(--dr-muted);
@@ -116,9 +156,6 @@ const PALETTE_CSS = `
   max-height: min(520px, 58vh);
   overflow: hidden;
 }
-.result-panel[hidden] {
-  display: none;
-}
 .panel-head {
   display: flex;
   align-items: center;
@@ -128,17 +165,6 @@ const PALETTE_CSS = `
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-}
-.query-chip {
-  max-width: 60%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  border: 1px solid var(--dr-border);
-  border-radius: 999px;
-  padding: 2px 7px;
-  text-transform: none;
-  letter-spacing: 0;
 }
 .list {
   overflow-y: auto;
@@ -239,10 +265,10 @@ const PALETTE_CSS = `
   font-size: 11px;
 }
 .status-left {
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: 8px;
-  min-width: 0;
 }
 .status-path {
   color: var(--dr-fg);
@@ -250,12 +276,6 @@ const PALETTE_CSS = `
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-.status-query {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  opacity: 0.8;
 }
 .status-right {
   display: flex;
@@ -270,12 +290,6 @@ const PALETTE_CSS = `
 }
 .hint.disabled {
   opacity: 0.35;
-}
-.foot-note {
-  border-top: 1px solid var(--dr-border);
-  padding: 6px 14px;
-  color: var(--dr-muted);
-  font-size: 10px;
 }
 `;
 
@@ -324,6 +338,12 @@ function engineHaystack(engine: Engine): string {
     .toLowerCase();
 }
 
+function categoryHaystack(category: Category | CategoryChild, path: string[]): string {
+  return [category.name, category.id, ...(category.aliases ?? []), pathName(path)]
+    .join(" ")
+    .toLowerCase();
+}
+
 export function openPalette(options: PaletteOptions): void {
   active?.close();
 
@@ -343,22 +363,20 @@ export function openPalette(options: PaletteOptions): void {
   panel.setAttribute("aria-label", "Derecherche engine picker");
   panel.innerHTML = `
     <header class="input-bar">
-      <span class="search-icon" aria-hidden="true">⌕</span>
-      <input class="input" data-filter type="text" autocomplete="off" spellcheck="false" placeholder="Filter engines or press TAB for categories">
+      <button class="back" type="button" data-action="back" hidden aria-label="Back">←</button>
+      <button class="token query-token" type="button" data-action="edit-keyword" hidden></button>
+      <span class="token category-token" data-category-token hidden></span>
+      <input class="input" data-input type="text" autocomplete="off" spellcheck="false">
       <kbd class="key">TAB</kbd>
     </header>
-    <section class="result-panel" data-panel>
-      <div class="panel-head">
-        <span data-mode>Common engines</span>
-        <span class="query-chip" data-query-chip></span>
-      </div>
+    <section class="result-panel">
+      <div class="panel-head"><span data-mode>Common engines</span></div>
       <div class="list" data-list></div>
     </section>
     <div class="action-menu" data-actions hidden></div>
     <footer class="status-bar">
       <div class="status-left">
-        <span class="status-path" data-status-path>Common</span>
-        <span class="status-query" data-status-query></span>
+        <span class="status-path" data-status-path>Common engines</span>
       </div>
       <div class="status-right">
         <span class="hint" data-hint-category><span>Select Category</span><kbd class="key">TAB</kbd></span>
@@ -369,25 +387,26 @@ export function openPalette(options: PaletteOptions): void {
   `;
   shadow.content.append(panel);
 
-  const filterInput = panel.querySelector<HTMLInputElement>("[data-filter]")!;
+  const input = panel.querySelector<HTMLInputElement>("[data-input]")!;
+  const backButton = panel.querySelector<HTMLButtonElement>('[data-action="back"]')!;
+  const queryToken = panel.querySelector<HTMLButtonElement>('[data-action="edit-keyword"]')!;
+  const categoryToken = panel.querySelector<HTMLElement>("[data-category-token]")!;
   const modeNode = panel.querySelector<HTMLElement>("[data-mode]")!;
-  const queryChip = panel.querySelector<HTMLElement>("[data-query-chip]")!;
   const listNode = panel.querySelector<HTMLElement>("[data-list]")!;
   const actionsNode = panel.querySelector<HTMLElement>("[data-actions]")!;
   const statusPath = panel.querySelector<HTMLElement>("[data-status-path]")!;
-  const statusQuery = panel.querySelector<HTMLElement>("[data-status-query]")!;
   const categoryHint = panel.querySelector<HTMLElement>("[data-hint-category]")!;
   const actionHint = panel.querySelector<HTMLElement>("[data-hint-action]")!;
 
   const initial = options.categoryId
     ? categoryById.get(options.categoryId)
     : undefined;
-  let path = initial?.path ?? [];
-  let mode: Mode = "common";
+  let mode: Mode = "query";
+  let path: string[] = [];
+  let query = options.query.trim();
   let filter = "";
   let selected = 0;
   let items: Item[] = [];
-  let query = options.query.trim();
   let actionMenuOpen = false;
   let actionIndex = 0;
 
@@ -417,19 +436,7 @@ export function openPalette(options: PaletteOptions): void {
     return item?.kind === "engine" ? item.engine : undefined;
   }
 
-  function buildItems(): Item[] {
-    if (mode === "filter") {
-      const q = filter.trim().toLowerCase();
-      return data.engines
-        .filter((engine) => engine.status === "active" && engineHaystack(engine).includes(q))
-        .slice(0, 60)
-        .map((engine) => ({ kind: "engine", engine }));
-    }
-
-    if (mode === "common") {
-      return common.map((engine) => ({ kind: "engine", engine }));
-    }
-
+  function currentLevelItems(): Item[] {
     const current = currentCategory();
     if (!current) {
       return categories.map((category) => ({
@@ -455,15 +462,53 @@ export function openPalette(options: PaletteOptions): void {
     return [...children, ...engines];
   }
 
+  function buildItems(): Item[] {
+    if (mode === "query") {
+      return common.map((engine) => ({ kind: "engine", engine }));
+    }
+
+    if (!filter.trim()) return currentLevelItems();
+
+    const q = filter.trim().toLowerCase();
+    const categoryItems: Item[] = allFlat
+      .filter((entry) => categoryHaystack(entry.category, entry.path).includes(q))
+      .slice(0, 12)
+      .map((entry) => ({
+        kind: "category" as const,
+        category: entry.category,
+        path: entry.path,
+      }));
+    const engineItems: Item[] = data.engines
+      .filter((engine) => engine.status === "active" && engineHaystack(engine).includes(q))
+      .slice(0, 60)
+      .map((engine) => ({ kind: "engine" as const, engine }));
+
+    return [...categoryItems, ...engineItems];
+  }
+
   function modeLabel(): string {
-    if (mode === "common") return "Common engines";
-    if (mode === "filter") return "Results";
-    if (path.length === 0) return "Categories";
-    return "Category";
+    if (mode === "query") return "Common engines";
+    if (filter.trim()) return "Filter results";
+    return path.length > 0 ? pathName(path) : "Categories";
+  }
+
+  function renderInput(): void {
+    backButton.hidden = mode === "query";
+    queryToken.hidden = mode === "query";
+    queryToken.textContent = query || "No keyword";
+    queryToken.title = query || "No keyword";
+    categoryToken.hidden = mode === "query" || path.length === 0;
+    categoryToken.textContent = path.length > 0 ? pathName(path) : "";
+    input.placeholder =
+      mode === "query"
+        ? "Type a search keyword"
+        : "Filter categories and engines";
+    input.setAttribute("aria-label", mode === "query" ? "Search keyword" : "Filter categories and engines");
   }
 
   function renderActions(): void {
-    if (!actionMenuOpen || !selectedEngine()) {
+    const engine = selectedEngine();
+    if (!actionMenuOpen || !engine) {
       actionsNode.hidden = true;
       actionsNode.innerHTML = "";
       return;
@@ -481,7 +526,7 @@ export function openPalette(options: PaletteOptions): void {
   function renderList(): void {
     if (items.length === 0) {
       listNode.innerHTML = `<div class="empty">${
-        mode === "filter" ? "No matching engines" : "No engines available"
+        filter.trim() ? "No matching engines" : "No engines available"
       }</div>`;
       return;
     }
@@ -492,7 +537,7 @@ export function openPalette(options: PaletteOptions): void {
       if (item.kind !== lastKind) {
         rows.push(
           `<div class="group-label">${
-            item.kind === "category" ? "Categories" : mode === "common" ? "Common" : "Engines"
+            item.kind === "category" ? "Categories" : mode === "query" ? "Common" : "Engines"
           }</div>`
         );
         lastKind = item.kind;
@@ -538,19 +583,18 @@ export function openPalette(options: PaletteOptions): void {
     items = buildItems();
     if (selected >= items.length) selected = Math.max(0, items.length - 1);
     modeNode.textContent = modeLabel();
-    queryChip.textContent = query ? `“${query}”` : "No query";
     statusPath.textContent =
-      mode === "common"
+      mode === "query"
         ? "Common engines"
-        : mode === "filter"
-          ? "Results"
-          : pathName(path) || "Categories";
-    statusQuery.textContent = query ? `· ${query}` : "";
+        : path.length > 0
+          ? pathName(path)
+          : "Categories";
     categoryHint.classList.toggle(
       "disabled",
-      mode === "categories" && selectedItem()?.kind === "engine"
+      mode === "category" && selectedItem()?.kind === "engine"
     );
     actionHint.classList.toggle("disabled", !selectedEngine());
+    renderInput();
     renderList();
     renderActions();
   }
@@ -560,6 +604,7 @@ export function openPalette(options: PaletteOptions): void {
     const entered = window.prompt("Search query")?.trim();
     if (!entered) return null;
     query = entered;
+    if (mode === "query") input.value = query;
     render();
     return query;
   }
@@ -574,11 +619,13 @@ export function openPalette(options: PaletteOptions): void {
 
   function enterCategory(item: CategoryItem): void {
     path = item.path;
-    mode = "categories";
+    mode = "category";
     filter = "";
-    filterInput.value = "";
+    input.value = "";
     selected = 0;
+    actionMenuOpen = false;
     render();
+    input.focus();
   }
 
   function openItem(item: Item | undefined): void {
@@ -590,11 +637,20 @@ export function openPalette(options: PaletteOptions): void {
     openEngine(item.engine);
   }
 
+  function exitToKeyword(): void {
+    mode = "query";
+    filter = "";
+    selected = 0;
+    actionMenuOpen = false;
+    input.value = query;
+    render();
+    input.focus();
+  }
+
   function goBack(): void {
-    if (mode === "filter" && filter) {
+    if (filter) {
       filter = "";
-      filterInput.value = "";
-      mode = "common";
+      input.value = "";
       selected = 0;
       render();
       return;
@@ -605,20 +661,30 @@ export function openPalette(options: PaletteOptions): void {
       render();
       return;
     }
-    if (mode === "categories") {
-      mode = "common";
-      selected = 0;
-      render();
-    }
+    if (mode === "category") exitToKeyword();
   }
 
   function enterCategoryMode(): void {
-    mode = "categories";
-    path = initial?.path ?? [];
+    mode = "category";
+    path = [];
     filter = "";
-    filterInput.value = "";
+    input.value = "";
     selected = 0;
+    actionMenuOpen = false;
     render();
+
+    const preferredRoot = initial?.path[0];
+    if (preferredRoot) {
+      const index = items.findIndex(
+        (item) => item.kind === "category" && item.category.id === preferredRoot
+      );
+      if (index >= 0) {
+        selected = index;
+        renderList();
+      }
+    }
+
+    input.focus();
   }
 
   function executeAction(action: Action): void {
@@ -638,9 +704,10 @@ export function openPalette(options: PaletteOptions): void {
       window.location.href = url;
       return;
     }
-    const entered = window.prompt("Search query", query)?.trim();
+    const entered = window.prompt("Search keyword", query)?.trim();
     if (entered) {
       query = entered;
+      if (mode === "query") input.value = query;
       render();
     }
   }
@@ -689,14 +756,12 @@ export function openPalette(options: PaletteOptions): void {
 
     if (event.key === "Tab") {
       event.preventDefault();
-      if (mode !== "categories") {
+      if (mode === "query") {
         enterCategoryMode();
         return;
       }
       const item = selectedItem();
-      if (item?.kind === "category") {
-        enterCategory(item);
-      }
+      if (item?.kind === "category") enterCategory(item);
       return;
     }
 
@@ -725,7 +790,7 @@ export function openPalette(options: PaletteOptions): void {
       goBack();
       return;
     }
-    if (event.key === "Backspace" && !filterInput.value) {
+    if (event.key === "Backspace" && !input.value) {
       event.preventDefault();
       goBack();
       return;
@@ -747,6 +812,14 @@ export function openPalette(options: PaletteOptions): void {
     if (!target) return;
 
     const action = target.closest<HTMLElement>("[data-action]");
+    if (action?.dataset.action === "back") {
+      goBack();
+      return;
+    }
+    if (action?.dataset.action === "edit-keyword") {
+      exitToKeyword();
+      return;
+    }
     if (action?.dataset.action) {
       const found = ACTIONS.find((item) => item.id === action.dataset.action);
       if (found) executeAction(found);
@@ -761,16 +834,21 @@ export function openPalette(options: PaletteOptions): void {
     }
   }
 
-  filterInput.addEventListener("input", () => {
-    filter = filterInput.value;
-    mode = filter.trim() ? "filter" : "common";
-    selected = 0;
+  input.addEventListener("input", () => {
+    if (mode === "query") {
+      query = input.value;
+    } else {
+      filter = input.value;
+      selected = 0;
+    }
     render();
   });
+
   panel.addEventListener("click", onClick);
   document.addEventListener("keydown", onKeydown, true);
+  input.value = query;
   render();
-  filterInput.focus();
+  input.focus();
 
   function close(): void {
     document.removeEventListener("keydown", onKeydown, true);
