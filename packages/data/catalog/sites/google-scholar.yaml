@@ -10,6 +10,9 @@ defaultCategory: academic-search
 capabilities: [url, dom, html]
 priority: 20
 mount:
-  anchor: 'input[name="q"]'
-  placement: below
-  offset: 8
+  anchor: ['#gs_hdr_tsi', 'input[name="q"]']
+  rules:
+    - container: '#gs_top'
+      insert: after
+    - anchor: ['#gs_hdr_tsi', 'input[name="q"]']
+      insert: after

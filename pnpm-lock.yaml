@@ -195,6 +195,25 @@ importers:
         specifier: ^7.2.4
         version: 7.3.7(@types/node@26.6.5)(yaml@2.9.1)
 
+  apps/userscript:
+    dependencies:
+      '@derecherche/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@derecherche/data':
+        specifier: workspace:*
+        version: link:../../packages/data
+      '@derecherche/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+    devDependencies:
+      happy-dom:
+        specifier: ^21.0.4
+        version: 21.0.4
+      vite:
+        specifier: ^7.2.4
+        version: 7.3.7(@types/node@26.6.5)(yaml@2.9.1)
+
   packages/core:
     dependencies:
       '@derecherche/data':

@@ -14,6 +14,9 @@ export default defineConfig({
   server: {
     port: 5173,
     strictPort: true,
+    fs: {
+      allow: [resolvePath("../..")],
+    },
   },
   build: {
     rollupOptions: {
@@ -22,6 +25,7 @@ export default defineConfig({
         search: resolvePath("search.html"),
         article: resolvePath("article.html"),
         palette: resolvePath("palette.html"),
+        adapters: resolvePath("adapters.html"),
       },
     },
   },

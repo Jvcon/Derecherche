@@ -55,13 +55,24 @@ export interface Site {
   };
   defaultCategory: string;
   capabilities?: Array<"url" | "dom" | "html">;
-  mount?: {
-    anchor?: string;
-    container?: string;
-    placement?: "below" | "above" | "floating";
-    offset?: number;
-  };
+  mount?: SiteMount;
   notes?: string;
+}
+
+export type MountSelector = string | string[];
+export type MountInsert = "after" | "before" | "append" | "prepend";
+
+export interface MountRule {
+  container?: MountSelector;
+  anchor?: MountSelector;
+  insert?: MountInsert;
+}
+
+export interface SiteMount extends MountRule {
+  placement?: "below" | "above" | "floating";
+  offset?: number;
+  required?: boolean;
+  rules?: MountRule[];
 }
 
 export interface IconRef {

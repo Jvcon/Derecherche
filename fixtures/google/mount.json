@@ -1,0 +1,22 @@
+{
+  "url": "https://www.google.com/search?q=rust+async",
+  "query": "rust async",
+  "cases": [
+    {
+      "name": "results wrapper",
+      "remove": [],
+      "selector": "#search",
+      "insert": "before",
+      "kind": "container"
+    },
+    {
+      "name": "top bar fallback",
+      "remove": [
+        "#search"
+      ],
+      "selector": "#gb",
+      "insert": "after",
+      "kind": "container"
+    }
+  ]
+}

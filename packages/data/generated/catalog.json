@@ -3175,9 +3175,27 @@
         "html"
       ],
       "mount": {
-        "anchor": "#kw",
-        "placement": "below",
-        "offset": 8
+        "anchor": [
+          "#kw",
+          "input[name=\"wd\"]"
+        ],
+        "rules": [
+          {
+            "container": "#head",
+            "insert": "after"
+          },
+          {
+            "container": "#content_left",
+            "insert": "before"
+          },
+          {
+            "anchor": [
+              "#kw",
+              "input[name=\"wd\"]"
+            ],
+            "insert": "after"
+          }
+        ]
       }
     },
     {
@@ -3202,12 +3220,30 @@
         "dom",
         "html"
       ],
+      "notes": "Selector is best-effort; verify on both search and video pages.",
       "mount": {
-        "anchor": "input[type=\"text\"]",
-        "placement": "below",
-        "offset": 8
-      },
-      "notes": "Selector is best-effort; verify on both search and video pages."
+        "anchor": [
+          "input[name=\"keyword\"]",
+          "input[type=\"text\"]"
+        ],
+        "rules": [
+          {
+            "container": "#biliMainHeader",
+            "insert": "after"
+          },
+          {
+            "container": ".bili-header",
+            "insert": "after"
+          },
+          {
+            "anchor": [
+              "input[name=\"keyword\"]",
+              "input[type=\"text\"]"
+            ],
+            "insert": "after"
+          }
+        ]
+      }
     },
     {
       "id": "bing-images",
@@ -3234,12 +3270,28 @@
         "html"
       ],
       "priority": 20,
+      "notes": "More specific than the host-only bing adapter.",
       "mount": {
-        "anchor": "#sb_form_q",
-        "placement": "below",
-        "offset": 8
-      },
-      "notes": "More specific than the host-only bing adapter."
+        "anchor": [
+          "#sb_form",
+          "#sb_form_q",
+          "input[name=\"q\"]"
+        ],
+        "rules": [
+          {
+            "container": "#b_header",
+            "insert": "after"
+          },
+          {
+            "anchor": [
+              "#sb_form",
+              "#sb_form_q",
+              "input[name=\"q\"]"
+            ],
+            "insert": "after"
+          }
+        ]
+      }
     },
     {
       "id": "bing",
@@ -3265,9 +3317,29 @@
         "html"
       ],
       "mount": {
-        "anchor": "#sb_form_q",
-        "placement": "below",
-        "offset": 8
+        "anchor": [
+          "#sb_form",
+          "#sb_form_q",
+          "input[name=\"q\"]"
+        ],
+        "rules": [
+          {
+            "container": "#b_header",
+            "insert": "after"
+          },
+          {
+            "container": "#b_results",
+            "insert": "before"
+          },
+          {
+            "anchor": [
+              "#sb_form",
+              "#sb_form_q",
+              "input[name=\"q\"]"
+            ],
+            "insert": "after"
+          }
+        ]
       }
     },
     {
@@ -3291,9 +3363,26 @@
         "html"
       ],
       "mount": {
-        "anchor": "input[name=\"q\"]",
-        "placement": "below",
-        "offset": 8
+        "anchor": [
+          "#header",
+          "input[name=\"q\"]"
+        ],
+        "rules": [
+          {
+            "container": "#header",
+            "insert": "after"
+          },
+          {
+            "container": "header",
+            "insert": "after"
+          },
+          {
+            "anchor": [
+              "input[name=\"q\"]"
+            ],
+            "insert": "after"
+          }
+        ]
       }
     },
     {
@@ -3318,9 +3407,26 @@
         "html"
       ],
       "mount": {
-        "anchor": "input[name=\"q\"]",
-        "placement": "below",
-        "offset": 8
+        "anchor": [
+          "#header",
+          "input[name=\"q\"]"
+        ],
+        "rules": [
+          {
+            "container": "#header",
+            "insert": "after"
+          },
+          {
+            "container": "header",
+            "insert": "after"
+          },
+          {
+            "anchor": [
+              "input[name=\"q\"]"
+            ],
+            "insert": "after"
+          }
+        ]
       }
     },
     {
@@ -3346,9 +3452,23 @@
         "html"
       ],
       "mount": {
-        "anchor": "input[name=\"q\"]",
-        "placement": "below",
-        "offset": 8
+        "anchor": [
+          "input[name=\"q\"]",
+          "#query-builder-test"
+        ],
+        "rules": [
+          {
+            "container": "header",
+            "insert": "after"
+          },
+          {
+            "anchor": [
+              "input[name=\"q\"]",
+              "#query-builder-test"
+            ],
+            "insert": "after"
+          }
+        ]
       }
     },
     {
@@ -3379,12 +3499,30 @@
         "html"
       ],
       "priority": 20,
+      "notes": "More specific than the host-only google adapter; path and tbm must both match.",
       "mount": {
-        "anchor": "input[name=\"q\"]",
-        "placement": "below",
-        "offset": 8
-      },
-      "notes": "More specific than the host-only google adapter; path and tbm must both match."
+        "anchor": [
+          "#tsf",
+          "input[name=\"q\"]"
+        ],
+        "rules": [
+          {
+            "container": "#search",
+            "insert": "before"
+          },
+          {
+            "container": "#top_nav",
+            "insert": "after"
+          },
+          {
+            "anchor": [
+              "#tsf",
+              "input[name=\"q\"]"
+            ],
+            "insert": "after"
+          }
+        ]
+      }
     },
     {
       "id": "google-scholar",
@@ -3408,9 +3546,23 @@
       ],
       "priority": 20,
       "mount": {
-        "anchor": "input[name=\"q\"]",
-        "placement": "below",
-        "offset": 8
+        "anchor": [
+          "#gs_hdr_tsi",
+          "input[name=\"q\"]"
+        ],
+        "rules": [
+          {
+            "container": "#gs_top",
+            "insert": "after"
+          },
+          {
+            "anchor": [
+              "#gs_hdr_tsi",
+              "input[name=\"q\"]"
+            ],
+            "insert": "after"
+          }
+        ]
       }
     },
     {
@@ -3436,12 +3588,32 @@
         "dom",
         "html"
       ],
+      "notes": "Google regional domains are matched by the wildcard host entry.",
       "mount": {
-        "anchor": "input[name=\"q\"]",
-        "placement": "below",
-        "offset": 8
-      },
-      "notes": "Google regional domains are matched by the wildcard host entry."
+        "anchor": [
+          "#tsf",
+          "form[action*=\"/search\"]",
+          "input[name=\"q\"]"
+        ],
+        "rules": [
+          {
+            "container": "#search",
+            "insert": "before"
+          },
+          {
+            "container": "#gb",
+            "insert": "after"
+          },
+          {
+            "anchor": [
+              "#tsf",
+              "form[action*=\"/search\"]",
+              "input[name=\"q\"]"
+            ],
+            "insert": "after"
+          }
+        ]
+      }
     },
     {
       "id": "wikipedia",
@@ -3465,9 +3637,27 @@
         "html"
       ],
       "mount": {
-        "anchor": "#searchInput",
-        "placement": "below",
-        "offset": 8
+        "anchor": [
+          "#searchInput",
+          "input[name=\"search\"]"
+        ],
+        "rules": [
+          {
+            "container": "header",
+            "insert": "after"
+          },
+          {
+            "container": "#mw-content-text",
+            "insert": "before"
+          },
+          {
+            "anchor": [
+              "#searchInput",
+              "input[name=\"search\"]"
+            ],
+            "insert": "after"
+          }
+        ]
       }
     },
     {
@@ -3494,9 +3684,27 @@
         "html"
       ],
       "mount": {
-        "anchor": "input#search",
-        "placement": "below",
-        "offset": 8
+        "anchor": [
+          "input#search",
+          "input[name=\"search_query\"]"
+        ],
+        "rules": [
+          {
+            "container": "#masthead-container",
+            "insert": "after"
+          },
+          {
+            "container": "#header",
+            "insert": "after"
+          },
+          {
+            "anchor": [
+              "input#search",
+              "input[name=\"search_query\"]"
+            ],
+            "insert": "after"
+          }
+        ]
       }
     },
     {
@@ -3521,12 +3729,30 @@
         "dom",
         "html"
       ],
+      "notes": "Selector is best-effort; verify against the current Zhihu search page.",
       "mount": {
-        "anchor": "input[name=\"q\"]",
-        "placement": "below",
-        "offset": 8
-      },
-      "notes": "Selector is best-effort; verify against the current Zhihu search page."
+        "anchor": [
+          "input[name=\"q\"]",
+          "input[type=\"text\"]"
+        ],
+        "rules": [
+          {
+            "container": ".AppHeader",
+            "insert": "after"
+          },
+          {
+            "container": "header",
+            "insert": "after"
+          },
+          {
+            "anchor": [
+              "input[name=\"q\"]",
+              "input[type=\"text\"]"
+            ],
+            "insert": "after"
+          }
+        ]
+      }
     }
   ]
 }

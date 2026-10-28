@@ -11,6 +11,11 @@ selectors:
 defaultCategory: web-general
 capabilities: [url, dom, html]
 mount:
-  anchor: '#kw'
-  placement: below
-  offset: 8
+  anchor: ['#kw', 'input[name="wd"]']
+  rules:
+    - container: '#head'
+      insert: after
+    - container: '#content_left'
+      insert: before
+    - anchor: ['#kw', 'input[name="wd"]']
+      insert: after

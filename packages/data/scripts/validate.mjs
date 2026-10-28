@@ -185,6 +185,12 @@ async function main() {
         fail(`${path.basename(file)}: site ${site.id} has an invalid pathPattern: ${site.pathPattern}`);
       }
     }
+    const mountRules = site.mount?.rules ?? (site.mount ? [site.mount] : []);
+    for (const [index, rule] of mountRules.entries()) {
+      if (!rule.container && !rule.anchor) {
+        fail(`${path.basename(file)}: site ${site.id} mount rule ${index} needs a container or anchor`);
+      }
+    }
   }
 
   checkUnique("site", sites.map((site) => site.id));

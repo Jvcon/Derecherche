@@ -75,6 +75,8 @@ Validation checks:
 - `category` may point to a top-level category or a subcategory.
 - Aim for at least three engines before a subcategory becomes visible. Phase 0 may keep planned placeholders; the UI hides empty branches.
 - `sites` may add `pathPattern` and `paramMatches` to beat a host-only adapter. More specific adapters win.
+- `mount.rules` are ordered from preferred to fallback. Each rule tries `container` selectors, then `anchor` selectors.
+- Every adapter with mount rules should have `fixtures/<id>/mount.html` and `mount.json`; see [site adapters](../../docs/site-adapters.md).
 - URL templates use `{q}`; only `http` and `https` are allowed.
 - Icons are referenced by id and shipped as a sprite. Do not inline base64.
 - Do not put functions or executable expressions in YAML.

@@ -11,8 +11,13 @@ selectors:
     - 'textarea[name="q"]'
 defaultCategory: web-general
 capabilities: [url, dom, html]
-mount:
-  anchor: 'input[name="q"]'
-  placement: below
-  offset: 8
 notes: Google regional domains are matched by the wildcard host entry.
+mount:
+  anchor: ['#tsf', 'form[action*="/search"]', 'input[name="q"]']
+  rules:
+    - container: '#search'
+      insert: before
+    - container: '#gb'
+      insert: after
+    - anchor: ['#tsf', 'form[action*="/search"]', 'input[name="q"]']
+      insert: after

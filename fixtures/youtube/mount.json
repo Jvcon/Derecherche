@@ -1,0 +1,13 @@
+{
+  "url": "https://www.youtube.com/results?search_query=rust+async",
+  "query": "rust async",
+  "cases": [
+    {
+      "name": "masthead",
+      "remove": [],
+      "selector": "#masthead-container",
+      "insert": "after",
+      "kind": "container"
+    }
+  ]
+}

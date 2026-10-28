@@ -27,8 +27,18 @@ Changes inside `apps/playground/src` use Vite HMR.
 | `/search.html?q=rust+async` | Mock Google-style search page |
 | `/article.html` | Long-form content page for selection testing |
 | `/palette.html` | Palette workbench; selecting a category opens the Palette focused on it |
+| `/adapters.html` | Mount inspector; resolves each adapter's selectors and previews InlineBar insertion |
 
 The playground keeps a small local frecency history in `localStorage` (`derecherche-playground-frecency`) so opening engines changes the recommended head on the next open.
+
+## Mount inspector
+
+`/adapters.html` loads the saved `fixtures/<site>/mount.html` snapshots and runs the real mount resolver plus InlineBar in a same-origin iframe.
+
+- Switch adapters and fixture cases to test fallback order.
+- Inspect the URL regex, parameter matches, and every attempted selector.
+- Paste a live page's `document.documentElement.outerHTML` to test the current DOM.
+- PASS/FAIL compares the resolved selector, insert mode, and kind with the fixture contract.
 
 ## InlineBar demo
 

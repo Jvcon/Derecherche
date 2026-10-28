@@ -12,6 +12,11 @@ selectors:
 defaultCategory: web-general
 capabilities: [url, dom, html]
 mount:
-  anchor: '#sb_form_q'
-  placement: below
-  offset: 8
+  anchor: ['#sb_form', '#sb_form_q', 'input[name="q"]']
+  rules:
+    - container: '#b_header'
+      insert: after
+    - container: '#b_results'
+      insert: before
+    - anchor: ['#sb_form', '#sb_form_q', 'input[name="q"]']
+      insert: after

@@ -1,0 +1,13 @@
+{
+  "url": "https://search.brave.com/search?q=rust+async",
+  "query": "rust async",
+  "cases": [
+    {
+      "name": "header",
+      "remove": [],
+      "selector": "#header",
+      "insert": "after",
+      "kind": "container"
+    }
+  ]
+}

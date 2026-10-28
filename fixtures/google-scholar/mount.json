@@ -1,0 +1,13 @@
+{
+  "url": "https://scholar.google.com/scholar?q=rust+async",
+  "query": "rust async",
+  "cases": [
+    {
+      "name": "scholar header",
+      "remove": [],
+      "selector": "#gs_top",
+      "insert": "after",
+      "kind": "container"
+    }
+  ]
+}

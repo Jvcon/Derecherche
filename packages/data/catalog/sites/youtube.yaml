@@ -12,6 +12,11 @@ selectors:
 defaultCategory: media-video
 capabilities: [url, dom, html]
 mount:
-  anchor: 'input#search'
-  placement: below
-  offset: 8
+  anchor: ['input#search', 'input[name="search_query"]']
+  rules:
+    - container: '#masthead-container'
+      insert: after
+    - container: '#header'
+      insert: after
+    - anchor: ['input#search', 'input[name="search_query"]']
+      insert: after

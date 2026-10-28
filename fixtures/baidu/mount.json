@@ -1,0 +1,22 @@
+{
+  "url": "https://www.baidu.com/s?wd=rust+async",
+  "query": "rust async",
+  "cases": [
+    {
+      "name": "head",
+      "remove": [],
+      "selector": "#head",
+      "insert": "after",
+      "kind": "container"
+    },
+    {
+      "name": "results fallback",
+      "remove": [
+        "#head"
+      ],
+      "selector": "#content_left",
+      "insert": "before",
+      "kind": "container"
+    }
+  ]
+}

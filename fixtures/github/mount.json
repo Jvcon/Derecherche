@@ -1,0 +1,13 @@
+{
+  "url": "https://github.com/search?q=rust+async",
+  "query": "rust async",
+  "cases": [
+    {
+      "name": "app header",
+      "remove": [],
+      "selector": "header",
+      "insert": "after",
+      "kind": "container"
+    }
+  ]
+}

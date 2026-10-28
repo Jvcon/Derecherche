@@ -1,6 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { Window } from "happy-dom";
+import catalog from "@derecherche/data";
 import {
   createShadowHost,
   mountInlineBar,
@@ -293,4 +297,111 @@ test("InlineBar returns null when the query is empty", () => {
   assert.equal(handle, null);
   assert.equal(window.document.querySelector("#derecherche-inline-bar"), null);
   window.close();
+});
+
+
+const repoRoot = path.resolve(fileURLToPath(new URL("../../..", import.meta.url)));
+const fixturesRoot = path.join(repoRoot, "fixtures");
+
+function mountFixtures() {
+  return fs
+    .readdirSync(fixturesRoot, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name)
+    .filter((name) =>
+      fs.existsSync(path.join(fixturesRoot, name, "mount.json"))
+    )
+    .sort();
+}
+
+for (const name of mountFixtures()) {
+  test(`mount fixture: ${name}`, () => {
+    const dir = path.join(fixturesRoot, name);
+    const html = fs.readFileSync(path.join(dir, "mount.html"), "utf8");
+    const fixture = JSON.parse(
+      fs.readFileSync(path.join(dir, "mount.json"), "utf8")
+    );
+
+    for (const testCase of fixture.cases) {
+      const window = new Window({ url: fixture.url });
+      window.document.body.innerHTML = html;
+      for (const selector of testCase.remove ?? []) {
+        window.document.querySelector(selector)?.remove();
+      }
+
+      let resolution;
+      const handle = mountInlineBar({
+        catalog,
+        sites: catalog.sites,
+        query: fixture.query,
+        url: fixture.url,
+        document: window.document,
+        onResolve: (value) => {
+          resolution = value;
+        },
+      });
+
+      assert.ok(handle, `${name}: ${testCase.name} should mount`);
+      assert.ok(handle.host.isConnected);
+      assert.equal(handle.host.dataset.derechercheSite, name);
+      assert.equal(handle.host.dataset.derechercheInsert, testCase.insert);
+      assert.equal(resolution.target?.selector, testCase.selector);
+      assert.equal(resolution.target?.insert, testCase.insert);
+      assert.equal(resolution.target?.kind, testCase.kind);
+
+      const container = window.document.querySelector(testCase.selector);
+      assert.ok(container);
+      if (testCase.insert === "before") {
+        assert.equal(handle.host.nextElementSibling, container);
+      } else if (testCase.insert === "after") {
+        assert.equal(handle.host.previousElementSibling, container);
+      } else if (testCase.insert === "append") {
+        assert.equal(handle.host.parentElement, container);
+        assert.equal(container.lastElementChild, handle.host);
+      } else if (testCase.insert === "prepend") {
+        assert.equal(handle.host.parentElement, container);
+        assert.equal(container.firstElementChild, handle.host);
+      }
+
+      assert.equal(
+        window.document.querySelectorAll("#derecherche-inline-bar").length,
+        1
+      );
+      handle.destroy();
+      window.close();
+    }
+  });
+}
+
+test("InlineBar supports prepend and append insertion", () => {
+  for (const insert of ["append", "prepend"]) {
+    const window = inlinePage();
+    window.document.body.innerHTML = `
+      <header><form><input name="q" value="github"></form></header>
+      <div id="results"><span>existing</span></div>
+    `;
+    const catalog = inlineCatalog();
+    catalog.sites[0].mount = {
+      rules: [{ container: "#results", insert }],
+    };
+
+    const handle = mountInlineBar({
+      catalog,
+      sites: catalog.sites,
+      query: "github",
+      url: "https://www.google.com/search?q=github",
+      document: window.document,
+    });
+
+    const results = window.document.querySelector("#results");
+    assert.ok(handle);
+    assert.equal(handle.host.parentElement, results);
+    if (insert === "append") {
+      assert.equal(results.lastElementChild, handle.host);
+    } else {
+      assert.equal(results.firstElementChild, handle.host);
+    }
+    handle.destroy();
+    window.close();
+  }
 });

@@ -13,8 +13,11 @@ selectors:
 defaultCategory: image-search
 capabilities: [url, dom, html]
 priority: 20
-mount:
-  anchor: '#sb_form_q'
-  placement: below
-  offset: 8
 notes: More specific than the host-only bing adapter.
+mount:
+  anchor: ['#sb_form', '#sb_form_q', 'input[name="q"]']
+  rules:
+    - container: '#b_header'
+      insert: after
+    - anchor: ['#sb_form', '#sb_form_q', 'input[name="q"]']
+      insert: after

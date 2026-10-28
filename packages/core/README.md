@@ -10,9 +10,11 @@ Headless core for Derecherche. It contains no DOM, userscript, extension, or CLI
 - `extractQuery(context, sites, options)` — resolves a query from URL params, live/DOM selectors, HTML snapshot selectors, selection, or clipboard.
 - `matchSite(url, sites)` — picks the most specific site adapter by host, path, params, and priority.
 - `extractFromUrl`, `extractFromDocument`, `extractFromSelection`, `extractFromClipboard` — individual extraction paths for tests and hosts.
-- `rankEngines(engines, settings, context, options)` — returns a stable list and a separate recommendation strip.
+- `buildRankedList(candidatePool, basePool, settings, context, options)` — returns one deduplicated list: pinned, up to three recommendations, then the stable rest.
+- `rankEngines(engines, settings, context, options)` — lower-level stable + recommended split used by `buildRankedList`.
 - `recommendationScore(engine, context, frecency)` — local, deterministic recommendation score.
-- `FrecencyEntry` / `RankContext` / `RankedEngines` types.
+- `resolveMount(document, site, options)` — resolves the InlineBar mount target through ordered `mount.rules`, with selector diagnostics and generic fallback.
+- `FrecencyEntry` / `RankContext` / `RankedEngines` / `MountResolution` types.
 - `normalizeSettings(input, catalogVersion)` — sanitizes persisted settings and custom engines.
 - `applySettings(engines, settings)` — filters disabled engines and applies name/order/pinned overrides.
 - `applyCategorySettings(categories, settings)` — hides and orders categories without mutating the catalog.
@@ -27,7 +29,8 @@ Headless core for Derecherche. It contains no DOM, userscript, extension, or CLI
 - Types from `@derecherche/data` are type-only imports.
 - Settings are user overrides; the bundled catalog is read-only.
 - `applySettings` preserves catalog order unless an explicit override is present.
-- `rankEngines` keeps the stable list independent of query and frecency. Recommendation is a separate list and must not reorder the stable list.
+- `buildRankedList` keeps the stable tail independent of query and frecency. Recommendations only occupy the head and are deduplicated.
+- `resolveMount` never executes selectors from YAML; it only calls `querySelector` on the supplied document and records attempts.
 
 ## Build and test
 
@@ -41,4 +44,4 @@ pnpm --filter @derecherche/core test
 
 ## Fixtures
 
-Site fixtures live in [`fixtures/`](../../fixtures/README.md). Each fixture is exercised in URL-only, HTML-snapshot, and live-DOM modes. Tests run offline with `happy-dom`.
+Site fixtures live in [`fixtures/`](../../fixtures/README.md). Each fixture is exercised in URL-only, HTML-snapshot, and live-DOM modes. Mount fixtures are exercised by the UI test suite. Tests run offline with `happy-dom`.

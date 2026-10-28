@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mount inspector · Derecherche</title>
+    <link rel="stylesheet" href="/src/mock.css" />
+  </head>
+  <body class="adapter-body">
+    <header class="adapter-header">
+      <a class="brand" href="/">De<span>Recherche</span></a>
+      <div>
+        <h1>Mount inspector</h1>
+        <p>
+          Verify a site adapter's URL match, ordered selectors, and InlineBar
+          insertion against a saved page fixture.
+        </p>
+      </div>
+    </header>
+
+    <main class="adapter-layout">
+      <aside class="adapter-controls">
+        <label class="field">
+          <span>Site adapter</span>
+          <select id="site"></select>
+        </label>
+
+        <label class="field">
+          <span>Page URL</span>
+          <input id="url" type="url" spellcheck="false" />
+        </label>
+
+        <label class="field" id="case-field">
+          <span>Fixture case</span>
+          <select id="case"></select>
+        </label>
+
+        <div class="adapter-summary" id="summary"></div>
+
+        <div class="adapter-actions">
+          <button id="run-fixture" type="button">Run fixture mount</button>
+          <button id="run-paste" type="button" class="secondary">
+            Resolve pasted HTML
+          </button>
+        </div>
+
+        <div class="adapter-result" id="result" hidden></div>
+
+        <details class="adapter-details">
+          <summary>Resolved selectors</summary>
+          <div id="attempts"></div>
+        </details>
+
+        <details class="adapter-details">
+          <summary>Fixture HTML</summary>
+          <pre id="fixture-html"></pre>
+        </details>
+
+        <label class="field">
+          <span>Paste live page HTML</span>
+          <textarea
+            id="paste"
+            spellcheck="false"
+            placeholder="Copy document.documentElement.outerHTML from the search result page, then run the resolver."
+          ></textarea>
+        </label>
+      </aside>
+
+      <section class="adapter-preview">
+        <div class="adapter-preview-head">
+          <h2>Preview</h2>
+          <span id="preview-status">Waiting for a fixture</span>
+        </div>
+        <div class="adapter-frame-shell">
+          <iframe
+            id="preview"
+            title="Site mount preview"
+            sandbox="allow-same-origin"
+          ></iframe>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="/src/adapters.ts"></script>
+  </body>
+</html>

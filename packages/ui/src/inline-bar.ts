@@ -4,7 +4,10 @@ import {
   buildTargetUrl,
   createDefaultSettings,
   matchSite,
+  resolveMount,
   type FrecencyEntry,
+  type MountInsert,
+  type MountResolution,
   type Settings,
 } from "@derecherche/core";
 import { DEFAULT_COMMON_ENGINE_IDS } from "./defaults.js";
@@ -28,6 +31,8 @@ export interface InlineBarOptions {
   frecency?: readonly FrecencyEntry[];
   limit?: number;
   document?: Document;
+  debug?: boolean;
+  onResolve?: (resolution: MountResolution<Element>) => void;
   onMore?: (context: InlineBarContext) => void;
   onOpen?: (engine: Engine, url: string, mode: PaletteOpenMode) => void;
   onEngineOpened?: (engineId: string) => void;
@@ -137,9 +142,21 @@ function escapeHtml(value: string): string {
     .replaceAll('"', "&quot;");
 }
 
-function resolveContainer(anchor: Element | null): Element | null {
-  if (!anchor) return null;
+function resolveAnchorBlock(anchor: Element): Element {
   return anchor.closest("header, [role='banner']") ?? anchor.closest("form") ?? anchor;
+}
+
+function insertMode(insert: MountInsert): InsertPosition {
+  switch (insert) {
+    case "before":
+      return "beforebegin";
+    case "prepend":
+      return "afterbegin";
+    case "append":
+      return "beforeend";
+    default:
+      return "afterend";
+  }
 }
 
 function removeExisting(document: Document): void {
@@ -167,18 +184,59 @@ export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | nul
     site = undefined;
   }
 
-  function resolveInsertion(): Element | null {
-    const anchorSelector = site?.mount?.anchor;
-    const containerSelector = site?.mount?.container;
-    const anchor = anchorSelector ? doc.querySelector(anchorSelector) : null;
-    const explicitContainer = containerSelector
-      ? doc.querySelector(containerSelector)
-      : null;
-    return explicitContainer ?? resolveContainer(anchor);
+  if (!site) return null;
+  const siteId = site.id;
+
+  interface Placement {
+    element: Element;
+    insert: MountInsert;
   }
 
-  let insertion = resolveInsertion();
-  if (!insertion?.parentElement) return null;
+  function resolvePlacement(): Placement | null {
+    const resolution = resolveMount(doc, site);
+    options.onResolve?.(resolution);
+
+    if (!resolution.target) {
+      if (options.debug) {
+        console.warn(
+          "[Derecherche] no mount target",
+          site?.id,
+          resolution.attempts
+        );
+      }
+      return null;
+    }
+
+    if (resolution.target.kind === "container") {
+      return {
+        element: resolution.target.element,
+        insert: resolution.target.insert,
+      };
+    }
+
+    return {
+      element: resolveAnchorBlock(resolution.target.element),
+      insert: "after",
+    };
+  }
+
+  function insertHost(placement: Placement): void {
+    placement.element.insertAdjacentElement(
+      insertMode(placement.insert),
+      shadow.host
+    );
+    shadow.host.dataset.derechercheSite = siteId;
+    shadow.host.dataset.derechercheMount =
+      placement.element.id ||
+      placement.element.getAttribute("class") ||
+      placement.element.tagName.toLowerCase();
+    shadow.host.dataset.derechercheInsert = placement.insert;
+  }
+
+  let placement = resolvePlacement();
+  if (!placement?.element.parentElement && placement?.insert !== "prepend" && placement?.insert !== "append") {
+    return null;
+  }
 
   removeExisting(doc);
 
@@ -315,7 +373,7 @@ export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | nul
     open(engine, "new-tab");
   });
 
-  insertion.insertAdjacentElement("afterend", shadow.host);
+  insertHost(placement);
   render();
 
   return {
@@ -328,11 +386,9 @@ export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | nul
         shadow.unmount();
         return;
       }
-      const nextInsertion = resolveInsertion();
-      if (nextInsertion?.parentElement) insertion = nextInsertion;
-      if (insertion?.parentElement) {
-        insertion.insertAdjacentElement("afterend", shadow.host);
-      }
+      const nextPlacement = resolvePlacement();
+      if (nextPlacement) placement = nextPlacement;
+      if (placement) insertHost(placement);
       render();
     },
     destroy() {

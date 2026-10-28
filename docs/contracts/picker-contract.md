@@ -121,7 +121,8 @@ Scoring must be local, deterministic, and testable. No network calls. Frecency i
 
 - Appears only on a matched result page with a non-empty query.
 - Does not appear on search home pages or pages without a query.
-- Uses the site adapter's `mount.container` when present, otherwise inserts a full-width row after the anchor's header/form.
+- Uses the site adapter's ordered `mount.rules` (`container` first, then `anchor`). See [site adapters](../site-adapters.md).
+- Inserts a full-width row before/after the resolved container, or lifts an anchor to the nearest header/form.
 - Shows up to six engines from the same `buildRankedList` result as Palette, including the `✦` recommendation head.
 - Current category defaults to the site adapter's `defaultCategory`.
 - Plain click switches the current tab to the target engine and searches the same query.

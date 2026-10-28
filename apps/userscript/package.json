@@ -1,0 +1,22 @@
+{
+  "name": "@derecherche/userscript",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Single-file Derecherche userscript",
+  "license": "GPL-3.0-only",
+  "scripts": {
+    "build": "vite build",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "pnpm --filter @derecherche/core build && pnpm --filter @derecherche/ui build && pnpm build && node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "@derecherche/core": "workspace:*",
+    "@derecherche/data": "workspace:*",
+    "@derecherche/ui": "workspace:*"
+  },
+  "devDependencies": {
+    "vite": "^7.2.4",
+    "happy-dom": "^21.0.4"
+  }
+}

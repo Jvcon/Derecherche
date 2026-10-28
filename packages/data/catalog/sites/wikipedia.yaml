@@ -10,6 +10,11 @@ selectors:
 defaultCategory: knowledge-encyclopedia
 capabilities: [url, dom, html]
 mount:
-  anchor: '#searchInput'
-  placement: below
-  offset: 8
+  anchor: ['#searchInput', 'input[name="search"]']
+  rules:
+    - container: 'header'
+      insert: after
+    - container: '#mw-content-text'
+      insert: before
+    - anchor: ['#searchInput', 'input[name="search"]']
+      insert: after

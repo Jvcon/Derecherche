@@ -21,7 +21,8 @@ Phase 0 data and interaction contracts are in place. Foundation work is in progr
 │  ├─ ui/                   # Shadow DOM, positioning, Palette, and InlineBar
 │  └─ data/                 # catalog, schemas, validation
 ├─ apps/
-│  └─ playground/           # dev harness for search/article/selection/Palette
+│  ├─ playground/           # dev harness, fixture inspector, Palette workbench
+│  └─ userscript/           # single-file userscript build
 ├─ docs/
 │  └─ contracts/            # interaction and data contracts
 ├─ fixtures/                # offline site extraction fixtures
@@ -35,22 +36,20 @@ Planned later:
 ```text
 packages/
 ├─ ui/                      # Shadow DOM InlineBar / SelectionBar / Palette
-├─ host-userscript/
-├─ host-extension/
-└─ host-cli/
+├─ host-extension/          # Phase 2
+└─ host-cli/                # Phase 3
 apps/
-├─ userscript/
-├─ extension/
-└─ cli/
+├─ extension/               # Phase 2
+└─ cli/                     # Phase 3
 ```
 
 ## Phase 1 interaction decisions
 
 - Category → subcategory → engine, with at most two category levels.
 - Category is the primary navigation axis; provider is a display enhancement only.
-- Recommendation never reorders the stable engine list. It appears in a separate strip.
-- InlineBar appears only on result pages with a query.
-- SelectionBar appears automatically after text selection, and hides InlineBar while visible.
+- Recommendation is a deduplicated head inside the single engine list; it never reorders the stable tail.
+- InlineBar appears only on matched result pages with a query.
+- InlineBar and SelectionBar are independent; they may appear together.
 - Default open mode is a new tab; `Ctrl+Enter` opens in the current tab.
 - Icons are bundled as a build-time sprite; no inline base64 in catalog entries.
 - Userscript delivery is Phase 1; `:spawn --userscript` is Phase 3.
@@ -58,6 +57,7 @@ apps/
 See:
 
 - [docs/contracts/picker-contract.md](docs/contracts/picker-contract.md) for the full interaction contract.
+- [docs/site-adapters.md](docs/site-adapters.md) for URL matching, mount rules, and insertion verification.
 - [docs/taxonomy.md](docs/taxonomy.md) for the category design and legacy mapping.
 - [docs/decisions/0001-phase-1-scope.md](docs/decisions/0001-phase-1-scope.md) for the accepted Phase 1 decisions.
 

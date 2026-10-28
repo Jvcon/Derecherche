@@ -111,3 +111,19 @@ for (const name of fixtureNames) {
     assert.equal(result?.adapterId, site.id);
   });
 }
+
+test("every site adapter has a mount fixture", () => {
+  for (const site of catalog.sites) {
+    const dir = path.join(fixturesRoot, site.id);
+    assert.ok(
+      fs.existsSync(path.join(dir, "mount.html")),
+      `${site.id}: missing mount.html`
+    );
+    const mount = JSON.parse(
+      fs.readFileSync(path.join(dir, "mount.json"), "utf8")
+    );
+    assert.ok(Array.isArray(mount.cases) && mount.cases.length > 0);
+    assert.ok(mount.url);
+    assert.ok(mount.query);
+  }
+});

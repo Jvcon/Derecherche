@@ -1,6 +1,13 @@
-import type { Catalog, Category, Engine, Provider, Site } from "@derecherche/data";
+import type {
+  Catalog,
+  Category,
+  Engine,
+  MountInsert,
+  Provider,
+  Site,
+} from "@derecherche/data";
 
-export type { Catalog, Category, Engine, Provider, Site };
+export type { Catalog, Category, Engine, MountInsert, Provider, Site };
 
 export type QuerySource =
   | "url"

@@ -15,8 +15,13 @@ selectors:
 defaultCategory: image-search
 capabilities: [url, dom, html]
 priority: 20
-mount:
-  anchor: 'input[name="q"]'
-  placement: below
-  offset: 8
 notes: More specific than the host-only google adapter; path and tbm must both match.
+mount:
+  anchor: ['#tsf', 'input[name="q"]']
+  rules:
+    - container: '#search'
+      insert: before
+    - container: '#top_nav'
+      insert: after
+    - anchor: ['#tsf', 'input[name="q"]']
+      insert: after

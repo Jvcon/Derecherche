@@ -1,0 +1,13 @@
+{
+  "url": "https://duckduckgo.com/?q=rust+async",
+  "query": "rust async",
+  "cases": [
+    {
+      "name": "header",
+      "remove": [],
+      "selector": "#header",
+      "insert": "after",
+      "kind": "container"
+    }
+  ]
+}

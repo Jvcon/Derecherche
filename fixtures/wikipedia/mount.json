@@ -1,0 +1,13 @@
+{
+  "url": "https://en.wikipedia.org/w/index.php?search=rust+async",
+  "query": "rust async",
+  "cases": [
+    {
+      "name": "page header",
+      "remove": [],
+      "selector": "header",
+      "insert": "after",
+      "kind": "container"
+    }
+  ]
+}

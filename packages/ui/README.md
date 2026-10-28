@@ -5,7 +5,8 @@ Shared Shadow DOM, positioning, and Palette component for Derecherche.
 ## API
 
 - `openPalette({ catalog, settings?, query, categoryId?, focusCategory?, commonEngineIds?, frecency?, onEngineOpened?, onOpen? })` — mounts the keyboard-first Palette. The host supplies the catalog, optional settings, and optional frecency history. `onOpen(engine, url, mode)` lets the host own new-tab/current-tab behavior; `onEngineOpened(engineId)` lets the host record usage.
-- `mountInlineBar({ catalog, sites, settings?, query, url?, categoryId?, frecency?, limit?, onMore?, onOpen?, onEngineOpened? })` — inserts a page-adaptive InlineBar after the matched site adapter's container. It renders the first six `buildRankedList` engines, opens in the current tab on plain click, and opens a new tab on `Ctrl`/`Cmd` + click. Returns `{ host, update, destroy }` or `null` when there is no query or no insertion point.
+- `mountInlineBar({ catalog, sites, settings?, query, url?, categoryId?, frecency?, limit?, debug?, onResolve?, onMore?, onOpen?, onEngineOpened? })` — inserts a page-adaptive InlineBar at the target resolved by `resolveMount`. It supports `before`/`after`/`prepend`/`append` insertion, renders the first six `buildRankedList` engines, opens in the current tab on plain click, and opens a new tab on `Ctrl`/`Cmd` + click. Returns `{ host, update, destroy }` or `null` when there is no matched adapter, no query, or no insertion point.
+- `onResolve(resolution)` exposes the selected selector, insert mode, and every attempted selector for debugging and the playground inspector.
 - `createShadowHost({ id, css, document, zIndex })` — creates a host with `all: initial`, design tokens, dark-mode variables, a `<style>` block, and a content container.
 - `positionAroundRect(anchorRect, size, options)` — computes a clamped position and flips above/below when needed.
 - `positionAtAnchor(element, anchor, options)` — computes and applies `left`, `top`, and `maxWidth` styles.

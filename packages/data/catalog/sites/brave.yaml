@@ -9,6 +9,11 @@ selectors:
 defaultCategory: web-general
 capabilities: [url, dom, html]
 mount:
-  anchor: 'input[name="q"]'
-  placement: below
-  offset: 8
+  anchor: ['#header', 'input[name="q"]']
+  rules:
+    - container: '#header'
+      insert: after
+    - container: 'header'
+      insert: after
+    - anchor: ['input[name="q"]']
+      insert: after

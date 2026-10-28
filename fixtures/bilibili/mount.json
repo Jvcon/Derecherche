@@ -1,0 +1,13 @@
+{
+  "url": "https://search.bilibili.com/all?keyword=rust",
+  "query": "rust",
+  "cases": [
+    {
+      "name": "site header",
+      "remove": [],
+      "selector": "#biliMainHeader",
+      "insert": "after",
+      "kind": "container"
+    }
+  ]
+}

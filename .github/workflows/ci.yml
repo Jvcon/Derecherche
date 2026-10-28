@@ -31,6 +31,7 @@ jobs:
       - run: pnpm build:core
       - run: pnpm build:ui
       - run: pnpm build:playground
+      - run: pnpm --filter @derecherche/userscript build
       - run: pnpm test
 
       - name: Check generated catalog is current
@@ -66,6 +67,7 @@ jobs:
       - run: pnpm build:core
       - run: pnpm build:ui
       - run: pnpm build:playground
+      - run: pnpm --filter @derecherche/userscript build
       - run: git diff --exit-code -- packages/data/generated
 
   link-check:

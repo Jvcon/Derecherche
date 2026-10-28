@@ -10,8 +10,13 @@ selectors:
     - 'input[type="text"]'
 defaultCategory: media-video
 capabilities: [url, dom, html]
-mount:
-  anchor: 'input[type="text"]'
-  placement: below
-  offset: 8
 notes: Selector is best-effort; verify on both search and video pages.
+mount:
+  anchor: ['input[name="keyword"]', 'input[type="text"]']
+  rules:
+    - container: '#biliMainHeader'
+      insert: after
+    - container: '.bili-header'
+      insert: after
+    - anchor: ['input[name="keyword"]', 'input[type="text"]']
+      insert: after

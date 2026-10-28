@@ -1,0 +1,13 @@
+{
+  "url": "https://www.bing.com/images/search?q=rust+logo",
+  "query": "rust logo",
+  "cases": [
+    {
+      "name": "header",
+      "remove": [],
+      "selector": "#b_header",
+      "insert": "after",
+      "kind": "container"
+    }
+  ]
+}

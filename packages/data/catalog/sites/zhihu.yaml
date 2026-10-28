@@ -10,8 +10,13 @@ selectors:
     - 'input[type="text"]'
 defaultCategory: knowledge-qa
 capabilities: [url, dom, html]
-mount:
-  anchor: 'input[name="q"]'
-  placement: below
-  offset: 8
 notes: Selector is best-effort; verify against the current Zhihu search page.
+mount:
+  anchor: ['input[name="q"]', 'input[type="text"]']
+  rules:
+    - container: '.AppHeader'
+      insert: after
+    - container: 'header'
+      insert: after
+    - anchor: ['input[name="q"]', 'input[type="text"]']
+      insert: after

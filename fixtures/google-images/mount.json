@@ -1,0 +1,22 @@
+{
+  "url": "https://www.google.com/search?q=rust+logo&tbm=isch",
+  "query": "rust logo",
+  "cases": [
+    {
+      "name": "results wrapper",
+      "remove": [],
+      "selector": "#search",
+      "insert": "before",
+      "kind": "container"
+    },
+    {
+      "name": "top nav fallback",
+      "remove": [
+        "#search"
+      ],
+      "selector": "#top_nav",
+      "insert": "after",
+      "kind": "container"
+    }
+  ]
+}
