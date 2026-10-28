@@ -4,7 +4,7 @@ import {
   flattenCategories,
 } from "@derecherche/core";
 import { data } from "./catalog";
-import { openPalette } from "./palette";
+import { openPalette } from "@derecherche/ui";
 
 const settings = createDefaultSettings(data.catalogVersion);
 const categories = applyCategorySettings(data.categories, settings);
@@ -29,6 +29,7 @@ for (const entry of flattenCategories(categories)) {
 
 function open(): void {
   openPalette({
+    catalog: data,
     query: queryInput.value.trim(),
     sourceLabel: "workbench",
     categoryId: categorySelect.value || undefined,

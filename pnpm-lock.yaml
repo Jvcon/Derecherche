@@ -225,6 +225,9 @@ importers:
       '@derecherche/core':
         specifier: workspace:*
         version: link:../core
+      '@derecherche/data':
+        specifier: workspace:*
+        version: link:../data
     devDependencies:
       happy-dom:
         specifier: ^21.0.4

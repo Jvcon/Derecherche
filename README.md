@@ -18,7 +18,7 @@ Phase 0 data and interaction contracts are in place. Foundation work is in progr
 .
 ├─ packages/
 │  ├─ core/                 # host-agnostic query, settings, URL, storage primitives
-│  ├─ ui/                   # Shadow DOM and positioning primitives
+│  ├─ ui/                   # Shadow DOM, positioning, and Palette
 │  └─ data/                 # catalog, schemas, validation
 ├─ apps/
 │  └─ playground/           # dev harness for search/article/selection/Palette

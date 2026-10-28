@@ -1,20 +1,32 @@
-import type { Category, CategoryChild, Engine } from "@derecherche/data";
+import type {
+  Catalog,
+  Category,
+  CategoryChild,
+  Engine,
+  Provider,
+} from "@derecherche/data";
 import {
   applyCategorySettings,
   buildTargetUrl,
   createDefaultSettings,
   flattenCategories,
   getEnginesForCategory,
+  type FlatCategory,
+  type Settings,
 } from "@derecherche/core";
-import { createShadowHost } from "@derecherche/ui";
-import { data } from "./catalog";
+import { createShadowHost } from "./shadow.js";
+
+export type PaletteOpenMode = "new-tab" | "current-tab";
 
 export interface PaletteOptions {
+  catalog: Catalog;
+  settings?: Settings;
   query: string;
   categoryId?: string;
   focusCategory?: boolean;
   sourceLabel?: string;
   commonEngineIds?: string[];
+  onOpen?: (engine: Engine, url: string, mode: PaletteOpenMode) => void;
 }
 
 interface CategoryItem {
@@ -301,12 +313,6 @@ const PALETTE_CSS = `
 }
 `;
 
-const settings = createDefaultSettings(data.catalogVersion);
-const categories = applyCategorySettings(data.categories, settings);
-const allFlat = flattenCategories(categories);
-const categoryById = new Map(allFlat.map((entry) => [entry.category.id, entry]));
-const providerById = new Map(data.providers.map((provider) => [provider.id, provider]));
-
 let active: { close(): void } | null = null;
 
 function escapeHtml(value: string): string {
@@ -317,22 +323,35 @@ function escapeHtml(value: string): string {
     .replaceAll('"', "&quot;");
 }
 
-function pathName(path: string[]): string {
+function pathNameOf(
+  path: string[],
+  categoryById: Map<string, FlatCategory>
+): string {
   return path
     .map((id) => categoryById.get(id)?.category.name ?? id)
     .join(" / ");
 }
 
-function categoryCount(id: string): number {
-  return getEnginesForCategory(data.engines, categories, id).length;
+function categoryCountOf(
+  id: string,
+  engines: readonly Engine[],
+  categories: readonly Category[]
+): number {
+  return getEnginesForCategory(engines, categories, id).length;
 }
 
-function markFor(engine: Engine): string {
+function markForOf(
+  engine: Engine,
+  providerById: Map<string, Provider>
+): string {
   const provider = providerById.get(engine.providerId);
   return (provider?.name ?? engine.name).slice(0, 1).toUpperCase();
 }
 
-function engineHaystack(engine: Engine): string {
+function engineHaystackOf(
+  engine: Engine,
+  categoryById: Map<string, FlatCategory>
+): string {
   const path = categoryById.get(engine.category)?.path ?? [engine.category];
   return [
     engine.name,
@@ -340,14 +359,23 @@ function engineHaystack(engine: Engine): string {
     engine.providerId,
     ...(engine.tags ?? []),
     ...(engine.triggers ?? []),
-    pathName(path),
+    pathNameOf(path, categoryById),
   ]
     .join(" ")
     .toLowerCase();
 }
 
-function categoryHaystack(category: Category | CategoryChild, path: string[]): string {
-  return [category.name, category.id, ...(category.aliases ?? []), pathName(path)]
+function categoryHaystackOf(
+  category: Category | CategoryChild,
+  path: string[],
+  categoryById: Map<string, FlatCategory>
+): string {
+  return [
+    category.name,
+    category.id,
+    ...(category.aliases ?? []),
+    pathNameOf(path, categoryById),
+  ]
     .join(" ")
     .toLowerCase();
 }
@@ -358,7 +386,7 @@ export function openPalette(options: PaletteOptions): void {
   const previousFocus =
     document.activeElement instanceof HTMLElement ? document.activeElement : null;
   const shadow = createShadowHost({
-    id: "derecherche-playground-palette",
+    id: "derecherche-palette",
     document,
     css: PALETTE_CSS,
   });
@@ -405,6 +433,27 @@ export function openPalette(options: PaletteOptions): void {
   const statusBar = panel.querySelector<HTMLElement>(".status-bar")!;
   const actionHint = panel.querySelector<HTMLElement>("[data-hint-action]")!;
 
+  const catalog = options.catalog;
+  const settings =
+    options.settings ?? createDefaultSettings(catalog.catalogVersion);
+  const categories = applyCategorySettings(catalog.categories, settings);
+  const allFlat = flattenCategories(categories);
+  const categoryById = new Map(allFlat.map((entry) => [entry.category.id, entry]));
+  const providerById = new Map(
+    catalog.providers.map((provider) => [provider.id, provider])
+  );
+  const pathName = (path: string[]): string => pathNameOf(path, categoryById);
+  const categoryCount = (id: string): number =>
+    categoryCountOf(id, catalog.engines, categories);
+  const markFor = (engine: Engine): string =>
+    markForOf(engine, providerById);
+  const engineHaystack = (engine: Engine): string =>
+    engineHaystackOf(engine, categoryById);
+  const categoryHaystack = (
+    category: Category | CategoryChild,
+    path: string[]
+  ): string => categoryHaystackOf(category, path, categoryById);
+
   const initial = options.categoryId
     ? categoryById.get(options.categoryId)
     : undefined;
@@ -422,10 +471,10 @@ export function openPalette(options: PaletteOptions): void {
     ? options.commonEngineIds
     : DEFAULT_COMMON_ENGINE_IDS;
   const commonEngines = commonIds
-    .map((id) => data.engines.find((engine) => engine.id === id))
+    .map((id) => catalog.engines.find((engine) => engine.id === id))
     .filter((engine): engine is Engine => engine !== undefined && engine.status === "active")
     .slice(0, 8);
-  const fallbackCommon = data.engines
+  const fallbackCommon = catalog.engines
     .filter((engine) => engine.status === "active")
     .slice(0, 6);
   const common = commonEngines.length > 0 ? commonEngines : fallbackCommon;
@@ -463,8 +512,8 @@ export function openPalette(options: PaletteOptions): void {
     }));
     const engines = (
       childCategories.length > 0
-        ? data.engines.filter((engine) => engine.category === current.id)
-        : getEnginesForCategory(data.engines, categories, current.id)
+        ? catalog.engines.filter((engine) => engine.category === current.id)
+        : getEnginesForCategory(catalog.engines, categories, current.id)
     ).map((engine) => ({ kind: "engine" as const, engine }));
 
     return [...children, ...engines];
@@ -489,7 +538,7 @@ export function openPalette(options: PaletteOptions): void {
           category: entry.category,
           path: entry.path,
         }));
-      const engineItems: Item[] = data.engines
+      const engineItems: Item[] = catalog.engines
         .filter((engine) => engine.status === "active" && engineHaystack(engine).includes(q))
         .slice(0, 60)
         .map((engine) => ({ kind: "engine" as const, engine }));
@@ -514,7 +563,7 @@ export function openPalette(options: PaletteOptions): void {
     }
 
     const engineItems: Item[] = getEnginesForCategory(
-      data.engines,
+      catalog.engines,
       categories,
       scopeId
     )
@@ -641,7 +690,11 @@ export function openPalette(options: PaletteOptions): void {
     const targetQuery = ensureQuery();
     if (!targetQuery) return;
     const url = buildTargetUrl(engine, targetQuery);
-    window.open(url, "_blank", "noopener,noreferrer");
+    if (options.onOpen) {
+      options.onOpen(engine, url, "new-tab");
+    } else {
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
     close();
   }
 
@@ -729,7 +782,12 @@ export function openPalette(options: PaletteOptions): void {
       return;
     }
     if (action.id === "current") {
-      window.location.href = url;
+      if (options.onOpen) {
+        options.onOpen(engine, url, "current-tab");
+        close();
+      } else {
+        window.location.href = url;
+      }
     }
   }
 

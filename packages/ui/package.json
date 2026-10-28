@@ -20,7 +20,8 @@
     "test": "pnpm build && node --test test/ui.test.mjs"
   },
   "dependencies": {
-    "@derecherche/core": "workspace:*"
+    "@derecherche/core": "workspace:*",
+    "@derecherche/data": "workspace:*"
   },
   "devDependencies": {
     "happy-dom": "^21.0.4"

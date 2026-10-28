@@ -1,9 +1,10 @@
 # @derecherche/ui
 
-Shared Shadow DOM and positioning primitives for the InlineBar, SelectionBar, and Palette.
+Shared Shadow DOM, positioning, and Palette component for Derecherche.
 
 ## API
 
+- `openPalette({ catalog, settings?, query, categoryId?, focusCategory?, commonEngineIds?, onOpen? })` — mounts the keyboard-first Palette. The host supplies the catalog and optional settings; the component does not import a playground catalog. `onOpen(engine, url, mode)` lets the host own new-tab/current-tab behavior.
 - `createShadowHost({ id, css, document, zIndex })` — creates a host with `all: initial`, design tokens, dark-mode variables, a `<style>` block, and a content container.
 - `positionAroundRect(anchorRect, size, options)` — computes a clamped position and flips above/below when needed.
 - `positionAtAnchor(element, anchor, options)` — computes and applies `left`, `top`, and `maxWidth` styles.
@@ -14,6 +15,8 @@ Shared Shadow DOM and positioning primitives for the InlineBar, SelectionBar, an
 ## Rules
 
 - Shadow DOM only; no host-page CSS leaks.
+- The Palette receives its catalog and settings from the host; never import `apps/playground` data.
+- Hosts should pass `onOpen` when they need extension/userscript tab semantics.
 - No framework dependency.
 - No remote assets.
 - `unmount()` must remove the host and all listeners created by `observeAnchor`.

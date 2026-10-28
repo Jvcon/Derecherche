@@ -9,7 +9,7 @@ pnpm dev:playground
 # http://localhost:5173
 ```
 
-`dev:playground` builds `packages/core` and `packages/ui` first, then starts Vite. The playground imports the built packages through Vite aliases.
+`dev:playground` builds `packages/core` and `packages/ui` first, then starts Vite. The Palette lives in `packages/ui`; the playground only supplies mock pages, the catalog, and the dev injection harness. The playground imports built packages through Vite aliases.
 
 If you change `packages/core` or `packages/ui`, rebuild them while the server is running:
 

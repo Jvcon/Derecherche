@@ -1,6 +1,6 @@
 import { extractQuery, matchSite } from "@derecherche/core";
 import { data } from "./catalog";
-import { openPalette } from "./palette";
+import { openPalette } from "@derecherche/ui";
 
 const BUTTON_CSS = `
 .dr-demo-launcher,
@@ -137,6 +137,7 @@ export function injectDemo(): void {
   launcher.addEventListener("click", () => {
     const result = currentResult();
     openPalette({
+      catalog: data,
       query: result?.query ?? "",
       sourceLabel: result?.source ?? "manual",
       categoryId: currentCategory(),
@@ -148,6 +149,7 @@ export function injectDemo(): void {
     hideSelection();
     if (!text) return;
     openPalette({
+      catalog: data,
       query: text,
       sourceLabel: "selection",
       categoryId: currentCategory() ?? "web-general",
@@ -170,6 +172,7 @@ export function injectDemo(): void {
         event.preventDefault();
         const result = currentResult();
         openPalette({
+          catalog: data,
           query: result?.query ?? "",
           sourceLabel: result?.source ?? "manual",
           categoryId: currentCategory(),
