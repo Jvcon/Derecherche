@@ -10,6 +10,16 @@
     "data:build": "pnpm --filter @derecherche/data build",
     "data:check": "pnpm data:build && git diff --exit-code -- packages/data/generated",
     "data:check-links": "pnpm --filter @derecherche/data check-links",
-    "data:legacy-report": "pnpm --filter @derecherche/data legacy:report"
+    "data:legacy-report": "pnpm --filter @derecherche/data legacy:report",
+    "lint": "eslint packages/data/scripts packages/data/test",
+    "typecheck": "tsc -p packages/data/tsconfig.json",
+    "test": "node --test packages/data/test/catalog.test.mjs",
+    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm data:build"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.13.0",
+    "globals": "^17.13.0",
+    "typescript": "^7.0.2"
   }
 }

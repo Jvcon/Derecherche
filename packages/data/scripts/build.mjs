@@ -204,6 +204,7 @@ async function main() {
   await Promise.all([
     fs.writeFile(path.join(generatedDir, "catalog.json"), stableJson(catalog)),
     fs.writeFile(path.join(generatedDir, "catalog.d.ts"), TYPES),
+    fs.writeFile(path.join(generatedDir, "index.d.ts"), TYPES),
     fs.writeFile(path.join(generatedDir, "index.js"), INDEX),
   ]);
 

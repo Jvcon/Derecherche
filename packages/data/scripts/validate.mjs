@@ -9,10 +9,8 @@ const catalogDir = path.join(root, "catalog");
 const schemaDir = path.join(root, "schema");
 
 const errors = [];
-const warnings = [];
 
 const fail = (message) => errors.push(message);
-const warn = (message) => warnings.push(message);
 
 async function readYaml(file) {
   return YAML.parse(await fs.readFile(file, "utf8"));
@@ -194,11 +192,6 @@ async function main() {
   const activeEngines = engines.filter((engine) => (engine.status ?? "active") === "active");
   const brokenEngines = engines.filter((engine) => engine.status === "broken");
   const deprecatedEngines = engines.filter((engine) => engine.status === "deprecated");
-
-  if (warnings.length > 0) {
-    console.warn("\nWarnings:");
-    for (const warning of warnings) console.warn(`  - ${warning}`);
-  }
 
   if (errors.length > 0) {
     console.error("\nCatalog validation failed:");

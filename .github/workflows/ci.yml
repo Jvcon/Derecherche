@@ -25,8 +25,10 @@ jobs:
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
-      - run: pnpm data:validate
+      - run: pnpm lint
+      - run: pnpm typecheck
       - run: pnpm data:build
+      - run: pnpm test
 
       - name: Check generated catalog is current
         run: |
@@ -36,6 +38,29 @@ jobs:
             echo "::error::Generated catalog is stale. Run pnpm data:build and commit the result."
             exit 1
           fi
+
+  build-matrix:
+    name: Build (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12.10.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm data:build
+      - run: git diff --exit-code -- packages/data/generated
 
   link-check:
     name: Link check (scheduled, non-blocking)

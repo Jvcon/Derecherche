@@ -80,6 +80,8 @@ pnpm data:validate
 pnpm data:build
 ```
 
+Run the local check suite with `pnpm check` (lint, typecheck, tests, and build).
+
 The generated catalog lives in `packages/data/generated/`. It is committed and consumed by future hosts.
 
 See [`docs/migration/legacy-engines.md`](docs/migration/legacy-engines.md) for the legacy engine migration report.

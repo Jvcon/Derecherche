@@ -34,6 +34,20 @@ pnpm data:build
 
 Generated files are committed and must not be edited by hand. CI should run `data:build` and fail if the generated diff is non-empty.
 
+## Checks
+
+```bash
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm check        # lint + typecheck + test + data:build
+```
+
+- `lint` uses ESLint on the catalog build/test scripts.
+- `typecheck` uses TypeScript against the generated entry point and a smoke test.
+- `test` checks catalog invariants, references, URL templates, site patterns, and the icon manifest.
+- CI also builds on Linux, macOS, and Windows to catch path and line-ending issues.
+
 ## Legacy migration
 
 ```bash

@@ -12,10 +12,10 @@
     "legacy:report": "node scripts/inventory-legacy.mjs"
   },
   "main": "./generated/index.js",
-  "types": "./generated/catalog.d.ts",
+  "types": "./generated/index.d.ts",
   "exports": {
     ".": {
-      "types": "./generated/catalog.d.ts",
+      "types": "./generated/index.d.ts",
       "import": "./generated/index.js",
       "default": "./generated/index.js"
     },
