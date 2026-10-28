@@ -33,7 +33,7 @@ type Mode = "query" | "category";
 interface Action {
   id: "copy" | "current";
   label: string;
-  shortcut: string;
+  shortcut: string[];
 }
 
 const DEFAULT_COMMON_ENGINE_IDS = [
@@ -46,8 +46,8 @@ const DEFAULT_COMMON_ENGINE_IDS = [
 ];
 
 const ACTIONS: Action[] = [
-  { id: "copy", label: "Copy target URL", shortcut: "⌥C" },
-  { id: "current", label: "Open in current tab", shortcut: "⌥↵" },
+  { id: "copy", label: "Copy target URL", shortcut: ["⌥", "C"] },
+  { id: "current", label: "Open in current tab", shortcut: ["⌥", "↵"] },
 ];
 
 const PALETTE_CSS = `
@@ -241,6 +241,10 @@ const PALETTE_CSS = `
 .action-menu[hidden] {
   display: none;
 }
+.shortcut-keys {
+  display: inline-flex;
+  gap: 4px;
+}
 .action {
   width: 100%;
   display: flex;
@@ -383,7 +387,7 @@ export function openPalette(options: PaletteOptions): void {
       </div>
       <div class="status-right">
         <span class="hint"><span>Open</span><kbd class="key">↵</kbd></span>
-        <span class="hint" data-hint-action><span>Action</span><kbd class="key">⌥L</kbd></span>
+        <span class="hint" data-hint-action><span>Action</span><kbd class="key">⌥</kbd><kbd class="key">L</kbd></span>
       </div>
     </footer>
   `;
@@ -550,7 +554,9 @@ export function openPalette(options: PaletteOptions): void {
       (action, index) =>
         `<button class="action${index === actionIndex ? " selected" : ""}" type="button" data-action="${action.id}">
           <span>${escapeHtml(action.label)}</span>
-          <kbd class="key">${escapeHtml(action.shortcut)}</kbd>
+          <span class="shortcut-keys">${action.shortcut
+            .map((key) => `<kbd class="key">${escapeHtml(key)}</kbd>`)
+            .join("")}</span>
         </button>`
     ).join("");
   }

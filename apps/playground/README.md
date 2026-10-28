@@ -50,7 +50,7 @@ Changes inside `apps/playground/src` use Vite HMR.
 - `↑/↓` move, `←` go back, `Esc` close.
 - `Alt+1`–`Alt+9` quick-pick the nth item.
 
-The UI is intentionally three rows: input bar, result panel, and status bar. The status bar shows `Open ↵` and `Action ⌥L`; the action menu floats above the status bar, right-bottom aligned to its top-right corner. Keycaps use symbols: `⌥` = Alt/Option, `⇥` = Tab, `↵` = Enter.
+The UI is intentionally three rows: input bar, result panel, and status bar. The status bar shows `Open ↵` and `Action ⌥L`; the action menu floats above the status bar, right-bottom aligned to its top-right corner. Keycaps use symbols: `⌥` = Alt/Option, `⇥` = Tab, `↵` = Enter. Modifiers and letters are separate keycaps, e.g. `⌥` + `L`.
 
 ## Production vs playground
 
