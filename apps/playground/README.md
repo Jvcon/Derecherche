@@ -34,7 +34,10 @@ Changes inside `apps/playground/src` use Vite HMR.
 - The extracted keyword is placed in the input bar.
 - The Result Panel starts on the configured common engines.
 - `TAB`: the keyword becomes a token (`[←] [keyword]`) and the Palette enters category mode.
-- In category mode, typing filters the current category list globally; `TAB` on a category appends it to the token trail:
+- In category mode, typing filters inside the currently focused category:
+  - Focused root category: matches its subcategories and engines below them.
+  - Focused subcategory: matches engines below it.
+- `TAB` on a category appends it to the token trail:
   - `[←] [keyword] [Category 1]`
   - `[←] [keyword] [Category 1 / Category 2]`
 - `Enter` opens the current engine or enters a highlighted category.

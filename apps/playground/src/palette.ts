@@ -396,6 +396,7 @@ export function openPalette(options: PaletteOptions): void {
   let path: string[] = [];
   let query = options.query.trim();
   let filter = "";
+  let filterScope: string[] | null = null;
   let selected = 0;
   let items: Item[] = [];
   let actionMenuOpen = false;
@@ -425,6 +426,13 @@ export function openPalette(options: PaletteOptions): void {
   function selectedEngine(): Engine | undefined {
     const item = selectedItem();
     return item?.kind === "engine" ? item.engine : undefined;
+  }
+
+  function focusedPath(): string[] {
+    if (mode !== "category") return [];
+    if (path.length > 0) return path;
+    const item = selectedItem();
+    return item?.kind === "category" ? item.path : [];
   }
 
   function currentLevelItems(): Item[] {
@@ -461,15 +469,36 @@ export function openPalette(options: PaletteOptions): void {
     if (!filter.trim()) return currentLevelItems();
 
     const q = filter.trim().toLowerCase();
-    const categoryItems: Item[] = allFlat
-      .filter((entry) => categoryHaystack(entry.category, entry.path).includes(q))
-      .slice(0, 12)
-      .map((entry) => ({
-        kind: "category" as const,
-        category: entry.category,
-        path: entry.path,
-      }));
-    const engineItems: Item[] = data.engines
+    const scope = filterScope ?? focusedPath();
+    const scopeId = scope[scope.length - 1];
+
+    if (!scopeId) {
+      return data.engines
+        .filter((engine) => engine.status === "active" && engineHaystack(engine).includes(q))
+        .slice(0, 60)
+        .map((engine) => ({ kind: "engine" as const, engine }));
+    }
+
+    const categoryItems: Item[] = [];
+    const scoped = categoryById.get(scopeId)?.category;
+    if (scoped && "children" in scoped) {
+      for (const child of scoped.children ?? []) {
+        const childPath = [...scope, child.id];
+        if (categoryHaystack(child, childPath).includes(q)) {
+          categoryItems.push({
+            kind: "category",
+            category: child,
+            path: childPath,
+          });
+        }
+      }
+    }
+
+    const engineItems: Item[] = getEnginesForCategory(
+      data.engines,
+      categories,
+      scopeId
+    )
       .filter((engine) => engine.status === "active" && engineHaystack(engine).includes(q))
       .slice(0, 60)
       .map((engine) => ({ kind: "engine" as const, engine }));
@@ -558,12 +587,15 @@ export function openPalette(options: PaletteOptions): void {
     items = buildItems();
     if (selected >= items.length) selected = Math.max(0, items.length - 1);
     modeNode.textContent = "Engines";
+    const scope = filter ? (filterScope ?? focusedPath()) : [];
     statusPath.textContent =
       mode === "query"
         ? "Common engines"
-        : path.length > 0
-          ? pathName(path)
-          : "Categories";
+        : scope.length > 0
+          ? pathName(scope)
+          : path.length > 0
+            ? pathName(path)
+            : "Categories";
     categoryHint.classList.toggle(
       "disabled",
       mode === "category" && selectedItem()?.kind === "engine"
@@ -596,6 +628,7 @@ export function openPalette(options: PaletteOptions): void {
     path = item.path;
     mode = "category";
     filter = "";
+    filterScope = null;
     input.value = "";
     selected = 0;
     actionMenuOpen = false;
@@ -615,6 +648,7 @@ export function openPalette(options: PaletteOptions): void {
   function exitToKeyword(): void {
     mode = "query";
     filter = "";
+    filterScope = null;
     selected = 0;
     actionMenuOpen = false;
     input.value = query;
@@ -625,6 +659,7 @@ export function openPalette(options: PaletteOptions): void {
   function goBack(): void {
     if (filter) {
       filter = "";
+      filterScope = null;
       input.value = "";
       selected = 0;
       render();
@@ -643,6 +678,7 @@ export function openPalette(options: PaletteOptions): void {
     mode = "category";
     path = [];
     filter = "";
+    filterScope = null;
     input.value = "";
     selected = 0;
     actionMenuOpen = false;
@@ -813,7 +849,11 @@ export function openPalette(options: PaletteOptions): void {
     if (mode === "query") {
       query = input.value;
     } else {
+      if (!filter && input.value.trim()) {
+        filterScope = focusedPath();
+      }
       filter = input.value;
+      if (!filter.trim()) filterScope = null;
       selected = 0;
     }
     render();
