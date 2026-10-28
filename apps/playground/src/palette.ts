@@ -31,8 +31,9 @@ type Item = CategoryItem | EngineItem;
 type Mode = "query" | "category";
 
 interface Action {
-  id: "copy" | "current" | "edit";
+  id: "copy" | "current";
   label: string;
+  shortcut: string;
 }
 
 const DEFAULT_COMMON_ENGINE_IDS = [
@@ -45,9 +46,8 @@ const DEFAULT_COMMON_ENGINE_IDS = [
 ];
 
 const ACTIONS: Action[] = [
-  { id: "copy", label: "Copy target URL" },
-  { id: "current", label: "Open in current tab" },
-  { id: "edit", label: "Edit keyword" },
+  { id: "copy", label: "Copy target URL", shortcut: "ALT+C" },
+  { id: "current", label: "Open in current tab", shortcut: "ALT+ENTER" },
 ];
 
 const PALETTE_CSS = `
@@ -231,7 +231,7 @@ const PALETTE_CSS = `
   right: 0;
   bottom: 0;
   z-index: 2;
-  width: 240px;
+  width: 280px;
   padding: 6px;
   background: var(--dr-bg);
   border: 1px solid var(--dr-border);
@@ -550,7 +550,7 @@ export function openPalette(options: PaletteOptions): void {
       (action, index) =>
         `<button class="action${index === actionIndex ? " selected" : ""}" type="button" data-action="${action.id}">
           <span>${escapeHtml(action.label)}</span>
-          <kbd class="key">${index === actionIndex ? "↵" : ""}</kbd>
+          <kbd class="key">${escapeHtml(action.shortcut)}</kbd>
         </button>`
     ).join("");
   }
@@ -722,13 +722,6 @@ export function openPalette(options: PaletteOptions): void {
     }
     if (action.id === "current") {
       window.location.href = url;
-      return;
-    }
-    const entered = window.prompt("Search keyword", query)?.trim();
-    if (entered) {
-      query = entered;
-      if (mode === "query") input.value = query;
-      render();
     }
   }
 
@@ -759,6 +752,22 @@ export function openPalette(options: PaletteOptions): void {
     }
 
     if (actionMenuOpen) {
+      const copyShortcut =
+        event.altKey &&
+        (event.code === "KeyC" || event.key.toLowerCase() === "c");
+      if (copyShortcut) {
+        event.preventDefault();
+        executeAction(ACTIONS[0]);
+        return;
+      }
+      const currentShortcut =
+        event.altKey &&
+        (event.code === "Enter" || event.key === "Enter");
+      if (currentShortcut) {
+        event.preventDefault();
+        executeAction(ACTIONS[1]);
+        return;
+      }
       if (event.key === "ArrowDown") {
         event.preventDefault();
         actionIndex = Math.min(ACTIONS.length - 1, actionIndex + 1);

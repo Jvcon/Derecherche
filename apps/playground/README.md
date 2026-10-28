@@ -44,7 +44,9 @@ Changes inside `apps/playground/src` use Vite HMR.
 - `Enter` opens the current engine or enters a highlighted category.
 - `TAB` on an engine row is disabled; the status bar hint is dimmed.
 - Click the keyword token or go back at the root to return to keyword editing.
-- `Alt+L` / `Option+L` on macOS: open the floating action menu for an engine (copy URL, open current tab, edit keyword).
+- `Alt+L` / `Option+L` on macOS: open the floating action menu for an engine.
+  - `Alt+C`: copy the target URL
+  - `Alt+Enter`: open in the current tab
 - `↑/↓` move, `←` go back, `Esc` close.
 - `Alt+1`–`Alt+9` quick-pick the nth item.
 
