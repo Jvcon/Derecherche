@@ -104,3 +104,14 @@ engines:
     legacyId: "scholar:6"
     status: active
     notes: Migrated from legacy engineList; URL updated to the current basic-search route.
+
+  - id: wolfram-alpha
+    providerId: wolframalpha
+    name: Wolfram Alpha
+    category: academic-data
+    tags: [knowledge, math, data, academic, 计算, 数学]
+    triggers: [wolfram, wolframalpha, math, 计算, 数学]
+    url: https://www.wolframalpha.com/input?i={q}
+    regions: [global]
+    status: active
+    notes: "Added from issue #24; computational knowledge and data queries."

@@ -25,4 +25,4 @@ Provider icons are generated from [Simple Icons](https://simpleicons.org/) at bu
 
 ## Current coverage
 
-The first pass maps 37 providers. Thirty providers use the letter-mark fallback because Simple Icons does not carry their brand.
+The first pass maps 38 providers. Thirty providers use the letter-mark fallback because Simple Icons does not carry their brand.

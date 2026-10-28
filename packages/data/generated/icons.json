@@ -190,6 +190,11 @@
       "symbol": "si-greasyfork",
       "slug": "greasyfork",
       "title": "Greasy Fork"
+    },
+    "wolframalpha": {
+      "symbol": "si-wolfram",
+      "slug": "wolfram",
+      "title": "Wolfram"
     }
   },
   "missing": [

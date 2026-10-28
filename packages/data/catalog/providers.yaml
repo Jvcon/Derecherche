@@ -339,3 +339,8 @@ providers:
     name: 闲鱼
     homepage: https://www.goofish.com
     regions: [cn]
+
+  - id: wolframalpha
+    name: Wolfram Alpha
+    homepage: https://www.wolframalpha.com
+    regions: [global]
