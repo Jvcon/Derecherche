@@ -12,15 +12,26 @@ packages/data/
 │  ├─ engines/              # engine records grouped by top-level category
 │  └─ sites/                # one site adapter per file
 ├─ schema/                  # JSON Schema contracts
-└─ scripts/validate.mjs     # catalog validation
+├─ generated/               # generated JSON, types, and icon manifest
+└─ scripts/                 # validation and build
 ```
 
-## Validate
+## Validate and build
 
 ```bash
 pnpm install
 pnpm data:validate
+pnpm data:build
 ```
+
+`data:build` validates first, then writes:
+
+- `generated/catalog.json` — merged catalog consumed by hosts
+- `generated/catalog.d.ts` — types for the generated data
+- `generated/index.js` — ESM entry point
+- `generated/icons.json` — icon manifest placeholder until the sprite exists
+
+Generated files are committed and must not be edited by hand. CI should run `data:build` and fail if the generated diff is non-empty.
 
 Validation checks:
 

@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 3 * * 1"
+
+jobs:
+  catalog:
+    name: Catalog and generated output
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12.10.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm data:validate
+      - run: pnpm data:build
+
+      - name: Check generated catalog is current
+        run: |
+          if [ -n "$(git status --porcelain -- packages/data/generated)" ]; then
+            git status --short -- packages/data/generated
+            git diff -- packages/data/generated
+            echo "::error::Generated catalog is stale. Run pnpm data:build and commit the result."
+            exit 1
+          fi
+
+  link-check:
+    name: Link check (scheduled, non-blocking)
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12.10.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm data:build
+      - run: pnpm data:check-links
+      - name: Publish report
+        if: always()
+        run: cat packages/data/generated/link-check.md >> "$GITHUB_STEP_SUMMARY"

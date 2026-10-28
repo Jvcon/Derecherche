@@ -10,9 +10,7 @@ Derecherche started as a search-engine jump userscript. The project is being reb
 
 ## Status
 
-Phase 0: data and interaction contracts.
-
-No runtime application is built yet. The current work is the catalog schema, taxonomy, site rules, and picker contract that all later hosts will share.
+Phase 0 data and interaction contracts are in place. Foundation work is in progress: the catalog build pipeline and CI gates are implemented; catalog migration, icon sprite, and licensing remain.
 
 ## Repository layout
 
@@ -74,12 +72,15 @@ packages/data/catalog/
 └─ icons/
 ```
 
-Validate the catalog:
+Validate and build the catalog:
 
 ```bash
 pnpm install
 pnpm data:validate
+pnpm data:build
 ```
+
+The generated catalog lives in `packages/data/generated/`. It is committed and consumed by future hosts.
 
 The data package is intentionally not published. The external contract for future integrations will be the CLI and JSON catalog, not an npm library.
 

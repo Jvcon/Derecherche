@@ -5,7 +5,20 @@
   "type": "module",
   "description": "Derecherche search engine catalog and validation",
   "scripts": {
-    "validate": "node scripts/validate.mjs"
+    "validate": "node scripts/validate.mjs",
+    "build": "node scripts/validate.mjs && node scripts/build.mjs",
+    "check-links": "node scripts/check-links.mjs"
+  },
+  "main": "./generated/index.js",
+  "types": "./generated/catalog.d.ts",
+  "exports": {
+    ".": {
+      "types": "./generated/catalog.d.ts",
+      "import": "./generated/index.js",
+      "default": "./generated/index.js"
+    },
+    "./catalog.json": "./generated/catalog.json",
+    "./icons.json": "./generated/icons.json"
   },
   "devDependencies": {
     "ajv": "^8.17.1",

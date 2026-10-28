@@ -99,11 +99,17 @@ async function main() {
     fail(formatAjvErrors(categoriesFile, validateCategories));
   }
 
+  const catalogVersions = new Set([categoriesDoc.catalogVersion]);
+  const schemaVersions = new Set([categoriesDoc.schemaVersion]);
+
   const providersFile = path.join(catalogDir, "providers.yaml");
   const providersDoc = await readYaml(providersFile);
   if (!validateProviders(providersDoc)) {
     fail(formatAjvErrors(providersFile, validateProviders));
   }
+
+  catalogVersions.add(providersDoc.catalogVersion);
+  schemaVersions.add(providersDoc.schemaVersion);
 
   const categoryIds = collectCategoryIds(categoriesDoc.categories ?? []);
   const providerIds = (providersDoc.providers ?? []).map((provider) => provider.id);
@@ -120,6 +126,9 @@ async function main() {
       continue;
     }
 
+    catalogVersions.add(doc.catalogVersion);
+    schemaVersions.add(doc.schemaVersion);
+
     for (const engine of doc.engines) {
       engines.push({ ...engine, __file: path.basename(file) });
       checkUrl(engine, path.basename(file));
@@ -134,6 +143,13 @@ async function main() {
 
   checkUnique("engine", engines.map((engine) => engine.id));
   const engineIds = new Set(engines.map((engine) => engine.id));
+
+  if (catalogVersions.size !== 1) {
+    fail(`catalogVersion must match across all catalog files: ${[...catalogVersions].join(", ")}`);
+  }
+  if (schemaVersions.size !== 1) {
+    fail(`schemaVersion must match across all catalog files: ${[...schemaVersions].join(", ")}`);
+  }
 
   for (const engine of engines) {
     if (engine.replacedBy && !engineIds.has(engine.replacedBy)) {

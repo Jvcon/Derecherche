@@ -1,0 +1,2302 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": "2026.10.0",
+  "categories": [
+    {
+      "id": "web",
+      "name": "网页",
+      "order": 10,
+      "aliases": [
+        "web",
+        "search",
+        "搜索",
+        "综合"
+      ],
+      "description": "通用网页搜索与新闻。",
+      "children": [
+        {
+          "id": "web-general",
+          "name": "综合",
+          "order": 10,
+          "aliases": [
+            "general",
+            "综合搜索"
+          ]
+        },
+        {
+          "id": "web-news",
+          "name": "新闻",
+          "order": 20,
+          "aliases": [
+            "news",
+            "资讯"
+          ]
+        },
+        {
+          "id": "web-meta",
+          "name": "元搜索",
+          "order": 30,
+          "aliases": [
+            "meta",
+            "metasearch",
+            "聚合"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "knowledge",
+      "name": "知识",
+      "order": 20,
+      "aliases": [
+        "knowledge",
+        "learn",
+        "学习",
+        "百科"
+      ],
+      "description": "百科、问答、词典、翻译与教程。",
+      "children": [
+        {
+          "id": "knowledge-encyclopedia",
+          "name": "百科",
+          "order": 10,
+          "aliases": [
+            "encyclopedia",
+            "wiki",
+            "维基"
+          ]
+        },
+        {
+          "id": "knowledge-qa",
+          "name": "问答",
+          "order": 20,
+          "aliases": [
+            "qa",
+            "question",
+            "问答社区"
+          ]
+        },
+        {
+          "id": "knowledge-dictionary",
+          "name": "词典",
+          "order": 30,
+          "aliases": [
+            "dictionary",
+            "dict",
+            "字典"
+          ]
+        },
+        {
+          "id": "knowledge-translate",
+          "name": "翻译",
+          "order": 40,
+          "aliases": [
+            "translate",
+            "translation",
+            "翻译"
+          ]
+        },
+        {
+          "id": "knowledge-howto",
+          "name": "教程",
+          "order": 50,
+          "aliases": [
+            "tutorial",
+            "howto",
+            "guide",
+            "指南"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "academic",
+      "name": "学术",
+      "order": 30,
+      "aliases": [
+        "academic",
+        "scholar",
+        "paper",
+        "论文",
+        "学术"
+      ],
+      "description": "学术搜索、论文库、引用与预印本。",
+      "children": [
+        {
+          "id": "academic-search",
+          "name": "学术搜索",
+          "order": 10,
+          "aliases": [
+            "scholar",
+            "academic search",
+            "学术搜索"
+          ]
+        },
+        {
+          "id": "academic-papers",
+          "name": "论文库",
+          "order": 20,
+          "aliases": [
+            "paper",
+            "preprint",
+            "论文",
+            "文献"
+          ]
+        },
+        {
+          "id": "academic-citation",
+          "name": "引用/预印本",
+          "order": 30,
+          "aliases": [
+            "citation",
+            "reference",
+            "preprint",
+            "引用"
+          ]
+        },
+        {
+          "id": "academic-data",
+          "name": "学术数据",
+          "order": 40,
+          "aliases": [
+            "dataset",
+            "data",
+            "数据"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "development",
+      "name": "开发",
+      "order": 40,
+      "aliases": [
+        "development",
+        "dev",
+        "code",
+        "programming",
+        "编程",
+        "代码"
+      ],
+      "description": "代码托管、文档、包管理、排错与在线运行。",
+      "children": [
+        {
+          "id": "dev-code",
+          "name": "代码托管",
+          "order": 10,
+          "aliases": [
+            "code",
+            "repo",
+            "git",
+            "仓库"
+          ]
+        },
+        {
+          "id": "dev-docs",
+          "name": "文档/API",
+          "order": 20,
+          "aliases": [
+            "docs",
+            "api",
+            "documentation",
+            "文档"
+          ]
+        },
+        {
+          "id": "dev-packages",
+          "name": "包管理",
+          "order": 30,
+          "aliases": [
+            "package",
+            "registry",
+            "dependency",
+            "包"
+          ]
+        },
+        {
+          "id": "dev-qa",
+          "name": "排错/问答",
+          "order": 40,
+          "aliases": [
+            "debug",
+            "error",
+            "stackoverflow",
+            "报错"
+          ]
+        },
+        {
+          "id": "dev-playground",
+          "name": "在线运行",
+          "order": 50,
+          "aliases": [
+            "playground",
+            "sandbox",
+            "repl",
+            "在线运行"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "design",
+      "name": "设计",
+      "order": 50,
+      "aliases": [
+        "design",
+        "inspiration",
+        "灵感",
+        "设计"
+      ],
+      "description": "设计灵感、作品集、配色与设计教程。",
+      "children": [
+        {
+          "id": "design-inspiration",
+          "name": "灵感",
+          "order": 10,
+          "aliases": [
+            "inspiration",
+            "idea",
+            "灵感"
+          ]
+        },
+        {
+          "id": "design-portfolio",
+          "name": "作品集",
+          "order": 20,
+          "aliases": [
+            "portfolio",
+            "showcase",
+            "作品"
+          ]
+        },
+        {
+          "id": "design-color",
+          "name": "配色",
+          "order": 30,
+          "aliases": [
+            "color",
+            "palette",
+            "配色"
+          ]
+        },
+        {
+          "id": "design-tutorial",
+          "name": "设计教程",
+          "order": 40,
+          "aliases": [
+            "tutorial",
+            "design tutorial",
+            "教程"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "assets",
+      "name": "素材",
+      "order": 60,
+      "aliases": [
+        "assets",
+        "material",
+        "resource",
+        "资源",
+        "素材"
+      ],
+      "description": "模板、矢量、图标、字体、视频素材与音效。",
+      "children": [
+        {
+          "id": "assets-template",
+          "name": "模板",
+          "order": 10,
+          "aliases": [
+            "template",
+            "模板"
+          ]
+        },
+        {
+          "id": "assets-vector",
+          "name": "矢量",
+          "order": 20,
+          "aliases": [
+            "vector",
+            "svg",
+            "矢量"
+          ]
+        },
+        {
+          "id": "assets-icon",
+          "name": "图标",
+          "order": 30,
+          "aliases": [
+            "icon",
+            "icons",
+            "图标"
+          ]
+        },
+        {
+          "id": "assets-font",
+          "name": "字体",
+          "order": 40,
+          "aliases": [
+            "font",
+            "typeface",
+            "字体"
+          ]
+        },
+        {
+          "id": "assets-clip",
+          "name": "视频素材",
+          "order": 50,
+          "aliases": [
+            "clip",
+            "footage",
+            "video asset",
+            "视频素材"
+          ]
+        },
+        {
+          "id": "assets-sound",
+          "name": "音效",
+          "order": 60,
+          "aliases": [
+            "sound",
+            "sfx",
+            "audio",
+            "音效"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "image",
+      "name": "图片",
+      "order": 70,
+      "aliases": [
+        "image",
+        "picture",
+        "photo",
+        "图片",
+        "壁纸"
+      ],
+      "description": "图片搜索、壁纸与高清图库。",
+      "children": [
+        {
+          "id": "image-search",
+          "name": "图片搜索",
+          "order": 10,
+          "aliases": [
+            "image search",
+            "搜图"
+          ]
+        },
+        {
+          "id": "image-wallpaper",
+          "name": "壁纸",
+          "order": 20,
+          "aliases": [
+            "wallpaper",
+            "壁纸"
+          ]
+        },
+        {
+          "id": "image-stock",
+          "name": "高清图库",
+          "order": 30,
+          "aliases": [
+            "stock",
+            "photo",
+            "图库"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "media",
+      "name": "影音",
+      "order": 80,
+      "aliases": [
+        "media",
+        "video",
+        "music",
+        "audio",
+        "视频",
+        "音乐"
+      ],
+      "description": "视频、音乐、音频/播客与直播。",
+      "children": [
+        {
+          "id": "media-video",
+          "name": "视频",
+          "order": 10,
+          "aliases": [
+            "video",
+            "视频"
+          ]
+        },
+        {
+          "id": "media-music",
+          "name": "音乐",
+          "order": 20,
+          "aliases": [
+            "music",
+            "音乐"
+          ]
+        },
+        {
+          "id": "media-audio",
+          "name": "音频/播客",
+          "order": 30,
+          "aliases": [
+            "audio",
+            "podcast",
+            "播客"
+          ]
+        },
+        {
+          "id": "media-live",
+          "name": "直播",
+          "order": 40,
+          "aliases": [
+            "live",
+            "stream",
+            "直播"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shopping",
+      "name": "购物",
+      "order": 90,
+      "aliases": [
+        "shopping",
+        "shop",
+        "buy",
+        "购物",
+        "电商"
+      ],
+      "description": "综合电商、比价、二手与设计商品。",
+      "children": [
+        {
+          "id": "shopping-general",
+          "name": "综合电商",
+          "order": 10,
+          "aliases": [
+            "ecommerce",
+            "电商"
+          ]
+        },
+        {
+          "id": "shopping-compare",
+          "name": "比价",
+          "order": 20,
+          "aliases": [
+            "compare",
+            "price",
+            "比价"
+          ]
+        },
+        {
+          "id": "shopping-secondhand",
+          "name": "二手",
+          "order": 30,
+          "aliases": [
+            "secondhand",
+            "used",
+            "二手"
+          ]
+        },
+        {
+          "id": "shopping-design",
+          "name": "设计商品",
+          "order": 40,
+          "aliases": [
+            "design goods",
+            "设计商品"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "community",
+      "name": "社区",
+      "order": 100,
+      "aliases": [
+        "community",
+        "social",
+        "forum",
+        "社区",
+        "社交"
+      ],
+      "description": "综合社区、技术社区、问答与论坛。",
+      "children": [
+        {
+          "id": "community-general",
+          "name": "综合社区",
+          "order": 10,
+          "aliases": [
+            "social",
+            "综合社区"
+          ]
+        },
+        {
+          "id": "community-tech",
+          "name": "技术社区",
+          "order": 20,
+          "aliases": [
+            "tech community",
+            "技术社区"
+          ]
+        },
+        {
+          "id": "community-qa",
+          "name": "问答",
+          "order": 30,
+          "aliases": [
+            "qa",
+            "question",
+            "问答"
+          ]
+        },
+        {
+          "id": "community-forum",
+          "name": "论坛",
+          "order": 40,
+          "aliases": [
+            "forum",
+            "bbs",
+            "论坛"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "life",
+      "name": "生活",
+      "order": 110,
+      "aliases": [
+        "life",
+        "daily",
+        "生活",
+        "日常"
+      ],
+      "description": "地图、美食、健康、政务与旅行。",
+      "children": [
+        {
+          "id": "life-map",
+          "name": "地图/出行",
+          "order": 10,
+          "aliases": [
+            "map",
+            "travel",
+            "地图",
+            "出行"
+          ]
+        },
+        {
+          "id": "life-food",
+          "name": "美食",
+          "order": 20,
+          "aliases": [
+            "food",
+            "recipe",
+            "美食"
+          ]
+        },
+        {
+          "id": "life-health",
+          "name": "健康",
+          "order": 30,
+          "aliases": [
+            "health",
+            "medical",
+            "健康"
+          ]
+        },
+        {
+          "id": "life-gov",
+          "name": "政务",
+          "order": 40,
+          "aliases": [
+            "government",
+            "政务"
+          ]
+        },
+        {
+          "id": "life-travel",
+          "name": "旅行",
+          "order": 50,
+          "aliases": [
+            "travel",
+            "trip",
+            "旅行"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tools",
+      "name": "工具",
+      "order": 120,
+      "aliases": [
+        "tools",
+        "utility",
+        "工具",
+        "在线工具"
+      ],
+      "description": "下载、转换、在线工具与网盘。",
+      "children": [
+        {
+          "id": "tools-download",
+          "name": "下载",
+          "order": 10,
+          "aliases": [
+            "download",
+            "下载"
+          ]
+        },
+        {
+          "id": "tools-convert",
+          "name": "转换",
+          "order": 20,
+          "aliases": [
+            "convert",
+            "converter",
+            "转换"
+          ]
+        },
+        {
+          "id": "tools-online",
+          "name": "在线工具",
+          "order": 30,
+          "aliases": [
+            "online tool",
+            "utility",
+            "在线工具"
+          ]
+        },
+        {
+          "id": "tools-cloud",
+          "name": "网盘",
+          "order": 40,
+          "aliases": [
+            "cloud",
+            "drive",
+            "网盘"
+          ]
+        }
+      ]
+    }
+  ],
+  "providers": [
+    {
+      "id": "google",
+      "name": "Google",
+      "homepage": "https://www.google.com",
+      "regions": [
+        "global"
+      ]
+    },
+    {
+      "id": "bing",
+      "name": "Bing",
+      "homepage": "https://www.bing.com",
+      "regions": [
+        "global"
+      ]
+    },
+    {
+      "id": "baidu",
+      "name": "百度",
+      "homepage": "https://www.baidu.com",
+      "regions": [
+        "cn"
+      ]
+    },
+    {
+      "id": "duckduckgo",
+      "name": "DuckDuckGo",
+      "homepage": "https://duckduckgo.com",
+      "regions": [
+        "global"
+      ]
+    },
+    {
+      "id": "brave",
+      "name": "Brave Search",
+      "homepage": "https://search.brave.com",
+      "regions": [
+        "global"
+      ]
+    },
+    {
+      "id": "wikipedia",
+      "name": "Wikipedia",
+      "homepage": "https://www.wikipedia.org",
+      "regions": [
+        "global"
+      ]
+    },
+    {
+      "id": "zhihu",
+      "name": "知乎",
+      "homepage": "https://www.zhihu.com",
+      "regions": [
+        "cn"
+      ]
+    },
+    {
+      "id": "deepl",
+      "name": "DeepL",
+      "homepage": "https://www.deepl.com",
+      "regions": [
+        "global"
+      ]
+    },
+    {
+      "id": "semantic-scholar",
+      "name": "Semantic Scholar",
+      "homepage": "https://www.semanticscholar.org",
+      "regions": [
+        "global"
+      ]
+    },
+    {
+      "id": "researchindex",
+      "name": "ResearchIndex",
+      "homepage": "https://www.researchindex.com",
+      "regions": [
+        "global"
+      ],
+      "notes": "Historical name; the URL must be re-verified before the engine is enabled."
+    },
+    {
+      "id": "arxiv",
+      "name": "arXiv",
+      "homepage": "https://arxiv.org",
+      "regions": [
+        "global"
+      ]
+    },
+    {
+      "id": "cnki",
+      "name": "中国知网",
+      "homepage": "https://www.cnki.net",
+      "regions": [
+        "cn"
+      ]
+    },
+    {
+      "id": "github",
+      "name": "GitHub",
+      "homepage": "https://github.com",
+      "regions": [
+        "global"
+      ]
+    },
+    {
+      "id": "stackoverflow",
+      "name": "Stack Overflow",
+      "homepage": "https://stackoverflow.com",
+      "regions": [
+        "global"
+      ]
+    },
+    {
+      "id": "mdn",
+      "name": "MDN Web Docs",
+      "homepage": "https://developer.mozilla.org",
+      "regions": [
+        "global"
+      ]
+    },
+    {
+      "id": "npm",
+      "name": "npm",
+      "homepage": "https://www.npmjs.com",
+      "regions": [
+        "global"
+      ]
+    },
+    {
+      "id": "pypi",
+      "name": "PyPI",
+      "homepage": "https://pypi.org",
+      "regions": [
+        "global"
+      ]
+    },
+    {
+      "id": "crates",
+      "name": "crates.io",
+      "homepage": "https://crates.io",
+      "regions": [
+        "global"
+      ]
+    },
+    {
+      "id": "dribbble",
+      "name": "Dribbble",
+      "homepage": "https://dribbble.com",
+      "regions": [
+        "global"
+      ]
+    },
+    {
+      "id": "behance",
+      "name": "Behance",
+      "homepage": "https://www.behance.net",
+      "regions": [
+        "global"
+      ]
+    },
+    {
+      "id": "pinterest",
+      "name": "Pinterest",
+      "homepage": "https://www.pinterest.com",
+      "regions": [
+        "global"
+      ]
+    },
+    {
+      "id": "unsplash",
+      "name": "Unsplash",
+      "homepage": "https://unsplash.com",
+      "regions": [
+        "global"
+      ]
+    },
+    {
+      "id": "iconify",
+      "name": "Iconify",
+      "homepage": "https://icon-sets.iconify.design",
+      "regions": [
+        "global"
+      ]
+    },
+    {
+      "id": "wallhaven",
+      "name": "Wallhaven",
+      "homepage": "https://wallhaven.cc",
+      "regions": [
+        "global"
+      ]
+    },
+    {
+      "id": "figma",
+      "name": "Figma Community",
+      "homepage": "https://www.figma.com/community",
+      "regions": [
+        "global"
+      ]
+    },
+    {
+      "id": "youtube",
+      "name": "YouTube",
+      "homepage": "https://www.youtube.com",
+      "regions": [
+        "global"
+      ]
+    },
+    {
+      "id": "bilibili",
+      "name": "哔哩哔哩",
+      "homepage": "https://www.bilibili.com",
+      "regions": [
+        "cn"
+      ]
+    },
+    {
+      "id": "spotify",
+      "name": "Spotify",
+      "homepage": "https://open.spotify.com",
+      "regions": [
+        "global"
+      ]
+    },
+    {
+      "id": "taobao",
+      "name": "淘宝",
+      "homepage": "https://www.taobao.com",
+      "regions": [
+        "cn"
+      ]
+    },
+    {
+      "id": "jd",
+      "name": "京东",
+      "homepage": "https://www.jd.com",
+      "regions": [
+        "cn"
+      ]
+    },
+    {
+      "id": "amazon",
+      "name": "Amazon",
+      "homepage": "https://www.amazon.com",
+      "regions": [
+        "global"
+      ]
+    },
+    {
+      "id": "reddit",
+      "name": "Reddit",
+      "homepage": "https://www.reddit.com",
+      "regions": [
+        "global"
+      ]
+    },
+    {
+      "id": "openstreetmap",
+      "name": "OpenStreetMap",
+      "homepage": "https://www.openstreetmap.org",
+      "regions": [
+        "global"
+      ]
+    },
+    {
+      "id": "archive",
+      "name": "Internet Archive",
+      "homepage": "https://archive.org",
+      "regions": [
+        "global"
+      ]
+    }
+  ],
+  "engines": [
+    {
+      "id": "google-scholar",
+      "providerId": "google",
+      "name": "Google Scholar",
+      "category": "academic-search",
+      "tags": [
+        "scholar",
+        "paper",
+        "citation",
+        "学术",
+        "论文"
+      ],
+      "triggers": [
+        "scholar",
+        "学术",
+        "论文",
+        "citation"
+      ],
+      "url": "https://scholar.google.com/scholar?q={q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "semantic-scholar",
+      "providerId": "semantic-scholar",
+      "name": "Semantic Scholar",
+      "category": "academic-search",
+      "tags": [
+        "scholar",
+        "paper",
+        "citation",
+        "学术",
+        "论文"
+      ],
+      "triggers": [
+        "semantic",
+        "scholar",
+        "论文"
+      ],
+      "url": "https://www.semanticscholar.org/search?q={q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "researchindex",
+      "providerId": "researchindex",
+      "name": "ResearchIndex",
+      "category": "academic-search",
+      "tags": [
+        "scholar",
+        "paper",
+        "citation",
+        "学术"
+      ],
+      "triggers": [
+        "researchindex"
+      ],
+      "url": "https://www.researchindex.com/search?q={q}",
+      "regions": [
+        "global"
+      ],
+      "status": "broken",
+      "notes": "Historical name; URL must be verified before enabling."
+    },
+    {
+      "id": "arxiv",
+      "providerId": "arxiv",
+      "name": "arXiv",
+      "category": "academic-papers",
+      "tags": [
+        "paper",
+        "preprint",
+        "论文",
+        "预印本"
+      ],
+      "triggers": [
+        "arxiv",
+        "preprint",
+        "论文"
+      ],
+      "url": "https://arxiv.org/search/?query={q}&searchtype=all",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "cnki",
+      "providerId": "cnki",
+      "name": "中国知网",
+      "category": "academic-papers",
+      "tags": [
+        "paper",
+        "论文",
+        "文献"
+      ],
+      "triggers": [
+        "cnki",
+        "知网",
+        "论文"
+      ],
+      "url": "https://kns.cnki.net/kns8s/defaultresult/index?kw={q}",
+      "regions": [
+        "cn"
+      ],
+      "status": "active",
+      "notes": "Search URL may change when CNKI redesigns its interface."
+    },
+    {
+      "id": "figma-community",
+      "providerId": "figma",
+      "name": "Figma Community",
+      "category": "assets-template",
+      "tags": [
+        "template",
+        "figma",
+        "模板"
+      ],
+      "triggers": [
+        "figma",
+        "template",
+        "模板"
+      ],
+      "url": "https://www.figma.com/community/search?query={q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "iconify",
+      "providerId": "iconify",
+      "name": "Iconify",
+      "category": "assets-icon",
+      "tags": [
+        "icon",
+        "svg",
+        "图标"
+      ],
+      "triggers": [
+        "icon",
+        "icons",
+        "图标"
+      ],
+      "url": "https://icon-sets.iconify.design/?query={q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "google-fonts",
+      "providerId": "google",
+      "name": "Google Fonts",
+      "category": "assets-font",
+      "tags": [
+        "font",
+        "typeface",
+        "字体"
+      ],
+      "triggers": [
+        "font",
+        "字体"
+      ],
+      "url": "https://fonts.google.com/?query={q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "reddit",
+      "providerId": "reddit",
+      "name": "Reddit",
+      "category": "community-general",
+      "tags": [
+        "community",
+        "forum",
+        "社区",
+        "论坛"
+      ],
+      "triggers": [
+        "reddit",
+        "社区"
+      ],
+      "url": "https://www.reddit.com/search/?q={q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "github-issues",
+      "providerId": "github",
+      "name": "GitHub Issues",
+      "category": "community-qa",
+      "tags": [
+        "issue",
+        "bug",
+        "qa",
+        "报错",
+        "讨论"
+      ],
+      "triggers": [
+        "issue",
+        "bug",
+        "github",
+        "报错"
+      ],
+      "url": "https://github.com/search?q={q}&type=issues",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "dribbble",
+      "providerId": "dribbble",
+      "name": "Dribbble",
+      "category": "design-inspiration",
+      "tags": [
+        "design",
+        "inspiration",
+        "灵感",
+        "设计"
+      ],
+      "triggers": [
+        "dribbble",
+        "design",
+        "设计"
+      ],
+      "url": "https://dribbble.com/search/{q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "behance",
+      "providerId": "behance",
+      "name": "Behance",
+      "category": "design-portfolio",
+      "tags": [
+        "design",
+        "portfolio",
+        "作品集",
+        "设计"
+      ],
+      "triggers": [
+        "behance",
+        "portfolio",
+        "作品"
+      ],
+      "url": "https://www.behance.net/search/projects?search={q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "pinterest",
+      "providerId": "pinterest",
+      "name": "Pinterest",
+      "category": "design-inspiration",
+      "tags": [
+        "design",
+        "inspiration",
+        "image",
+        "灵感",
+        "图片"
+      ],
+      "triggers": [
+        "pinterest",
+        "inspiration",
+        "灵感"
+      ],
+      "url": "https://www.pinterest.com/search/pins/?q={q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "github",
+      "providerId": "github",
+      "name": "GitHub",
+      "category": "dev-code",
+      "tags": [
+        "code",
+        "repo",
+        "git",
+        "代码",
+        "仓库"
+      ],
+      "triggers": [
+        "github",
+        "repo",
+        "code",
+        "代码"
+      ],
+      "url": "https://github.com/search?q={q}&type=repositories",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "stackoverflow",
+      "providerId": "stackoverflow",
+      "name": "Stack Overflow",
+      "category": "dev-qa",
+      "tags": [
+        "debug",
+        "error",
+        "qa",
+        "报错",
+        "问答"
+      ],
+      "triggers": [
+        "stackoverflow",
+        "error",
+        "debug",
+        "报错"
+      ],
+      "url": "https://stackoverflow.com/search?q={q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "mdn",
+      "providerId": "mdn",
+      "name": "MDN Web Docs",
+      "category": "dev-docs",
+      "tags": [
+        "docs",
+        "web",
+        "api",
+        "文档"
+      ],
+      "triggers": [
+        "mdn",
+        "docs",
+        "api",
+        "文档"
+      ],
+      "url": "https://developer.mozilla.org/zh-CN/search?q={q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "npm",
+      "providerId": "npm",
+      "name": "npm",
+      "category": "dev-packages",
+      "tags": [
+        "package",
+        "js",
+        "node",
+        "包"
+      ],
+      "triggers": [
+        "npm",
+        "package",
+        "包"
+      ],
+      "url": "https://www.npmjs.com/search?q={q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "pypi",
+      "providerId": "pypi",
+      "name": "PyPI",
+      "category": "dev-packages",
+      "tags": [
+        "package",
+        "python",
+        "包"
+      ],
+      "triggers": [
+        "pypi",
+        "python",
+        "包"
+      ],
+      "url": "https://pypi.org/search/?q={q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "crates",
+      "providerId": "crates",
+      "name": "crates.io",
+      "category": "dev-packages",
+      "tags": [
+        "package",
+        "rust",
+        "包"
+      ],
+      "triggers": [
+        "crates",
+        "rust",
+        "包"
+      ],
+      "url": "https://crates.io/search?q={q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "google-images",
+      "providerId": "google",
+      "name": "Google Images",
+      "category": "image-search",
+      "tags": [
+        "image",
+        "picture",
+        "图片",
+        "搜图"
+      ],
+      "triggers": [
+        "image",
+        "images",
+        "图片",
+        "搜图"
+      ],
+      "url": "https://www.google.com/search?tbm=isch&q={q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "bing-images",
+      "providerId": "bing",
+      "name": "Bing Images",
+      "category": "image-search",
+      "tags": [
+        "image",
+        "picture",
+        "图片",
+        "搜图"
+      ],
+      "triggers": [
+        "image",
+        "images",
+        "图片",
+        "搜图"
+      ],
+      "url": "https://www.bing.com/images/search?q={q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "baidu-images",
+      "providerId": "baidu",
+      "name": "百度图片",
+      "category": "image-search",
+      "tags": [
+        "image",
+        "picture",
+        "图片",
+        "搜图"
+      ],
+      "triggers": [
+        "image",
+        "图片",
+        "搜图"
+      ],
+      "url": "https://image.baidu.com/search/index?tn=baiduimage&word={q}",
+      "regions": [
+        "cn"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "unsplash",
+      "providerId": "unsplash",
+      "name": "Unsplash",
+      "category": "image-stock",
+      "tags": [
+        "stock",
+        "photo",
+        "图库",
+        "高清"
+      ],
+      "triggers": [
+        "unsplash",
+        "photo",
+        "图库"
+      ],
+      "url": "https://unsplash.com/s/photos/{q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "wallhaven",
+      "providerId": "wallhaven",
+      "name": "Wallhaven",
+      "category": "image-wallpaper",
+      "tags": [
+        "wallpaper",
+        "壁纸"
+      ],
+      "triggers": [
+        "wallpaper",
+        "壁纸"
+      ],
+      "url": "https://wallhaven.cc/search?q={q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "wikipedia-zh",
+      "providerId": "wikipedia",
+      "name": "维基百科（中文）",
+      "category": "knowledge-encyclopedia",
+      "tags": [
+        "wiki",
+        "encyclopedia",
+        "百科"
+      ],
+      "triggers": [
+        "wiki",
+        "维基",
+        "百科"
+      ],
+      "url": "https://zh.wikipedia.org/w/index.php?search={q}",
+      "languages": [
+        "zh"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "wikipedia-en",
+      "providerId": "wikipedia",
+      "name": "Wikipedia (English)",
+      "category": "knowledge-encyclopedia",
+      "tags": [
+        "wiki",
+        "encyclopedia",
+        "百科"
+      ],
+      "triggers": [
+        "wiki",
+        "wikipedia"
+      ],
+      "url": "https://en.wikipedia.org/w/index.php?search={q}",
+      "languages": [
+        "en"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "baidu-baike",
+      "providerId": "baidu",
+      "name": "百度百科",
+      "category": "knowledge-encyclopedia",
+      "tags": [
+        "baike",
+        "encyclopedia",
+        "百科"
+      ],
+      "triggers": [
+        "baike",
+        "百科"
+      ],
+      "url": "https://baike.baidu.com/search/word?word={q}",
+      "regions": [
+        "cn"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "zhihu-search",
+      "providerId": "zhihu",
+      "name": "知乎",
+      "category": "knowledge-qa",
+      "tags": [
+        "qa",
+        "问答",
+        "知乎"
+      ],
+      "triggers": [
+        "zhihu",
+        "知乎"
+      ],
+      "url": "https://www.zhihu.com/search?type=content&q={q}",
+      "regions": [
+        "cn"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "deepl",
+      "providerId": "deepl",
+      "name": "DeepL",
+      "category": "knowledge-translate",
+      "tags": [
+        "translate",
+        "翻译"
+      ],
+      "triggers": [
+        "deepl",
+        "翻译"
+      ],
+      "url": "https://www.deepl.com/translator#auto/zh/{q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "google-translate",
+      "providerId": "google",
+      "name": "Google Translate",
+      "category": "knowledge-translate",
+      "tags": [
+        "translate",
+        "翻译"
+      ],
+      "triggers": [
+        "translate",
+        "翻译"
+      ],
+      "url": "https://translate.google.com/?sl=auto&tl=zh-CN&text={q}&op=translate",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "openstreetmap",
+      "providerId": "openstreetmap",
+      "name": "OpenStreetMap",
+      "category": "life-map",
+      "tags": [
+        "map",
+        "travel",
+        "地图",
+        "出行"
+      ],
+      "triggers": [
+        "map",
+        "地图",
+        "出行"
+      ],
+      "url": "https://www.openstreetmap.org/search?query={q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "youtube",
+      "providerId": "youtube",
+      "name": "YouTube",
+      "category": "media-video",
+      "tags": [
+        "video",
+        "视频"
+      ],
+      "triggers": [
+        "youtube",
+        "video",
+        "视频"
+      ],
+      "url": "https://www.youtube.com/results?search_query={q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "bilibili",
+      "providerId": "bilibili",
+      "name": "哔哩哔哩",
+      "category": "media-video",
+      "tags": [
+        "video",
+        "视频",
+        "b站"
+      ],
+      "triggers": [
+        "bilibili",
+        "b站",
+        "视频"
+      ],
+      "url": "https://search.bilibili.com/all?keyword={q}",
+      "regions": [
+        "cn"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "spotify",
+      "providerId": "spotify",
+      "name": "Spotify",
+      "category": "media-music",
+      "tags": [
+        "music",
+        "音乐"
+      ],
+      "triggers": [
+        "spotify",
+        "music",
+        "音乐"
+      ],
+      "url": "https://open.spotify.com/search/{q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "taobao",
+      "providerId": "taobao",
+      "name": "淘宝",
+      "category": "shopping-general",
+      "tags": [
+        "shopping",
+        "购物",
+        "淘宝"
+      ],
+      "triggers": [
+        "taobao",
+        "淘宝",
+        "购物"
+      ],
+      "url": "https://s.taobao.com/search?q={q}",
+      "regions": [
+        "cn"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "jd",
+      "providerId": "jd",
+      "name": "京东",
+      "category": "shopping-general",
+      "tags": [
+        "shopping",
+        "购物",
+        "京东"
+      ],
+      "triggers": [
+        "jd",
+        "京东",
+        "购物"
+      ],
+      "url": "https://search.jd.com/Search?keyword={q}",
+      "regions": [
+        "cn"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "amazon",
+      "providerId": "amazon",
+      "name": "Amazon",
+      "category": "shopping-general",
+      "tags": [
+        "shopping",
+        "购物",
+        "amazon"
+      ],
+      "triggers": [
+        "amazon",
+        "亚马逊",
+        "购物"
+      ],
+      "url": "https://www.amazon.com/s?k={q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "internet-archive",
+      "providerId": "archive",
+      "name": "Internet Archive",
+      "category": "tools-download",
+      "tags": [
+        "archive",
+        "download",
+        "下载",
+        "存档"
+      ],
+      "triggers": [
+        "archive",
+        "下载",
+        "存档"
+      ],
+      "url": "https://archive.org/search?query={q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "google-web",
+      "providerId": "google",
+      "name": "Google",
+      "category": "web-general",
+      "tags": [
+        "web",
+        "search",
+        "谷歌"
+      ],
+      "triggers": [
+        "google",
+        "谷歌"
+      ],
+      "url": "https://www.google.com/search?q={q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "bing-web",
+      "providerId": "bing",
+      "name": "Bing",
+      "category": "web-general",
+      "tags": [
+        "web",
+        "search",
+        "必应"
+      ],
+      "triggers": [
+        "bing",
+        "必应"
+      ],
+      "url": "https://www.bing.com/search?q={q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "baidu-web",
+      "providerId": "baidu",
+      "name": "百度",
+      "category": "web-general",
+      "tags": [
+        "web",
+        "search",
+        "百度"
+      ],
+      "triggers": [
+        "baidu",
+        "百度"
+      ],
+      "url": "https://www.baidu.com/s?wd={q}",
+      "regions": [
+        "cn"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "duckduckgo-web",
+      "providerId": "duckduckgo",
+      "name": "DuckDuckGo",
+      "category": "web-general",
+      "tags": [
+        "web",
+        "search",
+        "privacy",
+        "隐私"
+      ],
+      "triggers": [
+        "ddg",
+        "duckduckgo"
+      ],
+      "url": "https://duckduckgo.com/?q={q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "brave-web",
+      "providerId": "brave",
+      "name": "Brave Search",
+      "category": "web-general",
+      "tags": [
+        "web",
+        "search",
+        "privacy",
+        "隐私"
+      ],
+      "triggers": [
+        "brave"
+      ],
+      "url": "https://search.brave.com/search?q={q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "google-news",
+      "providerId": "google",
+      "name": "Google News",
+      "category": "web-news",
+      "tags": [
+        "news",
+        "新闻"
+      ],
+      "triggers": [
+        "news",
+        "新闻"
+      ],
+      "url": "https://news.google.com/search?q={q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "bing-news",
+      "providerId": "bing",
+      "name": "Bing News",
+      "category": "web-news",
+      "tags": [
+        "news",
+        "新闻"
+      ],
+      "triggers": [
+        "news",
+        "新闻"
+      ],
+      "url": "https://www.bing.com/news/search?q={q}",
+      "regions": [
+        "global"
+      ],
+      "status": "active"
+    }
+  ],
+  "sites": [
+    {
+      "id": "baidu",
+      "name": "百度搜索",
+      "hosts": [
+        "www.baidu.com",
+        "baidu.com"
+      ],
+      "urlParams": [
+        "wd"
+      ],
+      "selectors": {
+        "query": [
+          "#kw",
+          "input[name=\"wd\"]"
+        ]
+      },
+      "defaultCategory": "web-general",
+      "capabilities": [
+        "url",
+        "dom",
+        "html"
+      ],
+      "mount": {
+        "anchor": "#kw",
+        "placement": "below",
+        "offset": 8
+      }
+    },
+    {
+      "id": "bilibili",
+      "name": "哔哩哔哩搜索",
+      "hosts": [
+        "search.bilibili.com",
+        "www.bilibili.com"
+      ],
+      "urlParams": [
+        "keyword"
+      ],
+      "selectors": {
+        "query": [
+          "input[name=\"keyword\"]",
+          "input[type=\"text\"]"
+        ]
+      },
+      "defaultCategory": "media-video",
+      "capabilities": [
+        "url",
+        "dom",
+        "html"
+      ],
+      "mount": {
+        "anchor": "input[type=\"text\"]",
+        "placement": "below",
+        "offset": 8
+      },
+      "notes": "Selector is best-effort; verify on both search and video pages."
+    },
+    {
+      "id": "bing-images",
+      "name": "Bing Images",
+      "hosts": [
+        "www.bing.com",
+        "cn.bing.com",
+        "bing.com"
+      ],
+      "pathPattern": "^/images/search$",
+      "urlParams": [
+        "q"
+      ],
+      "selectors": {
+        "query": [
+          "#sb_form_q",
+          "input[name=\"q\"]"
+        ]
+      },
+      "defaultCategory": "image-search",
+      "capabilities": [
+        "url",
+        "dom",
+        "html"
+      ],
+      "priority": 20,
+      "mount": {
+        "anchor": "#sb_form_q",
+        "placement": "below",
+        "offset": 8
+      },
+      "notes": "More specific than the host-only bing adapter."
+    },
+    {
+      "id": "bing",
+      "name": "Bing Search",
+      "hosts": [
+        "www.bing.com",
+        "cn.bing.com",
+        "bing.com"
+      ],
+      "urlParams": [
+        "q"
+      ],
+      "selectors": {
+        "query": [
+          "#sb_form_q",
+          "input[name=\"q\"]"
+        ]
+      },
+      "defaultCategory": "web-general",
+      "capabilities": [
+        "url",
+        "dom",
+        "html"
+      ],
+      "mount": {
+        "anchor": "#sb_form_q",
+        "placement": "below",
+        "offset": 8
+      }
+    },
+    {
+      "id": "brave",
+      "name": "Brave Search",
+      "hosts": [
+        "search.brave.com"
+      ],
+      "urlParams": [
+        "q"
+      ],
+      "selectors": {
+        "query": [
+          "input[name=\"q\"]"
+        ]
+      },
+      "defaultCategory": "web-general",
+      "capabilities": [
+        "url",
+        "dom",
+        "html"
+      ],
+      "mount": {
+        "anchor": "input[name=\"q\"]",
+        "placement": "below",
+        "offset": 8
+      }
+    },
+    {
+      "id": "duckduckgo",
+      "name": "DuckDuckGo",
+      "hosts": [
+        "duckduckgo.com",
+        "www.duckduckgo.com"
+      ],
+      "urlParams": [
+        "q"
+      ],
+      "selectors": {
+        "query": [
+          "input[name=\"q\"]"
+        ]
+      },
+      "defaultCategory": "web-general",
+      "capabilities": [
+        "url",
+        "dom",
+        "html"
+      ],
+      "mount": {
+        "anchor": "input[name=\"q\"]",
+        "placement": "below",
+        "offset": 8
+      }
+    },
+    {
+      "id": "github",
+      "name": "GitHub Search",
+      "hosts": [
+        "github.com",
+        "www.github.com"
+      ],
+      "urlParams": [
+        "q"
+      ],
+      "selectors": {
+        "query": [
+          "input[name=\"q\"]",
+          "#query-builder-test"
+        ]
+      },
+      "defaultCategory": "dev-code",
+      "capabilities": [
+        "url",
+        "dom",
+        "html"
+      ],
+      "mount": {
+        "anchor": "input[name=\"q\"]",
+        "placement": "below",
+        "offset": 8
+      }
+    },
+    {
+      "id": "google-images",
+      "name": "Google Images",
+      "hosts": [
+        "www.google.com",
+        "google.com",
+        "*.google.com"
+      ],
+      "pathPattern": "^/search$",
+      "paramMatches": {
+        "tbm": "isch"
+      },
+      "urlParams": [
+        "q"
+      ],
+      "selectors": {
+        "query": [
+          "input[name=\"q\"]",
+          "textarea[name=\"q\"]"
+        ]
+      },
+      "defaultCategory": "image-search",
+      "capabilities": [
+        "url",
+        "dom",
+        "html"
+      ],
+      "priority": 20,
+      "mount": {
+        "anchor": "input[name=\"q\"]",
+        "placement": "below",
+        "offset": 8
+      },
+      "notes": "More specific than the host-only google adapter; path and tbm must both match."
+    },
+    {
+      "id": "google-scholar",
+      "name": "Google Scholar",
+      "hosts": [
+        "scholar.google.com"
+      ],
+      "urlParams": [
+        "q"
+      ],
+      "selectors": {
+        "query": [
+          "input[name=\"q\"]"
+        ]
+      },
+      "defaultCategory": "academic-search",
+      "capabilities": [
+        "url",
+        "dom",
+        "html"
+      ],
+      "priority": 20,
+      "mount": {
+        "anchor": "input[name=\"q\"]",
+        "placement": "below",
+        "offset": 8
+      }
+    },
+    {
+      "id": "google",
+      "name": "Google Search",
+      "hosts": [
+        "www.google.com",
+        "google.com",
+        "*.google.com"
+      ],
+      "urlParams": [
+        "q"
+      ],
+      "selectors": {
+        "query": [
+          "input[name=\"q\"]",
+          "textarea[name=\"q\"]"
+        ]
+      },
+      "defaultCategory": "web-general",
+      "capabilities": [
+        "url",
+        "dom",
+        "html"
+      ],
+      "mount": {
+        "anchor": "input[name=\"q\"]",
+        "placement": "below",
+        "offset": 8
+      },
+      "notes": "Google regional domains are matched by the wildcard host entry."
+    },
+    {
+      "id": "wikipedia",
+      "name": "Wikipedia Search",
+      "hosts": [
+        "*.wikipedia.org"
+      ],
+      "urlParams": [
+        "search"
+      ],
+      "selectors": {
+        "query": [
+          "input[name=\"search\"]",
+          "#searchInput"
+        ]
+      },
+      "defaultCategory": "knowledge-encyclopedia",
+      "capabilities": [
+        "url",
+        "dom",
+        "html"
+      ],
+      "mount": {
+        "anchor": "#searchInput",
+        "placement": "below",
+        "offset": 8
+      }
+    },
+    {
+      "id": "youtube",
+      "name": "YouTube Search",
+      "hosts": [
+        "www.youtube.com",
+        "youtube.com",
+        "m.youtube.com"
+      ],
+      "urlParams": [
+        "search_query"
+      ],
+      "selectors": {
+        "query": [
+          "input#search",
+          "input[name=\"search_query\"]"
+        ]
+      },
+      "defaultCategory": "media-video",
+      "capabilities": [
+        "url",
+        "dom",
+        "html"
+      ],
+      "mount": {
+        "anchor": "input#search",
+        "placement": "below",
+        "offset": 8
+      }
+    },
+    {
+      "id": "zhihu",
+      "name": "知乎搜索",
+      "hosts": [
+        "www.zhihu.com",
+        "zhihu.com"
+      ],
+      "urlParams": [
+        "q"
+      ],
+      "selectors": {
+        "query": [
+          "input[name=\"q\"]",
+          "input[type=\"text\"]"
+        ]
+      },
+      "defaultCategory": "knowledge-qa",
+      "capabilities": [
+        "url",
+        "dom",
+        "html"
+      ],
+      "mount": {
+        "anchor": "input[name=\"q\"]",
+        "placement": "below",
+        "offset": 8
+      },
+      "notes": "Selector is best-effort; verify against the current Zhihu search page."
+    }
+  ]
+}
