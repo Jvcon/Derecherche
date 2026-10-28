@@ -27,6 +27,7 @@ export interface QueryContext {
   selection?: string;
   clipboard?: string;
   document?: DocumentLike;
+  documentKind?: "dom" | "html";
   html?: string;
 }
 

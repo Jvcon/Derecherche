@@ -7,6 +7,9 @@ Headless core for Derecherche. It contains no DOM, userscript, extension, or CLI
 - `buildTargetUrl(engine, query)` — validates the engine URL template, normalizes the query, and returns an encoded target URL.
 - `normalizeQuery(input)` — trims and collapses whitespace.
 - `validateEngineTemplate(engine)` — rejects missing `{q}` and non-http(s) templates.
+- `extractQuery(context, sites, options)` — resolves a query from URL params, live/DOM selectors, HTML snapshot selectors, selection, or clipboard.
+- `matchSite(url, sites)` — picks the most specific site adapter by host, path, params, and priority.
+- `extractFromUrl`, `extractFromDocument`, `extractFromSelection`, `extractFromClipboard` — individual extraction paths for tests and hosts.
 - `normalizeSettings(input, catalogVersion)` — sanitizes persisted settings and custom engines.
 - `applySettings(engines, settings)` — filters disabled engines and applies name/order/pinned overrides.
 - `applyCategorySettings(categories, settings)` — hides and orders categories without mutating the catalog.
