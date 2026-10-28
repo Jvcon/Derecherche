@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Derecherche UI demo</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: system-ui, sans-serif;
+        background: #f6f8fa;
+      }
+      main {
+        max-width: 720px;
+        margin: 80px auto;
+        padding: 24px;
+      }
+      button {
+        padding: 8px 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Derecherche UI demo</h1>
+      <p>This page tests the shadow host and anchor positioning primitives.</p>
+      <button id="anchor" type="button">Toggle surface</button>
+    </main>
+    <script type="module">
+      import {
+        createShadowHost,
+        trackAnchor,
+      } from "../dist/index.js";
+
+      const shadow = createShadowHost({
+        id: "derecherche-demo",
+        css: `
+          .surface {
+            background: var(--dr-bg);
+            color: var(--dr-fg);
+            border: 1px solid var(--dr-border);
+            border-radius: var(--dr-radius);
+            box-shadow: var(--dr-shadow);
+            padding: 10px 14px;
+          }
+        `,
+      });
+
+      const surface = document.createElement("div");
+      surface.className = "surface";
+      surface.textContent = "Derecherche surface";
+      shadow.content.append(surface);
+
+      const anchor = document.getElementById("anchor");
+      let cleanup = null;
+      let visible = false;
+
+      anchor.addEventListener("click", () => {
+        visible = !visible;
+        if (visible) {
+          shadow.mount();
+          cleanup = trackAnchor(shadow.host, anchor, { placement: "below", offset: 8 });
+        } else {
+          cleanup?.();
+          cleanup = null;
+          shadow.unmount();
+        }
+      });
+    </script>
+  </body>
+</html>

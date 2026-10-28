@@ -11,7 +11,7 @@ export default [
   },
   js.configs.recommended,
   {
-    files: ["packages/data/**/*.mjs", "packages/core/**/*.mjs"],
+    files: ["packages/data/**/*.mjs", "packages/core/**/*.mjs", "packages/ui/**/*.mjs"],
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",

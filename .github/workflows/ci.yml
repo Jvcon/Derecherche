@@ -29,6 +29,7 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm data:build
       - run: pnpm build:core
+      - run: pnpm build:ui
       - run: pnpm test
 
       - name: Check generated catalog is current
@@ -62,6 +63,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm data:build
       - run: pnpm build:core
+      - run: pnpm build:ui
       - run: git diff --exit-code -- packages/data/generated
 
   link-check:

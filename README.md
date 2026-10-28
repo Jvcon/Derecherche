@@ -18,6 +18,7 @@ Phase 0 data and interaction contracts are in place. Foundation work is in progr
 .
 ├─ packages/
 │  ├─ core/                 # host-agnostic query, settings, URL, storage primitives
+│  ├─ ui/                   # Shadow DOM and positioning primitives
 │  └─ data/                 # catalog, schemas, validation
 ├─ docs/
 │  └─ contracts/            # interaction and data contracts
