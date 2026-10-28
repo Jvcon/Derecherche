@@ -744,7 +744,11 @@ export function openPalette(options: PaletteOptions): void {
       return;
     }
 
-    if (event.altKey && event.key.toLowerCase() === "l") {
+    // macOS turns Option+L into "¬", so use the physical key code.
+    const isActionShortcut =
+      event.altKey &&
+      (event.code === "KeyL" || event.key.toLowerCase() === "l");
+    if (isActionShortcut) {
       event.preventDefault();
       if (selectedEngine()) {
         actionMenuOpen = !actionMenuOpen;
