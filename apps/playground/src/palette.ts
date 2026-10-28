@@ -5,7 +5,6 @@ import {
   createDefaultSettings,
   flattenCategories,
   getEnginesForCategory,
-  rankEngines,
 } from "@derecherche/core";
 import { createShadowHost } from "@derecherche/ui";
 import { data } from "./catalog";
@@ -14,6 +13,7 @@ export interface PaletteOptions {
   query: string;
   categoryId?: string;
   sourceLabel?: string;
+  commonEngineIds?: string[];
 }
 
 interface CategoryItem {
@@ -28,6 +28,27 @@ interface EngineItem {
 }
 
 type Item = CategoryItem | EngineItem;
+type Mode = "common" | "filter" | "categories";
+
+interface Action {
+  id: "copy" | "current" | "edit";
+  label: string;
+}
+
+const DEFAULT_COMMON_ENGINE_IDS = [
+  "google-web",
+  "github",
+  "youtube",
+  "wikipedia-zh",
+  "baidu-web",
+  "wolfram-alpha",
+];
+
+const ACTIONS: Action[] = [
+  { id: "copy", label: "Copy target URL" },
+  { id: "current", label: "Open in current tab" },
+  { id: "edit", label: "Edit query" },
+];
 
 const PALETTE_CSS = `
 :host {
@@ -35,133 +56,100 @@ const PALETTE_CSS = `
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  background: rgba(15, 18, 22, 0.36);
+  background: rgba(15, 18, 22, 0.42);
 }
 .panel {
   width: min(760px, calc(100vw - 32px));
-  max-height: min(720px, 76vh);
-  margin-top: 10vh;
+  margin-top: 9vh;
   display: flex;
   flex-direction: column;
   background: var(--dr-bg);
   color: var(--dr-fg);
   border: 1px solid var(--dr-border);
-  border-radius: 16px;
-  box-shadow: var(--dr-shadow);
+  border-radius: 14px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28);
   overflow: hidden;
 }
-.head {
+.input-bar {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
   border-bottom: 1px solid var(--dr-border);
 }
-.query {
-  min-width: 0;
-  flex: 1;
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
+.search-icon {
+  color: var(--dr-muted);
+  font-size: 18px;
+  line-height: 1;
 }
-.query .label,
-.source {
+.input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 16px;
+}
+.input::placeholder {
+  color: var(--dr-muted);
+}
+.key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 22px;
+  padding: 0 6px;
+  border: 1px solid var(--dr-border);
+  border-bottom-width: 2px;
+  border-radius: 6px;
+  color: var(--dr-muted);
+  font: 600 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 0.04em;
+  background: var(--dr-bg);
+}
+.result-panel {
+  display: flex;
+  flex-direction: column;
+  max-height: min(520px, 58vh);
+  overflow: hidden;
+}
+.result-panel[hidden] {
+  display: none;
+}
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px 4px;
   color: var(--dr-muted);
   font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
 }
-.query strong {
-  font-size: 15px;
+.query-chip {
+  max-width: 60%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-.source {
   border: 1px solid var(--dr-border);
   border-radius: 999px;
-  padding: 2px 6px;
-}
-.close,
-.chip,
-.item,
-.crumb {
-  font: inherit;
-  color: inherit;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-}
-.close {
-  color: var(--dr-muted);
-  border: 1px solid var(--dr-border);
-  border-radius: 8px;
-  padding: 4px 8px;
-}
-.toolbar {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 12px 16px 8px;
-}
-.filter {
-  width: 100%;
-  border: 1px solid var(--dr-border);
-  border-radius: 9px;
-  background: transparent;
-  color: inherit;
-  padding: 9px 11px;
-  font: inherit;
-  outline: none;
-}
-.filter:focus {
-  border-color: var(--dr-accent);
-}
-.breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  flex-wrap: wrap;
-  font-size: 12px;
-  color: var(--dr-muted);
-}
-.crumb {
-  color: var(--dr-accent);
-  padding: 2px 4px;
-  border-radius: 5px;
-}
-.crumb:hover {
-  background: var(--dr-hover);
-}
-.recommend {
-  display: flex;
-  gap: 6px;
-  overflow-x: auto;
-  padding: 0 16px 10px;
-}
-.recommend:empty {
-  display: none;
-}
-.chip {
-  flex: none;
-  border: 1px solid var(--dr-border);
-  border-radius: 999px;
-  padding: 4px 9px;
-  font-size: 12px;
-}
-.chip:hover {
-  background: var(--dr-hover);
+  padding: 2px 7px;
+  text-transform: none;
+  letter-spacing: 0;
 }
 .list {
   overflow-y: auto;
   padding: 0 8px 8px;
-  min-height: 80px;
+  min-height: 54px;
 }
 .group-label {
   color: var(--dr-muted);
   font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   padding: 8px 8px 4px;
 }
 .item {
@@ -170,8 +158,13 @@ const PALETTE_CSS = `
   align-items: center;
   gap: 10px;
   text-align: left;
-  padding: 9px 8px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  padding: 8px;
   border-radius: 9px;
+  cursor: pointer;
 }
 .item:hover,
 .item.selected {
@@ -206,6 +199,7 @@ const PALETTE_CSS = `
   white-space: nowrap;
 }
 .item-hint {
+  flex: none;
   color: var(--dr-muted);
   font-size: 11px;
 }
@@ -214,14 +208,74 @@ const PALETTE_CSS = `
   padding: 18px 10px;
   text-align: center;
 }
-.foot {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+.action-menu {
   border-top: 1px solid var(--dr-border);
-  padding: 8px 16px;
+  padding: 8px;
+}
+.action {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  padding: 8px 10px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+.action:hover,
+.action.selected {
+  background: var(--dr-hover);
+}
+.status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid var(--dr-border);
+  padding: 8px 14px;
   color: var(--dr-muted);
   font-size: 11px;
+}
+.status-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.status-path {
+  color: var(--dr-fg);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.status-query {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.8;
+}
+.status-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: none;
+}
+.hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.hint.disabled {
+  opacity: 0.35;
+}
+.foot-note {
+  border-top: 1px solid var(--dr-border);
+  padding: 6px 14px;
+  color: var(--dr-muted);
+  font-size: 10px;
 }
 `;
 
@@ -288,54 +342,92 @@ export function openPalette(options: PaletteOptions): void {
   panel.setAttribute("aria-modal", "true");
   panel.setAttribute("aria-label", "Derecherche engine picker");
   panel.innerHTML = `
-    <header class="head">
-      <div class="query">
-        <span class="label">Query</span>
-        <strong data-query></strong>
-        <span class="source" data-source></span>
-      </div>
-      <button class="close" type="button" data-action="close">Esc</button>
+    <header class="input-bar">
+      <span class="search-icon" aria-hidden="true">⌕</span>
+      <input class="input" data-filter type="text" autocomplete="off" spellcheck="false" placeholder="Filter engines or press TAB for categories">
+      <kbd class="key">TAB</kbd>
     </header>
-    <div class="toolbar">
-      <input class="filter" data-filter type="text" autocomplete="off" spellcheck="false" placeholder="Filter engines or categories">
-      <div class="breadcrumb" data-breadcrumb></div>
-    </div>
-    <div class="recommend" data-recommend></div>
-    <div class="list" data-list></div>
-    <footer class="foot">
-      <span>↑↓ move</span><span>Enter open</span><span>→ enter</span><span>← back</span><span>Alt+1–9 quick pick</span>
+    <section class="result-panel" data-panel>
+      <div class="panel-head">
+        <span data-mode>Common engines</span>
+        <span class="query-chip" data-query-chip></span>
+      </div>
+      <div class="list" data-list></div>
+    </section>
+    <div class="action-menu" data-actions hidden></div>
+    <footer class="status-bar">
+      <div class="status-left">
+        <span class="status-path" data-status-path>Common</span>
+        <span class="status-query" data-status-query></span>
+      </div>
+      <div class="status-right">
+        <span class="hint" data-hint-category><span>Select Category</span><kbd class="key">TAB</kbd></span>
+        <span class="hint"><span>Open</span><kbd class="key">↵</kbd></span>
+        <span class="hint" data-hint-action><span>Action</span><kbd class="key">⌘K</kbd></span>
+      </div>
     </footer>
   `;
   shadow.content.append(panel);
 
-  const queryNode = panel.querySelector<HTMLElement>("[data-query]")!;
-  const sourceNode = panel.querySelector<HTMLElement>("[data-source]")!;
   const filterInput = panel.querySelector<HTMLInputElement>("[data-filter]")!;
-  const breadcrumbNode = panel.querySelector<HTMLElement>("[data-breadcrumb]")!;
-  const recommendNode = panel.querySelector<HTMLElement>("[data-recommend]")!;
+  const modeNode = panel.querySelector<HTMLElement>("[data-mode]")!;
+  const queryChip = panel.querySelector<HTMLElement>("[data-query-chip]")!;
   const listNode = panel.querySelector<HTMLElement>("[data-list]")!;
+  const actionsNode = panel.querySelector<HTMLElement>("[data-actions]")!;
+  const statusPath = panel.querySelector<HTMLElement>("[data-status-path]")!;
+  const statusQuery = panel.querySelector<HTMLElement>("[data-status-query]")!;
+  const categoryHint = panel.querySelector<HTMLElement>("[data-hint-category]")!;
+  const actionHint = panel.querySelector<HTMLElement>("[data-hint-action]")!;
 
   const initial = options.categoryId
     ? categoryById.get(options.categoryId)
     : undefined;
   let path = initial?.path ?? [];
+  let mode: Mode = "common";
   let filter = "";
   let selected = 0;
   let items: Item[] = [];
   let query = options.query.trim();
+  let actionMenuOpen = false;
+  let actionIndex = 0;
+
+  const commonIds = options.commonEngineIds?.length
+    ? options.commonEngineIds
+    : DEFAULT_COMMON_ENGINE_IDS;
+  const commonEngines = commonIds
+    .map((id) => data.engines.find((engine) => engine.id === id))
+    .filter((engine): engine is Engine => engine !== undefined && engine.status === "active")
+    .slice(0, 8);
+  const fallbackCommon = data.engines
+    .filter((engine) => engine.status === "active")
+    .slice(0, 6);
+  const common = commonEngines.length > 0 ? commonEngines : fallbackCommon;
 
   function currentCategory(): Category | CategoryChild | undefined {
     const id = path[path.length - 1];
     return id ? categoryById.get(id)?.category : undefined;
   }
 
+  function selectedItem(): Item | undefined {
+    return items[selected];
+  }
+
+  function selectedEngine(): Engine | undefined {
+    const item = selectedItem();
+    return item?.kind === "engine" ? item.engine : undefined;
+  }
+
   function buildItems(): Item[] {
-    const q = filter.trim().toLowerCase();
-    if (q) {
+    if (mode === "filter") {
+      const q = filter.trim().toLowerCase();
       return data.engines
-        .filter((engine) => engineHaystack(engine).includes(q))
+        .filter((engine) => engine.status === "active" && engineHaystack(engine).includes(q))
         .slice(0, 60)
         .map((engine) => ({ kind: "engine", engine }));
+    }
+
+    if (mode === "common") {
+      return common.map((engine) => ({ kind: "engine", engine }));
     }
 
     const current = currentCategory();
@@ -347,13 +439,12 @@ export function openPalette(options: PaletteOptions): void {
       }));
     }
 
-    const currentPath = path;
     const childCategories =
       "children" in current ? (current.children ?? []) : [];
     const children = childCategories.map((child) => ({
       kind: "category" as const,
       category: child,
-      path: [...currentPath, child.id],
+      path: [...path, child.id],
     }));
     const engines = (
       childCategories.length > 0
@@ -364,49 +455,34 @@ export function openPalette(options: PaletteOptions): void {
     return [...children, ...engines];
   }
 
-  function renderBreadcrumb(): void {
-    const crumbs = [
-      `<button class="crumb" type="button" data-path="">全部</button>`,
-      ...path.map((id, index) => {
-        const subPath = path.slice(0, index + 1).join("|");
-        return `<span>/</span><button class="crumb" type="button" data-path="${escapeHtml(subPath)}">${escapeHtml(
-          categoryById.get(id)?.category.name ?? id
-        )}</button>`;
-      }),
-    ];
-    breadcrumbNode.innerHTML = crumbs.join("");
+  function modeLabel(): string {
+    if (mode === "common") return "Common engines";
+    if (mode === "filter") return "Results";
+    if (path.length === 0) return "Categories";
+    return "Category";
   }
 
-  function renderRecommendations(): void {
-    const recommended = rankEngines(
-      data.engines,
-      settings,
-      {
-        query,
-        categoryId: path[path.length - 1],
-        now: Date.now(),
-      },
-      { recommendedLimit: 4 }
-    ).recommended;
-
-    if (filter.trim() || recommended.length === 0) {
-      recommendNode.innerHTML = "";
+  function renderActions(): void {
+    if (!actionMenuOpen || !selectedEngine()) {
+      actionsNode.hidden = true;
+      actionsNode.innerHTML = "";
       return;
     }
-
-    recommendNode.innerHTML = recommended
-      .map(
-        (engine) =>
-          `<button class="chip" type="button" data-engine="${escapeHtml(
-            engine.id
-          )}">${escapeHtml(engine.name)}</button>`
-      )
-      .join("");
+    actionsNode.hidden = false;
+    actionsNode.innerHTML = ACTIONS.map(
+      (action, index) =>
+        `<button class="action${index === actionIndex ? " selected" : ""}" type="button" data-action="${action.id}">
+          <span>${escapeHtml(action.label)}</span>
+          <kbd class="key">${index === actionIndex ? "↵" : ""}</kbd>
+        </button>`
+    ).join("");
   }
 
   function renderList(): void {
     if (items.length === 0) {
-      listNode.innerHTML = `<div class="empty">No matches</div>`;
+      listNode.innerHTML = `<div class="empty">${
+        mode === "filter" ? "No matching engines" : "No engines available"
+      }</div>`;
       return;
     }
 
@@ -416,7 +492,7 @@ export function openPalette(options: PaletteOptions): void {
       if (item.kind !== lastKind) {
         rows.push(
           `<div class="group-label">${
-            item.kind === "category" ? "Categories" : "Engines"
+            item.kind === "category" ? "Categories" : mode === "common" ? "Common" : "Engines"
           }</div>`
         );
         lastKind = item.kind;
@@ -432,7 +508,7 @@ export function openPalette(options: PaletteOptions): void {
                 item.category.id
               )} engines</small>
             </span>
-            <span class="item-hint">→</span>
+            <span class="item-hint">TAB</span>
           </button>
         `);
       } else {
@@ -459,13 +535,24 @@ export function openPalette(options: PaletteOptions): void {
   }
 
   function render(): void {
-    queryNode.textContent = query || "Manual query";
-    sourceNode.textContent = options.sourceLabel ?? "page";
-    renderBreadcrumb();
-    renderRecommendations();
     items = buildItems();
     if (selected >= items.length) selected = Math.max(0, items.length - 1);
+    modeNode.textContent = modeLabel();
+    queryChip.textContent = query ? `“${query}”` : "No query";
+    statusPath.textContent =
+      mode === "common"
+        ? "Common engines"
+        : mode === "filter"
+          ? "Results"
+          : pathName(path) || "Categories";
+    statusQuery.textContent = query ? `· ${query}` : "";
+    categoryHint.classList.toggle(
+      "disabled",
+      mode === "categories" && selectedItem()?.kind === "engine"
+    );
+    actionHint.classList.toggle("disabled", !selectedEngine());
     renderList();
+    renderActions();
   }
 
   function ensureQuery(): string | null {
@@ -473,8 +560,7 @@ export function openPalette(options: PaletteOptions): void {
     const entered = window.prompt("Search query")?.trim();
     if (!entered) return null;
     query = entered;
-    queryNode.textContent = query;
-    renderRecommendations();
+    render();
     return query;
   }
 
@@ -486,69 +572,167 @@ export function openPalette(options: PaletteOptions): void {
     close();
   }
 
+  function enterCategory(item: CategoryItem): void {
+    path = item.path;
+    mode = "categories";
+    filter = "";
+    filterInput.value = "";
+    selected = 0;
+    render();
+  }
+
   function openItem(item: Item | undefined): void {
     if (!item) return;
     if (item.kind === "category") {
-      path = item.path;
-      filter = "";
-      filterInput.value = "";
-      selected = 0;
-      render();
+      enterCategory(item);
       return;
     }
     openEngine(item.engine);
   }
 
   function goBack(): void {
-    if (path.length === 0) return;
-    path = path.slice(0, -1);
+    if (mode === "filter" && filter) {
+      filter = "";
+      filterInput.value = "";
+      mode = "common";
+      selected = 0;
+      render();
+      return;
+    }
+    if (path.length > 0) {
+      path = path.slice(0, -1);
+      selected = 0;
+      render();
+      return;
+    }
+    if (mode === "categories") {
+      mode = "common";
+      selected = 0;
+      render();
+    }
+  }
+
+  function enterCategoryMode(): void {
+    mode = "categories";
+    path = initial?.path ?? [];
+    filter = "";
+    filterInput.value = "";
     selected = 0;
     render();
+  }
+
+  function executeAction(action: Action): void {
+    const engine = selectedEngine();
+    if (!engine) return;
+    const targetQuery = ensureQuery();
+    if (!targetQuery) return;
+    const url = buildTargetUrl(engine, targetQuery);
+
+    if (action.id === "copy") {
+      void navigator.clipboard?.writeText(url).catch(() => undefined);
+      actionMenuOpen = false;
+      renderActions();
+      return;
+    }
+    if (action.id === "current") {
+      window.location.href = url;
+      return;
+    }
+    const entered = window.prompt("Search query", query)?.trim();
+    if (entered) {
+      query = entered;
+      render();
+    }
   }
 
   function onKeydown(event: KeyboardEvent): void {
     if (event.key === "Escape") {
       event.preventDefault();
-      close();
+      if (actionMenuOpen) {
+        actionMenuOpen = false;
+        renderActions();
+      } else {
+        close();
+      }
       return;
     }
+
+    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+      event.preventDefault();
+      if (selectedEngine()) {
+        actionMenuOpen = !actionMenuOpen;
+        actionIndex = 0;
+        renderActions();
+      }
+      return;
+    }
+
+    if (actionMenuOpen) {
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        actionIndex = Math.min(ACTIONS.length - 1, actionIndex + 1);
+        renderActions();
+        return;
+      }
+      if (event.key === "ArrowUp") {
+        event.preventDefault();
+        actionIndex = Math.max(0, actionIndex - 1);
+        renderActions();
+        return;
+      }
+      if (event.key === "Enter") {
+        event.preventDefault();
+        executeAction(ACTIONS[actionIndex]);
+      }
+      return;
+    }
+
+    if (event.key === "Tab") {
+      event.preventDefault();
+      if (mode !== "categories") {
+        enterCategoryMode();
+        return;
+      }
+      const item = selectedItem();
+      if (item?.kind === "category") {
+        enterCategory(item);
+      }
+      return;
+    }
+
     if (event.key === "ArrowDown") {
       event.preventDefault();
       selected = Math.min(items.length - 1, selected + 1);
-      renderList();
+      render();
       return;
     }
     if (event.key === "ArrowUp") {
       event.preventDefault();
       selected = Math.max(0, selected - 1);
-      renderList();
+      render();
       return;
     }
     if (event.key === "ArrowRight") {
-      const item = items[selected];
+      const item = selectedItem();
       if (item?.kind === "category") {
         event.preventDefault();
-        openItem(item);
+        enterCategory(item);
       }
       return;
     }
     if (event.key === "ArrowLeft") {
-      if (path.length > 0) {
-        event.preventDefault();
-        goBack();
-      }
+      event.preventDefault();
+      goBack();
       return;
     }
     if (event.key === "Backspace" && !filterInput.value) {
-      if (path.length > 0) {
-        event.preventDefault();
-        goBack();
-      }
+      event.preventDefault();
+      goBack();
       return;
     }
     if (event.key === "Enter") {
       event.preventDefault();
-      openItem(items[selected]);
+      openItem(selectedItem());
       return;
     }
     if (event.altKey && /^[1-9]$/.test(event.key)) {
@@ -563,25 +747,9 @@ export function openPalette(options: PaletteOptions): void {
     if (!target) return;
 
     const action = target.closest<HTMLElement>("[data-action]");
-    if (action?.dataset.action === "close") {
-      close();
-      return;
-    }
-
-    const engine = target.closest<HTMLElement>("[data-engine]");
-    if (engine?.dataset.engine) {
-      const found = data.engines.find((item) => item.id === engine.dataset.engine);
-      if (found) openEngine(found);
-      return;
-    }
-
-    const crumb = target.closest<HTMLElement>("[data-path]");
-    if (crumb) {
-      path = crumb.dataset.path ? crumb.dataset.path.split("|") : [];
-      filter = "";
-      filterInput.value = "";
-      selected = 0;
-      render();
+    if (action?.dataset.action) {
+      const found = ACTIONS.find((item) => item.id === action.dataset.action);
+      if (found) executeAction(found);
       return;
     }
 
@@ -595,6 +763,7 @@ export function openPalette(options: PaletteOptions): void {
 
   filterInput.addEventListener("input", () => {
     filter = filterInput.value;
+    mode = filter.trim() ? "filter" : "common";
     selected = 0;
     render();
   });
