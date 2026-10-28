@@ -46,8 +46,8 @@ const DEFAULT_COMMON_ENGINE_IDS = [
 ];
 
 const ACTIONS: Action[] = [
-  { id: "copy", label: "Copy target URL", shortcut: "ALT+C" },
-  { id: "current", label: "Open in current tab", shortcut: "ALT+ENTER" },
+  { id: "copy", label: "Copy target URL", shortcut: "⌥C" },
+  { id: "current", label: "Open in current tab", shortcut: "⌥↵" },
 ];
 
 const PALETTE_CSS = `
@@ -370,7 +370,7 @@ export function openPalette(options: PaletteOptions): void {
       <button class="token query-token" type="button" data-action="edit-keyword" hidden></button>
       <span class="token category-token" data-category-token hidden></span>
       <input class="input" data-input type="text" autocomplete="off" spellcheck="false">
-      <kbd class="key">TAB</kbd>
+      <kbd class="key">⇥</kbd>
     </header>
     <section class="result-panel">
       <div class="panel-head"><span data-mode>Common engines</span></div>
@@ -383,7 +383,7 @@ export function openPalette(options: PaletteOptions): void {
       </div>
       <div class="status-right">
         <span class="hint"><span>Open</span><kbd class="key">↵</kbd></span>
-        <span class="hint" data-hint-action><span>Action</span><kbd class="key">ALT + L</kbd></span>
+        <span class="hint" data-hint-action><span>Action</span><kbd class="key">⌥L</kbd></span>
       </div>
     </footer>
   `;
@@ -575,7 +575,7 @@ export function openPalette(options: PaletteOptions): void {
                 item.category.id
               )} engines</small>
             </span>
-            <span class="item-hint">TAB</span>
+            <span class="item-hint">⇥</span>
           </button>
         `);
       } else {

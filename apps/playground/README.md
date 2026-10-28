@@ -44,13 +44,13 @@ Changes inside `apps/playground/src` use Vite HMR.
 - `Enter` opens the current engine or enters a highlighted category.
 - `TAB` on an engine row is disabled; the status bar hint is dimmed.
 - Click the keyword token or go back at the root to return to keyword editing.
-- `Alt+L` / `Option+L` on macOS: open the floating action menu for an engine.
-  - `Alt+C`: copy the target URL
-  - `Alt+Enter`: open in the current tab
+- `⌥L` (`Alt+L` / `Option+L`): open the floating action menu for an engine.
+  - `⌥C`: copy the target URL
+  - `⌥↵`: open in the current tab
 - `↑/↓` move, `←` go back, `Esc` close.
 - `Alt+1`–`Alt+9` quick-pick the nth item.
 
-The UI is intentionally three rows: input bar, result panel, and status bar. The status bar shows `Open Enter` and `Action ALT + L`; the action menu floats above the status bar, right-bottom aligned to its top-right corner.
+The UI is intentionally three rows: input bar, result panel, and status bar. The status bar shows `Open ↵` and `Action ⌥L`; the action menu floats above the status bar, right-bottom aligned to its top-right corner. Keycaps use symbols: `⌥` = Alt/Option, `⇥` = Tab, `↵` = Enter.
 
 ## Production vs playground
 
