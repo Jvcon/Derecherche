@@ -12,6 +12,7 @@ import { data } from "./catalog";
 export interface PaletteOptions {
   query: string;
   categoryId?: string;
+  focusCategory?: boolean;
   sourceLabel?: string;
   commonEngineIds?: string[];
 }
@@ -407,8 +408,9 @@ export function openPalette(options: PaletteOptions): void {
   const initial = options.categoryId
     ? categoryById.get(options.categoryId)
     : undefined;
-  let mode: Mode = "query";
-  let path: string[] = [];
+  const startInCategory = Boolean(options.focusCategory && initial);
+  let mode: Mode = startInCategory ? "category" : "query";
+  let path: string[] = startInCategory ? (initial?.path ?? []) : [];
   let query = options.query.trim();
   let filter = "";
   let selected = 0;
@@ -885,7 +887,7 @@ export function openPalette(options: PaletteOptions): void {
 
   panel.addEventListener("click", onClick);
   document.addEventListener("keydown", onKeydown, true);
-  input.value = query;
+  input.value = mode === "query" ? query : "";
   render();
   input.focus();
 

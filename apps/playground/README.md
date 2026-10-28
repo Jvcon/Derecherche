@@ -26,7 +26,7 @@ Changes inside `apps/playground/src` use Vite HMR.
 |---|---|
 | `/search.html?q=rust+async` | Mock Google-style search page |
 | `/article.html` | Long-form content page for selection testing |
-| `/palette.html` | Palette workbench with query/category controls |
+| `/palette.html` | Palette workbench; selecting a category opens the Palette focused on it |
 
 ## What to test
 
@@ -34,6 +34,7 @@ Changes inside `apps/playground/src` use Vite HMR.
 - The extracted keyword is placed in the input bar.
 - The Result Panel starts on the configured common engines.
 - `TAB`: the keyword becomes a token (`[←] [keyword]`) and the Palette enters category mode.
+- External callers can pass `categoryId` + `focusCategory: true` to open the Palette focused on that category.
 - In category mode, typing searches based on the entered category path:
   - No category entered (root): global search across all categories and engines.
   - Entered root category: matches its subcategories and engines below them.

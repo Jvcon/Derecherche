@@ -1,4 +1,8 @@
-import { applyCategorySettings, createDefaultSettings } from "@derecherche/core";
+import {
+  applyCategorySettings,
+  createDefaultSettings,
+  flattenCategories,
+} from "@derecherche/core";
 import { data } from "./catalog";
 import { openPalette } from "./palette";
 
@@ -14,10 +18,12 @@ rootOption.value = "";
 rootOption.textContent = "全部";
 categorySelect.append(rootOption);
 
-for (const category of categories) {
+for (const entry of flattenCategories(categories)) {
   const option = document.createElement("option");
-  option.value = category.id;
-  option.textContent = category.name;
+  option.value = entry.category.id;
+  option.textContent = entry.parentId
+    ? `— ${entry.category.name}`
+    : entry.category.name;
   categorySelect.append(option);
 }
 
@@ -26,12 +32,12 @@ function open(): void {
     query: queryInput.value.trim(),
     sourceLabel: "workbench",
     categoryId: categorySelect.value || undefined,
+    focusCategory: Boolean(categorySelect.value),
   });
 }
 
 openButton.addEventListener("click", open);
+categorySelect.addEventListener("change", open);
 queryInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter") open();
 });
-
-open();
