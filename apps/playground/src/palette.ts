@@ -163,20 +163,11 @@ const PALETTE_CSS = `
   padding: 10px 16px 4px;
   color: var(--dr-muted);
   font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
 }
 .list {
   overflow-y: auto;
   padding: 0 8px 8px;
   min-height: 54px;
-}
-.group-label {
-  color: var(--dr-muted);
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 8px 8px 4px;
 }
 .item {
   width: 100%;
@@ -486,12 +477,6 @@ export function openPalette(options: PaletteOptions): void {
     return [...categoryItems, ...engineItems];
   }
 
-  function modeLabel(): string {
-    if (mode === "query") return "Common engines";
-    if (filter.trim()) return "Filter results";
-    return path.length > 0 ? pathName(path) : "Categories";
-  }
-
   function renderInput(): void {
     backButton.hidden = mode === "query";
     queryToken.hidden = mode === "query";
@@ -532,17 +517,7 @@ export function openPalette(options: PaletteOptions): void {
     }
 
     const rows: string[] = [];
-    let lastKind: Item["kind"] | null = null;
     items.forEach((item, index) => {
-      if (item.kind !== lastKind) {
-        rows.push(
-          `<div class="group-label">${
-            item.kind === "category" ? "Categories" : mode === "query" ? "Common" : "Engines"
-          }</div>`
-        );
-        lastKind = item.kind;
-      }
-
       if (item.kind === "category") {
         rows.push(`
           <button class="item${index === selected ? " selected" : ""}" type="button" data-index="${index}">
@@ -582,7 +557,7 @@ export function openPalette(options: PaletteOptions): void {
   function render(): void {
     items = buildItems();
     if (selected >= items.length) selected = Math.max(0, items.length - 1);
-    modeNode.textContent = modeLabel();
+    modeNode.textContent = "Engines";
     statusPath.textContent =
       mode === "query"
         ? "Common engines"
