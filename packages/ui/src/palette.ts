@@ -7,11 +7,14 @@ import type {
 } from "@derecherche/data";
 import {
   applyCategorySettings,
+  buildRankedList,
   buildTargetUrl,
   createDefaultSettings,
   flattenCategories,
   getEnginesForCategory,
   type FlatCategory,
+  type FrecencyEntry,
+  type RankContext,
   type Settings,
 } from "@derecherche/core";
 import { createShadowHost } from "./shadow.js";
@@ -26,6 +29,8 @@ export interface PaletteOptions {
   focusCategory?: boolean;
   sourceLabel?: string;
   commonEngineIds?: string[];
+  frecency?: readonly FrecencyEntry[];
+  onEngineOpened?: (engineId: string) => void;
   onOpen?: (engine: Engine, url: string, mode: PaletteOpenMode) => void;
 }
 
@@ -38,6 +43,7 @@ interface CategoryItem {
 interface EngineItem {
   kind: "engine";
   engine: Engine;
+  recommended: boolean;
 }
 
 type Item = CategoryItem | EngineItem;
@@ -200,6 +206,10 @@ const PALETTE_CSS = `
 .item:hover,
 .item.selected {
   background: var(--dr-hover);
+}
+.rec-mark {
+  color: var(--dr-accent);
+  margin-right: 4px;
 }
 .mark {
   flex: none;
@@ -493,85 +503,97 @@ export function openPalette(options: PaletteOptions): void {
     return item?.kind === "engine" ? item.engine : undefined;
   }
 
-  function currentLevelItems(): Item[] {
-    const current = currentCategory();
-    if (!current) {
-      return categories.map((category) => ({
-        kind: "category",
-        category,
-        path: [category.id],
-      }));
+  function scopeCategoryIds(scopeId: string): string[] {
+    const ids = [scopeId];
+    const category = categoryById.get(scopeId)?.category;
+    if (category && "children" in category) {
+      for (const child of category.children ?? []) ids.push(child.id);
     }
+    return ids;
+  }
 
-    const childCategories =
-      "children" in current ? (current.children ?? []) : [];
-    const children = childCategories.map((child) => ({
-      kind: "category" as const,
-      category: child,
-      path: [...path, child.id],
+  function rankedEngineItems(
+    candidatePool: readonly Engine[],
+    basePool: readonly Engine[],
+    context: RankContext
+  ): EngineItem[] {
+    return buildRankedList(candidatePool, basePool, settings, context, {
+      frecency: options.frecency,
+      recommendedLimit: 3,
+      maxPerProvider: 1,
+    }).items.map((engine) => ({
+      kind: "engine" as const,
+      engine,
+      recommended: engine.recommended,
     }));
-    const engines = (
-      childCategories.length > 0
-        ? catalog.engines.filter((engine) => engine.category === current.id)
-        : getEnginesForCategory(catalog.engines, categories, current.id)
-    ).map((engine) => ({ kind: "engine" as const, engine }));
-
-    return [...children, ...engines];
   }
 
   function buildItems(): Item[] {
     if (mode === "query") {
-      return common.map((engine) => ({ kind: "engine", engine }));
+      return rankedEngineItems(catalog.engines, common, {
+        query,
+        categoryId: initial?.category.id,
+        categoryPath: initial?.path,
+        now: Date.now(),
+      });
     }
-
-    if (!filter.trim()) return currentLevelItems();
 
     const q = filter.trim().toLowerCase();
+    const current = currentCategory();
 
-    // No entered category: search the whole taxonomy and all engines.
-    if (path.length === 0) {
-      const categoryItems: Item[] = allFlat
-        .filter((entry) => categoryHaystack(entry.category, entry.path).includes(q))
-        .slice(0, 20)
-        .map((entry) => ({
-          kind: "category" as const,
-          category: entry.category,
-          path: entry.path,
+    if (!current) {
+      const categoryItems: Item[] = categories
+        .filter((category) => categoryHaystack(category, [category.id]).includes(q))
+        .map((category) => ({
+          kind: "category",
+          category,
+          path: [category.id],
         }));
-      const engineItems: Item[] = catalog.engines
+
+      if (!q) return categoryItems;
+
+      const matches = catalog.engines
         .filter((engine) => engine.status === "active" && engineHaystack(engine).includes(q))
-        .slice(0, 60)
-        .map((engine) => ({ kind: "engine" as const, engine }));
-      return [...categoryItems, ...engineItems];
+        .slice(0, 60);
+      return [...categoryItems, ...rankedEngineItems(matches, matches, {
+        query,
+        now: Date.now(),
+      })];
     }
 
-    // Entered category: scope the search to that category and its descendants.
-    const scopeId = path[path.length - 1];
-    const categoryItems: Item[] = [];
-    const scoped = categoryById.get(scopeId)?.category;
-    if (scoped && "children" in scoped) {
-      for (const child of scoped.children ?? []) {
-        const childPath = [...path, child.id];
-        if (categoryHaystack(child, childPath).includes(q)) {
-          categoryItems.push({
-            kind: "category",
-            category: child,
-            path: childPath,
-          });
-        }
-      }
-    }
+    const childCategories =
+      "children" in current ? (current.children ?? []) : [];
+    const categoryItems: Item[] = childCategories
+      .map((child) => ({
+        kind: "category" as const,
+        category: child,
+        path: [...path, child.id],
+      }))
+      .filter((item) => !q || categoryHaystack(item.category, item.path).includes(q));
 
-    const engineItems: Item[] = getEnginesForCategory(
+    const scopedEngines = getEnginesForCategory(
       catalog.engines,
       categories,
-      scopeId
-    )
-      .filter((engine) => engine.status === "active" && engineHaystack(engine).includes(q))
-      .slice(0, 60)
-      .map((engine) => ({ kind: "engine" as const, engine }));
+      current.id
+    ).filter((engine) => engine.status === "active");
+    const matchingEngines = q
+      ? scopedEngines.filter((engine) => engineHaystack(engine).includes(q))
+      : scopedEngines;
+    const basePool =
+      q || childCategories.length === 0
+        ? matchingEngines
+        : matchingEngines.filter((engine) => engine.category === current.id);
 
-    return [...categoryItems, ...engineItems];
+    return [
+      ...categoryItems,
+      ...rankedEngineItems(matchingEngines, basePool, {
+        query,
+        categoryId: current.id,
+        categoryPath: path,
+        scopeIds: scopeCategoryIds(current.id),
+        now: Date.now(),
+      }),
+    ];
   }
 
   function renderInput(): void {
@@ -641,7 +663,7 @@ export function openPalette(options: PaletteOptions): void {
           <button class="item${index === selected ? " selected" : ""}" type="button" data-index="${index}">
             <span class="mark">${escapeHtml(markFor(item.engine))}</span>
             <span class="item-body">
-              <strong>${escapeHtml(item.engine.name)}</strong>
+              <strong>${item.recommended ? '<span class="rec-mark" title="Recommended">✦</span>' : ""}${escapeHtml(item.engine.name)}</strong>
               <small>${escapeHtml(
                 category ? pathName(category.path) : item.engine.category
               )} · ${escapeHtml(item.engine.providerId)}</small>
@@ -695,6 +717,7 @@ export function openPalette(options: PaletteOptions): void {
     } else {
       window.open(url, "_blank", "noopener,noreferrer");
     }
+    options.onEngineOpened?.(engine.id);
     close();
   }
 
@@ -788,6 +811,7 @@ export function openPalette(options: PaletteOptions): void {
       } else {
         window.location.href = url;
       }
+      options.onEngineOpened?.(engine.id);
     }
   }
 

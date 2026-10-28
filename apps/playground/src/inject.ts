@@ -1,5 +1,6 @@
 import { extractQuery, matchSite } from "@derecherche/core";
 import { data } from "./catalog";
+import { getFrecency, recordEngineUse } from "./frecency";
 import { openPalette } from "@derecherche/ui";
 
 const BUTTON_CSS = `
@@ -141,6 +142,8 @@ export function injectDemo(): void {
       query: result?.query ?? "",
       sourceLabel: result?.source ?? "manual",
       categoryId: currentCategory(),
+      frecency: getFrecency(),
+      onEngineOpened: recordEngineUse,
     });
   });
 
@@ -153,6 +156,8 @@ export function injectDemo(): void {
       query: text,
       sourceLabel: "selection",
       categoryId: currentCategory() ?? "web-general",
+      frecency: getFrecency(),
+      onEngineOpened: recordEngineUse,
     });
   });
 
@@ -176,6 +181,8 @@ export function injectDemo(): void {
           query: result?.query ?? "",
           sourceLabel: result?.source ?? "manual",
           categoryId: currentCategory(),
+          frecency: getFrecency(),
+          onEngineOpened: recordEngineUse,
         });
       }
     },

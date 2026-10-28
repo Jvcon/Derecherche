@@ -28,6 +28,8 @@ Changes inside `apps/playground/src` use Vite HMR.
 | `/article.html` | Long-form content page for selection testing |
 | `/palette.html` | Palette workbench; selecting a category opens the Palette focused on it |
 
+The playground keeps a small local frecency history in `localStorage` (`derecherche-playground-frecency`) so opening engines changes the recommended head on the next open.
+
 ## What to test
 
 - `Alt+J` or the floating Derecherche button opens the Palette.

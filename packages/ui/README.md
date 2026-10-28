@@ -4,7 +4,7 @@ Shared Shadow DOM, positioning, and Palette component for Derecherche.
 
 ## API
 
-- `openPalette({ catalog, settings?, query, categoryId?, focusCategory?, commonEngineIds?, onOpen? })` — mounts the keyboard-first Palette. The host supplies the catalog and optional settings; the component does not import a playground catalog. `onOpen(engine, url, mode)` lets the host own new-tab/current-tab behavior.
+- `openPalette({ catalog, settings?, query, categoryId?, focusCategory?, commonEngineIds?, frecency?, onEngineOpened?, onOpen? })` — mounts the keyboard-first Palette. The host supplies the catalog, optional settings, and optional frecency history. `onOpen(engine, url, mode)` lets the host own new-tab/current-tab behavior; `onEngineOpened(engineId)` lets the host record usage.
 - `createShadowHost({ id, css, document, zIndex })` — creates a host with `all: initial`, design tokens, dark-mode variables, a `<style>` block, and a content container.
 - `positionAroundRect(anchorRect, size, options)` — computes a clamped position and flips above/below when needed.
 - `positionAtAnchor(element, anchor, options)` — computes and applies `left`, `top`, and `maxWidth` styles.
@@ -17,6 +17,7 @@ Shared Shadow DOM, positioning, and Palette component for Derecherche.
 - Shadow DOM only; no host-page CSS leaks.
 - The Palette receives its catalog and settings from the host; never import `apps/playground` data.
 - Hosts should pass `onOpen` when they need extension/userscript tab semantics.
+- The Palette renders one deduplicated list: pinned engines, up to three recommended engines (max one per provider), then the stable rest. Recommended rows carry a `✦` marker.
 - No framework dependency.
 - No remote assets.
 - `unmount()` must remove the host and all listeners created by `observeAnchor`.

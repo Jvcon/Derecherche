@@ -4,6 +4,7 @@ import {
   flattenCategories,
 } from "@derecherche/core";
 import { data } from "./catalog";
+import { getFrecency, recordEngineUse } from "./frecency";
 import { openPalette } from "@derecherche/ui";
 
 const settings = createDefaultSettings(data.catalogVersion);
@@ -34,6 +35,8 @@ function open(): void {
     sourceLabel: "workbench",
     categoryId: categorySelect.value || undefined,
     focusCategory: Boolean(categorySelect.value),
+    frecency: getFrecency(),
+    onEngineOpened: recordEngineUse,
   });
 }
 

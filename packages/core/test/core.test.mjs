@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   applyCategorySettings,
   applySettings,
+  buildRankedList,
   buildTargetUrl,
   createDefaultSettings,
   createMemoryStorage,
@@ -440,4 +441,80 @@ test("recommendation scoring is deterministic with a fixed clock", () => {
   const first = rankEngines([google, github, bing, wolfram], settings, options);
   const second = rankEngines([google, github, bing, wolfram], settings, options);
   assert.deepEqual(first.recommended.map((engine) => engine.id), second.recommended.map((engine) => engine.id));
+});
+
+const googleImages = {
+  id: "google-images",
+  providerId: "google",
+  name: "Google Images",
+  category: "image-search",
+  url: "https://www.google.com/search?tbm=isch&q={q}",
+  tags: ["image", "google"],
+  triggers: ["image", "google"],
+  status: "active",
+};
+
+test("buildRankedList promotes up to three deduplicated recommendations", () => {
+  const settings = normalizeSettings({}, "2026.10.0");
+  const result = buildRankedList(
+    [google, github, bing, wolfram, googleImages],
+    [google, github],
+    settings,
+    { query: "google github", now: 1000 },
+    { frecency: [{ engineId: "bing", count: 10, lastUsedAt: 1000 }] }
+  );
+
+  assert.equal(new Set(result.items.map((item) => item.id)).size, result.items.length);
+  assert.equal(result.recommendedIds.length, 3);
+  assert.equal(result.items.filter((item) => item.recommended).length, 3);
+  assert.equal(
+    new Set(result.recommendedIds.map((id) => result.items.find((item) => item.id === id)?.providerId)).size,
+    result.recommendedIds.length
+  );
+});
+
+test("buildRankedList keeps pinned engines first and excludes them from recommendations", () => {
+  const settings = normalizeSettings(
+    { engines: { "google-web": { pinned: true } } },
+    "2026.10.0"
+  );
+  const result = buildRankedList(
+    [google, github, bing, wolfram],
+    [google, github],
+    settings,
+    { query: "github", now: 1000 }
+  );
+
+  assert.equal(result.items[0].id, "google-web");
+  assert.equal(result.items[0].recommended, false);
+  assert.equal(result.recommendedIds.includes("google-web"), false);
+  assert.equal(result.items.filter((item) => item.id === "google-web").length, 1);
+});
+
+test("buildRankedList recommends within a category scope", () => {
+  const settings = normalizeSettings({}, "2026.10.0");
+  const result = buildRankedList(
+    [github, bing],
+    [github, bing],
+    settings,
+    { query: "code", categoryId: "dev-code", now: 1000 }
+  );
+
+  assert.equal(result.items[0].id, "github");
+  assert.deepEqual(result.recommendedIds, ["github"]);
+  assert.deepEqual(result.items.map((item) => item.id), ["github", "bing"]);
+});
+
+test("buildRankedList deduplicates recommended engines already in the base pool", () => {
+  const settings = normalizeSettings({}, "2026.10.0");
+  const result = buildRankedList(
+    [github, bing],
+    [github, bing],
+    settings,
+    { query: "github", now: 1000 }
+  );
+
+  assert.deepEqual(result.recommendedIds, ["github"]);
+  assert.equal(result.items.filter((item) => item.id === "github").length, 1);
+  assert.deepEqual(result.items.map((item) => item.id), ["github", "bing"]);
 });
