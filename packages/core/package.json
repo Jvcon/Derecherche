@@ -17,9 +17,12 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "pnpm build && node --test test/core.test.mjs"
+    "test": "pnpm build && node --test test/core.test.mjs test/fixtures.test.mjs"
   },
   "dependencies": {
     "@derecherche/data": "workspace:*"
+  },
+  "devDependencies": {
+    "happy-dom": "^21.0.4"
   }
 }

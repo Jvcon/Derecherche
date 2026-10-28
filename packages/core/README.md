@@ -38,3 +38,7 @@ pnpm --filter @derecherche/core test
 ```
 
 `test` builds first, then runs the Node test runner against `dist/`.
+
+## Fixtures
+
+Site fixtures live in [`fixtures/`](../../fixtures/README.md). Each fixture is exercised in URL-only, HTML-snapshot, and live-DOM modes. Tests run offline with `happy-dom`.

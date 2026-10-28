@@ -21,6 +21,7 @@ Phase 0 data and interaction contracts are in place. Foundation work is in progr
 │  └─ data/                 # catalog, schemas, validation
 ├─ docs/
 │  └─ contracts/            # interaction and data contracts
+├─ fixtures/                # offline site extraction fixtures
 ├─ legacy/                  # archived reference code, not built
 ├─ package.json
 └─ pnpm-workspace.yaml
