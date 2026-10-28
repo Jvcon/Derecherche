@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Derecherche playground</title>
+    <link rel="stylesheet" href="/src/mock.css" />
+  </head>
+  <body>
+    <main class="demo-links">
+      <h1>Derecherche playground</h1>
+      <p>
+        Development harness for the Palette, InlineBar, and SelectionBar. The
+        pages simulate a search results page and a content page, then load the
+        demo injection entry.
+      </p>
+
+      <div class="cards">
+        <a class="card" href="/search.html?q=rust+async">
+          <h2>Search results</h2>
+          <p>Mock Google-style result page with a query input and result list.</p>
+        </a>
+        <a class="card" href="/article.html">
+          <h2>Article / content</h2>
+          <p>Long-form page for testing text selection and the SelectionBar.</p>
+        </a>
+        <a class="card" href="/palette.html">
+          <h2>Palette workbench</h2>
+          <p>Open the Palette directly with configurable query and category.</p>
+        </a>
+      </div>
+
+      <p style="margin-top: 28px">
+        Press <code>Alt+J</code> on the search or article page, or click the
+        floating Derecherche button.
+      </p>
+    </main>
+  </body>
+</html>

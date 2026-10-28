@@ -20,6 +20,8 @@ Phase 0 data and interaction contracts are in place. Foundation work is in progr
 │  ├─ core/                 # host-agnostic query, settings, URL, storage primitives
 │  ├─ ui/                   # Shadow DOM and positioning primitives
 │  └─ data/                 # catalog, schemas, validation
+├─ apps/
+│  └─ playground/           # dev harness for search/article/selection/Palette
 ├─ docs/
 │  └─ contracts/            # interaction and data contracts
 ├─ fixtures/                # offline site extraction fixtures
@@ -83,6 +85,13 @@ pnpm data:build
 ```
 
 Run the local check suite with `pnpm check` (lint, typecheck, tests, and build).
+
+For the UI development harness:
+
+```bash
+pnpm dev:playground
+# http://localhost:5173
+```
 
 The generated catalog lives in `packages/data/generated/`. It is committed and consumed by future hosts.
 

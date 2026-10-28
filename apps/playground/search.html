@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Search demo · Derecherche</title>
+    <link rel="stylesheet" href="/src/mock.css" />
+  </head>
+  <body data-demo-url="https://www.google.com/search">
+    <header class="search-header">
+      <a class="brand" href="/">De<span>Recherche</span></a>
+      <form class="search-box" id="search-form">
+        <input
+          id="q"
+          name="q"
+          type="search"
+          autocomplete="off"
+          spellcheck="false"
+          placeholder="Search the demo"
+          aria-label="Search"
+        />
+        <button type="submit">Search</button>
+      </form>
+      <nav class="header-actions">
+        <a href="/article.html">Article demo</a>
+        <a href="/palette.html">Palette workbench</a>
+      </nav>
+    </header>
+
+    <nav class="search-tabs" aria-label="Search categories">
+      <span class="active">All</span>
+      <span>Images</span>
+      <span>Videos</span>
+      <span>News</span>
+      <span>Scholar</span>
+    </nav>
+
+    <div class="search-layout">
+      <main>
+        <div class="result-count" id="result-count"></div>
+
+        <a class="result" href="#">
+          <div class="site">docs.derecherche.dev › core</div>
+          <h2>Search routing without the search engine lock-in</h2>
+          <p>
+            Derecherche resolves a query from the current page, lets you choose
+            a target engine, and builds the destination URL. The catalog and
+            ranking are host-agnostic.
+          </p>
+        </a>
+
+        <a class="result" href="#">
+          <div class="site">github.com › Jvcon › Derecherche</div>
+          <h2>Jvcon/Derecherche: host-agnostic search routing</h2>
+          <p>
+            Userscript first, browser extension second, and a headless CLI for
+            fzf, qutebrowser, Noctalia, and DankMaterialShell.
+          </p>
+        </a>
+
+        <a class="result" href="#">
+          <div class="site">developer.mozilla.org › Shadow DOM</div>
+          <h2>Using Shadow DOM for isolated browser UI</h2>
+          <p>
+            Shadow DOM keeps the picker's styles isolated from the host page.
+            The playground uses the same primitives that the userscript will
+            ship.
+          </p>
+        </a>
+
+        <a class="result" href="#">
+          <div class="site">example.org › keyboard-first</div>
+          <h2>Designing a keyboard-first engine picker</h2>
+          <p>
+            Stable ordering, a separate recommendation strip, and category
+            drill-down keep muscle memory intact while still surfacing useful
+            engines.
+          </p>
+        </a>
+      </main>
+
+      <aside class="dev-panel">
+        <h2>Demo state</h2>
+        <dl>
+          <dt>Site adapter</dt>
+          <dd id="adapter">google</dd>
+          <dt>Query</dt>
+          <dd id="query">-</dd>
+          <dt>Source</dt>
+          <dd>url</dd>
+          <dt>Shortcut</dt>
+          <dd>Alt+J</dd>
+        </dl>
+        <p>
+          The floating button and <code>Alt+J</code> open the Palette. Change
+          the query and submit the form to test extraction.
+        </p>
+      </aside>
+    </div>
+
+    <script type="module" src="/src/search.ts"></script>
+  </body>
+</html>

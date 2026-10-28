@@ -13,10 +13,12 @@
     "data:legacy-report": "pnpm --filter @derecherche/data legacy:report",
     "build:core": "pnpm --filter @derecherche/core build",
     "build:ui": "pnpm --filter @derecherche/ui build",
+    "build:playground": "pnpm build:core && pnpm build:ui && pnpm --filter @derecherche/playground build",
+    "dev:playground": "pnpm build:core && pnpm build:ui && pnpm --filter @derecherche/playground dev",
     "lint": "eslint packages/data/scripts packages/data/test packages/core/test packages/ui/test",
-    "typecheck": "pnpm --filter @derecherche/core typecheck && pnpm --filter @derecherche/ui typecheck && tsc -p packages/data/tsconfig.json",
+    "typecheck": "pnpm --filter @derecherche/core typecheck && pnpm --filter @derecherche/ui typecheck && pnpm --filter @derecherche/playground typecheck && tsc -p packages/data/tsconfig.json",
     "test": "node --test packages/data/test/catalog.test.mjs && pnpm --filter @derecherche/core test && pnpm --filter @derecherche/ui test",
-    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm data:build && pnpm build:core && pnpm build:ui"
+    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm data:build && pnpm build:core && pnpm build:ui && pnpm build:playground"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

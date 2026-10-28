@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Article demo · Derecherche</title>
+    <link rel="stylesheet" href="/src/mock.css" />
+  </head>
+  <body>
+    <header class="search-header">
+      <a class="brand" href="/">De<span>Recherche</span></a>
+      <nav class="header-actions">
+        <a href="/search.html?q=rust+async">Search demo</a>
+        <a href="/palette.html">Palette workbench</a>
+      </nav>
+    </header>
+
+    <article class="article-page">
+      <h1>A search picker should not fight the page</h1>
+      <div class="article-meta">Demo article · select any sentence to test the SelectionBar</div>
+
+      <p>
+        Search is rarely a single action. A user may start with a phrase, move
+        to a code repository, then jump to a paper or a dictionary. The useful
+        part is not the list of engines; it is the routing layer that keeps the
+        query intact while the destination changes.
+      </p>
+
+      <p>
+        Derecherche treats the catalog as data and the picker as a host-specific
+        shell. The same engine records can power a userscript, a browser
+        extension, a terminal picker, or a desktop launcher. Category
+        navigation is the primary axis; provider branding is only a visual
+        grouping.
+      </p>
+
+      <blockquote>
+        Stable ordering for muscle memory. Recommendation as a separate strip,
+        never as a silent reorder.
+      </blockquote>
+
+      <p>
+        The Palette uses a two-level category tree. Selecting a category enters
+        it; selecting an engine opens the target in a new tab. Typing filters
+        globally, so a user who knows the engine name does not have to navigate
+        the tree. Number shortcuts stay bound to the stable list, not to the
+        dynamic recommendations.
+      </p>
+
+      <p>
+        Selection is a second context. When text is selected, a small floating
+        action can search that exact phrase without touching the page search
+        box. The action stays out of inputs and editable regions, does not steal
+        focus, and hides when the selection disappears.
+      </p>
+
+      <p>
+        The article page exists to test those interactions against real prose.
+        Select a sentence, try the floating action, then open the Palette and
+        filter for an engine such as GitHub, Wikipedia, or Wolfram Alpha.
+      </p>
+    </article>
+
+    <script type="module" src="/src/article.ts"></script>
+  </body>
+</html>

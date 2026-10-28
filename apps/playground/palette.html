@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Palette workbench · Derecherche</title>
+    <link rel="stylesheet" href="/src/mock.css" />
+  </head>
+  <body>
+    <header class="search-header">
+      <a class="brand" href="/">De<span>Recherche</span></a>
+      <nav class="header-actions">
+        <a href="/search.html?q=rust+async">Search demo</a>
+        <a href="/article.html">Article demo</a>
+      </nav>
+    </header>
+
+    <main class="palette-workbench">
+      <h1>Palette workbench</h1>
+      <p>
+        Open the Palette directly with a chosen query and starting category.
+        This page is for iterating on layout, density, keyboard flow, and the
+        recommendation strip.
+      </p>
+
+      <div class="workbench-controls">
+        <input id="workbench-query" type="text" value="rust async" aria-label="Query" />
+        <select id="workbench-category" aria-label="Starting category"></select>
+        <button id="workbench-open" type="button">Open Palette</button>
+      </div>
+
+      <div class="workbench-note">
+        <strong>Try:</strong> type to filter, use ↑/↓ to move, → to enter a
+        category, ← to go back, Enter to open, Esc to close. The Palette is
+        rendered in a Shadow DOM host so host-page CSS cannot leak in.
+      </div>
+    </main>
+
+    <script type="module" src="/src/palette-page.ts"></script>
+  </body>
+</html>

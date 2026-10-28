@@ -1,0 +1,22 @@
+{
+  "name": "@derecherche/playground",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Derecherche Palette and userscript UI playground",
+  "license": "GPL-3.0-only",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "vite": "^7.2.4"
+  },
+  "dependencies": {
+    "@derecherche/core": "workspace:*",
+    "@derecherche/data": "workspace:*",
+    "@derecherche/ui": "workspace:*"
+  }
+}
