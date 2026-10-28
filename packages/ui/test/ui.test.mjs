@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { Window } from "happy-dom";
 import {
   createShadowHost,
+  mountInlineBar,
   observeAnchor,
   positionAroundRect,
   positionAtAnchor,
@@ -132,4 +133,164 @@ test("observeAnchor updates on scroll/resize and cleans up", () => {
   window.dispatchEvent(new window.Event("scroll"));
   assert.equal(updates, 2);
   void element;
+});
+
+
+function inlineCatalog() {
+  return {
+    schemaVersion: 1,
+    catalogVersion: "test",
+    categories: [
+      {
+        id: "web-general",
+        name: "Web",
+        order: 1,
+        children: [{ id: "web-code", name: "Code", order: 1 }],
+      },
+    ],
+    providers: [
+      { id: "google", name: "Google" },
+      { id: "github", name: "GitHub" },
+      { id: "microsoft", name: "Microsoft" },
+    ],
+    engines: [
+      {
+        id: "google-web",
+        providerId: "google",
+        name: "Google",
+        category: "web-general",
+        url: "https://www.google.com/search?q={q}",
+        status: "active",
+      },
+      {
+        id: "github",
+        providerId: "github",
+        name: "GitHub",
+        category: "web-code",
+        url: "https://github.com/search?q={q}",
+        tags: ["code"],
+        triggers: ["github"],
+        status: "active",
+      },
+      {
+        id: "bing",
+        providerId: "microsoft",
+        name: "Bing",
+        category: "web-general",
+        url: "https://www.bing.com/search?q={q}",
+        status: "active",
+      },
+    ],
+    sites: [
+      {
+        id: "google",
+        name: "Google Search",
+        hosts: ["www.google.com"],
+        urlParams: ["q"],
+        defaultCategory: "web-general",
+        mount: { anchor: 'input[name="q"]' },
+      },
+    ],
+  };
+}
+
+function inlinePage() {
+  const window = new Window();
+  window.document.body.innerHTML = `
+    <header><form id="searchform"><input name="q" value="rust"></form></header>
+    <main id="results"></main>
+  `;
+  return window;
+}
+
+test("InlineBar mounts after the adapter header and renders engines", () => {
+  const window = inlinePage();
+  const handle = mountInlineBar({
+    catalog: inlineCatalog(),
+    sites: inlineCatalog().sites,
+    query: "github",
+    url: "https://www.google.com/search?q=github",
+    document: window.document,
+  });
+
+  assert.ok(handle);
+  const host = window.document.querySelector("#derecherche-inline-bar");
+  assert.ok(host);
+  assert.equal(host.previousElementSibling?.tagName, "HEADER");
+  const buttons = [...host.shadowRoot.querySelectorAll("button.engine")];
+  assert.ok(buttons.length >= 2);
+  assert.ok(host.shadowRoot.querySelector("button.more"));
+
+  const second = mountInlineBar({
+    catalog: inlineCatalog(),
+    sites: inlineCatalog().sites,
+    query: "github",
+    url: "https://www.google.com/search?q=github",
+    document: window.document,
+  });
+  assert.equal(window.document.querySelectorAll("#derecherche-inline-bar").length, 1);
+
+  handle.destroy();
+  second.destroy();
+  assert.equal(window.document.querySelector("#derecherche-inline-bar"), null);
+  window.close();
+});
+
+test("InlineBar opens in the current tab and Ctrl-click opens a new tab", () => {
+  const window = inlinePage();
+  const opened = [];
+  const recorded = [];
+  const more = [];
+  const handle = mountInlineBar({
+    catalog: inlineCatalog(),
+    sites: inlineCatalog().sites,
+    query: "github",
+    url: "https://www.google.com/search?q=github",
+    document: window.document,
+    onOpen: (engine, url, mode) => opened.push([engine.id, url, mode]),
+    onEngineOpened: (id) => recorded.push(id),
+    onMore: (context) => more.push(context),
+  });
+
+  const buttons = [...handle.host.shadowRoot.querySelectorAll("button.engine")];
+  const github = buttons.find((button) => button.dataset.engineId === "github");
+  github.dispatchEvent(new window.MouseEvent("click", { bubbles: true, composed: true }));
+  assert.deepEqual(opened[0], [
+    "github",
+    "https://github.com/search?q=github",
+    "current-tab",
+  ]);
+  assert.deepEqual(recorded, ["github"]);
+
+  github.dispatchEvent(
+    new window.MouseEvent("click", { bubbles: true, composed: true, ctrlKey: true })
+  );
+  assert.equal(opened[1][2], "new-tab");
+
+  handle.host.shadowRoot
+    .querySelector("button.more")
+    .dispatchEvent(new window.MouseEvent("click", { bubbles: true, composed: true }));
+  assert.equal(more.length, 1);
+  assert.equal(more[0].query, "github");
+  assert.equal(more[0].categoryId, "web-general");
+
+  handle.update({ query: "bing" });
+  assert.equal(handle.host.shadowRoot.querySelectorAll("button.engine").length > 0, true);
+  handle.destroy();
+  window.close();
+});
+
+test("InlineBar returns null when the query is empty", () => {
+  const window = inlinePage();
+  const handle = mountInlineBar({
+    catalog: inlineCatalog(),
+    sites: inlineCatalog().sites,
+    query: "   ",
+    url: "https://www.google.com/search",
+    document: window.document,
+  });
+
+  assert.equal(handle, null);
+  assert.equal(window.document.querySelector("#derecherche-inline-bar"), null);
+  window.close();
 });

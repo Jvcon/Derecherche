@@ -1,7 +1,11 @@
 import { extractQuery, matchSite } from "@derecherche/core";
 import { data } from "./catalog";
 import { getFrecency, recordEngineUse } from "./frecency";
-import { openPalette } from "@derecherche/ui";
+import {
+  mountInlineBar,
+  openPalette,
+  type InlineBarHandle,
+} from "@derecherche/ui";
 
 const BUTTON_CSS = `
 .dr-demo-launcher,
@@ -65,6 +69,17 @@ function currentCategory(): string | undefined {
   return matchSite(new URL(resolveUrl()), data.sites)?.defaultCategory;
 }
 
+function pageResult() {
+  return extractQuery(
+    {
+      url: resolveUrl(),
+      document,
+      documentKind: "dom",
+    },
+    data.sites
+  );
+}
+
 function installStyles(): void {
   const style = document.createElement("style");
   style.dataset.derechercheDemo = "";
@@ -74,6 +89,49 @@ function installStyles(): void {
 
 export function injectDemo(): void {
   installStyles();
+
+  let inlineBar: InlineBarHandle | null = null;
+
+  function syncInlineBar(): void {
+    const result = pageResult();
+    if (!result) {
+      inlineBar?.destroy();
+      inlineBar = null;
+      return;
+    }
+    const next = {
+      query: result.query,
+      url: resolveUrl(),
+      categoryId: currentCategory(),
+    };
+    if (inlineBar) {
+      inlineBar.update(next);
+      return;
+    }
+    inlineBar = mountInlineBar({
+      catalog: data,
+      sites: data.sites,
+      ...next,
+      frecency: getFrecency(),
+      onEngineOpened: recordEngineUse,
+      onMore: (context) => {
+        openPalette({
+          catalog: data,
+          query: context.query,
+          sourceLabel: "inline-bar",
+          categoryId: context.categoryId,
+          focusCategory: Boolean(context.categoryId),
+          frecency: getFrecency(),
+          onEngineOpened: recordEngineUse,
+        });
+      },
+    });
+  }
+
+  syncInlineBar();
+  window.addEventListener("popstate", syncInlineBar);
+  window.addEventListener("hashchange", syncInlineBar);
+  window.addEventListener("derecherche:querychange", syncInlineBar);
 
   const launcher = document.createElement("button");
   launcher.type = "button";

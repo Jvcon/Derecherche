@@ -17,6 +17,7 @@ import {
   type RankContext,
   type Settings,
 } from "@derecherche/core";
+import { DEFAULT_COMMON_ENGINE_IDS } from "./defaults.js";
 import { createShadowHost } from "./shadow.js";
 
 export type PaletteOpenMode = "new-tab" | "current-tab";
@@ -54,15 +55,6 @@ interface Action {
   label: string;
   shortcut: string[];
 }
-
-const DEFAULT_COMMON_ENGINE_IDS = [
-  "google-web",
-  "github",
-  "youtube",
-  "wikipedia-zh",
-  "baidu-web",
-  "wolfram-alpha",
-];
 
 const ACTIONS: Action[] = [
   { id: "copy", label: "Copy target URL", shortcut: ["⌥", "C"] },

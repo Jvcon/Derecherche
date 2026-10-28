@@ -14,7 +14,7 @@ Canonical data schemas live in [`packages/data/schema/`](../../packages/data/sch
 | **Engine** | A concrete search target with a URL template, e.g. Google Scholar |
 | **Category** | A resource type, e.g. 学术 / 学术搜索 |
 | **Stable list** | The user-visible, deterministic engine order |
-| **Recommendation strip** | Dynamic suggestions that never reorder the stable list |
+| **Recommendation head** | Up to three dynamic engines merged into the head of the single list |
 | **InlineBar** | The ambient bar anchored near the page search box |
 | **SelectionBar** | The floating bar shown after text selection |
 | **Palette** | The full keyboard-first picker |
@@ -80,57 +80,56 @@ If the query is empty, InlineBar is hidden.
 
 | Key | Action |
 |---|---|
-| Type | Filter engines and categories globally |
-| `Up` / `Down` | Move highlight in the stable list |
-| `Enter` | Open engine in a new tab; enter category when a category is highlighted |
-| `Ctrl+Enter` | Open in the current tab |
-| `Shift+Enter` | Open in a background tab when the host supports it |
-| `Tab` / `Shift+Tab` | Cycle sibling categories |
-| `Right` | Enter category / drill down |
-| `Left` | Go to parent category |
-| `Backspace` (empty filter) | Go to parent category |
-| `1`–`9` | Select the nth item in the stable list |
-| `Ctrl+E` | Edit the query |
+| Type | Filter within the current scope |
+| `Up` / `Down` | Move highlight in the visible list |
+| `Enter` | Open the highlighted engine |
+| `Tab` | Enter category mode, or append the highlighted category to the token trail |
+| `Left` / `Backspace` (empty filter) | Go up one category level; at the root, return to keyword editing |
+| `Alt+1`–`Alt+9` | Select the nth visible list item |
+| `Alt+L` | Open the floating action menu |
+| `Alt+C` | Copy the target URL |
+| `Alt+Enter` | Open in the current tab |
 | `Esc` | Close |
-| `?` | Show shortcut help |
 
-Number keys bind only to the stable list. They never bind to the recommendation strip.
+Digit keys remain available for filtering; quick-pick uses `Alt` plus a digit. Category mode is entered with `Tab`; `Tab` on an engine row is disabled.
 
 ## 5. Recommendation
 
-Recommendation is a bypass, not a reorder.
+Recommendation is a head, not a second list.
 
-- The stable list order is catalog `order` plus user overrides. It does not change based on query or usage.
-- The recommendation strip is dynamic, limited to 3–5 engines, and has no number bindings.
-- Typing hides the strip and produces a flat fuzzy result list.
-- Frecency may influence the strip, never the stable list.
-- Site affinity and query intent may influence the strip, never the stable list.
-- An optional "smart order" setting may be added later; it is off by default.
+- There is one deduplicated list. Pinned engines come first, then up to three recommended engines, then the remaining stable list.
+- The stable tail order is catalog `order` plus user overrides. It does not change based on query or usage.
+- Recommendation candidates are non-pinned engines from the current scope and filter result.
+- At most three recommendations are selected, with at most one engine per provider.
+- Recommended rows carry a `✦` marker; there is no separate group heading.
+- `Alt+1`–`Alt+9` bind to the whole visible list, including the recommendation head.
+- Query mode recommends from all active engines and keeps common engines as the stable base.
+- Category mode recommends only inside the active category scope and current filter.
+- Frecency, site affinity, query intent, and category affinity influence the head, never the stable tail.
 
 Recommended scoring inputs:
 
 ```text
-pinned + fixed weight
 frecency
-site affinity
 query intent / trigger words
 category affinity
 ```
 
-Scoring must be local, deterministic, and testable. No network calls.
+Scoring must be local, deterministic, and testable. No network calls. Frecency is supplied by the host and never uploaded.
 
 ## 6. InlineBar
 
 - Appears only on a matched result page with a non-empty query.
 - Does not appear on search home pages or pages without a query.
-- Shows top-level category chips, the current category's top engines, and `More`.
+- Uses the site adapter's `mount.container` when present, otherwise inserts a full-width row after the anchor's header/form.
+- Shows up to six engines from the same `buildRankedList` result as Palette, including the `✦` recommendation head.
 - Current category defaults to the site adapter's `defaultCategory`.
-- Maximum 6 engines to keep the bar compact.
-- Default placement is a fixed overlay anchored to the site adapter's `anchor`, not an insertion into the host layout.
-- Fallback placement is a floating pill when the anchor is unavailable.
+- Plain click switches the current tab to the target engine and searches the same query.
+- `Ctrl` + click opens a new tab; `Cmd` + click is accepted on macOS. Middle click also opens a new tab.
+- `More` opens Palette with the same query and category.
 - Must be idempotent across SPA navigation: remove the previous instance before mounting a new one.
-- Must not cover the page's own search tabs; offset is adapter-controlled.
-- Hides when SelectionBar is visible.
+- Must not break the host page layout.
+- Is independent of SelectionBar: the two may coexist and neither hides the other.
 
 ## 7. SelectionBar
 
@@ -142,7 +141,7 @@ Scoring must be local, deterministic, and testable. No network calls.
 - Does not capture global number keys. Number keys work only after the bar or Palette receives focus.
 - Hides on scroll, resize, selection loss, `Esc`, or outside click.
 - Shows the current category's top 4 engines and `More`.
-- Hides InlineBar while visible.
+- Coexists with InlineBar; it does not hide it.
 - May be disabled per host and in editable or sensitive contexts.
 
 ## 8. Open modes
@@ -184,10 +183,11 @@ Core resolution must not assume live DOM. Site adapters declare capabilities exp
 ## 11. Acceptance criteria
 
 - Keyboard-only flow works: open Palette, switch category, drill down, filter, open a new tab.
-- `1`–`9` always map to the stable list and never to the recommendation strip.
-- InlineBar appears under the search box on Google, Bing, and Baidu result pages without breaking layout.
+- `Alt+1`–`Alt+9` map to the visible list, including the recommendation head. Plain digits remain usable for filtering.
+- InlineBar appears on matched result pages with a non-empty query without breaking layout.
+- InlineBar opens in the current tab on plain click and in a new tab on `Ctrl`/`Cmd` + click.
 - InlineBar does not duplicate after SPA navigation.
 - SelectionBar does not appear in inputs, does not steal focus, and hides on scroll.
-- SelectionBar hides InlineBar while visible.
+- InlineBar and SelectionBar can appear at the same time.
 - The same engine order and category state are visible across all three surfaces.
 - Core can resolve a URL and build a target URL in Node without a DOM.

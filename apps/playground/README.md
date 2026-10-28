@@ -30,8 +30,20 @@ Changes inside `apps/playground/src` use Vite HMR.
 
 The playground keeps a small local frecency history in `localStorage` (`derecherche-playground-frecency`) so opening engines changes the recommended head on the next open.
 
+## InlineBar demo
+
+On `/search.html` the playground finds the mock Google adapter, inserts a full-width InlineBar after the page header, and renders the first six `buildRankedList` engines.
+
+- Plain click switches the current tab to the target engine.
+- `Ctrl` / `Cmd` + click opens the target in a new tab.
+- Middle click opens a new tab.
+- `More` opens the Palette with the same query and category.
+- The footer's `Simulate SPA query` button updates the URL with `history.pushState` and re-syncs the InlineBar without duplicating it.
+- Selecting text still shows the SelectionBar while the InlineBar stays visible.
+
 ## What to test
 
+- The InlineBar appears under the search header with up to six engines and a `More` button.
 - `Alt+J` or the floating Derecherche button opens the Palette.
 - The extracted keyword is placed in the input bar.
 - The Result Panel starts on the configured common engines.
