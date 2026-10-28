@@ -44,11 +44,11 @@ Changes inside `apps/playground/src` use Vite HMR.
 - `Enter` opens the current engine or enters a highlighted category.
 - `TAB` on an engine row is disabled; the status bar hint is dimmed.
 - Click the keyword token or go back at the root to return to keyword editing.
-- `⌘K` / `Ctrl+K`: open the action menu for an engine (copy URL, open current tab, edit keyword).
+- `Alt+L`: open the floating action menu for an engine (copy URL, open current tab, edit keyword).
 - `↑/↓` move, `←` go back, `Esc` close.
 - `Alt+1`–`Alt+9` quick-pick the nth item.
 
-The UI is intentionally three rows: input bar, result panel, and status bar. The status bar keeps the Raycast-style hints visible: `Select Category TAB`, `Open Enter`, `Action ⌘K`.
+The UI is intentionally three rows: input bar, result panel, and status bar. The status bar shows `Open Enter` and `Action ALT + L`; the action menu floats above the status bar, right-bottom aligned to its top-right corner.
 
 ## Production vs playground
 

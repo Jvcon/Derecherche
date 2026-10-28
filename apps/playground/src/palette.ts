@@ -59,6 +59,7 @@ const PALETTE_CSS = `
   background: rgba(15, 18, 22, 0.42);
 }
 .panel {
+  position: relative;
   width: min(780px, calc(100vw - 32px));
   margin-top: 9vh;
   display: flex;
@@ -226,8 +227,19 @@ const PALETTE_CSS = `
   text-align: center;
 }
 .action-menu {
-  border-top: 1px solid var(--dr-border);
-  padding: 8px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 240px;
+  padding: 6px;
+  background: var(--dr-bg);
+  border: 1px solid var(--dr-border);
+  border-radius: 10px;
+  box-shadow: var(--dr-shadow);
+}
+.action-menu[hidden] {
+  display: none;
 }
 .action {
   width: 100%;
@@ -370,9 +382,8 @@ export function openPalette(options: PaletteOptions): void {
         <span class="status-path" data-status-path>Common engines</span>
       </div>
       <div class="status-right">
-        <span class="hint" data-hint-category><span>Select Category</span><kbd class="key">TAB</kbd></span>
         <span class="hint"><span>Open</span><kbd class="key">↵</kbd></span>
-        <span class="hint" data-hint-action><span>Action</span><kbd class="key">⌘K</kbd></span>
+        <span class="hint" data-hint-action><span>Action</span><kbd class="key">ALT + L</kbd></span>
       </div>
     </footer>
   `;
@@ -386,7 +397,7 @@ export function openPalette(options: PaletteOptions): void {
   const listNode = panel.querySelector<HTMLElement>("[data-list]")!;
   const actionsNode = panel.querySelector<HTMLElement>("[data-actions]")!;
   const statusPath = panel.querySelector<HTMLElement>("[data-status-path]")!;
-  const categoryHint = panel.querySelector<HTMLElement>("[data-hint-category]")!;
+  const statusBar = panel.querySelector<HTMLElement>(".status-bar")!;
   const actionHint = panel.querySelector<HTMLElement>("[data-hint-action]")!;
 
   const initial = options.categoryId
@@ -522,6 +533,10 @@ export function openPalette(options: PaletteOptions): void {
     input.setAttribute("aria-label", mode === "query" ? "Search keyword" : "Filter categories and engines");
   }
 
+  function positionActionMenu(): void {
+    actionsNode.style.bottom = `${statusBar.offsetHeight}px`;
+  }
+
   function renderActions(): void {
     const engine = selectedEngine();
     if (!actionMenuOpen || !engine) {
@@ -529,6 +544,7 @@ export function openPalette(options: PaletteOptions): void {
       actionsNode.innerHTML = "";
       return;
     }
+    positionActionMenu();
     actionsNode.hidden = false;
     actionsNode.innerHTML = ACTIONS.map(
       (action, index) =>
@@ -597,10 +613,6 @@ export function openPalette(options: PaletteOptions): void {
           : filter.trim()
             ? "All categories"
             : "Categories";
-    categoryHint.classList.toggle(
-      "disabled",
-      mode === "category" && selectedItem()?.kind === "engine"
-    );
     actionHint.classList.toggle("disabled", !selectedEngine());
     renderInput();
     renderList();
@@ -732,7 +744,7 @@ export function openPalette(options: PaletteOptions): void {
       return;
     }
 
-    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+    if (event.altKey && event.key.toLowerCase() === "l") {
       event.preventDefault();
       if (selectedEngine()) {
         actionMenuOpen = !actionMenuOpen;
