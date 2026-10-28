@@ -51,3 +51,30 @@ engines:
     url: https://wallhaven.cc/search?q={q}
     regions: [global]
     status: active
+
+  # Migrated from legacy/userscript/template.js.
+  # Keep legacyId for settings migration; see docs/migration/legacy-engines.md.
+
+  - id: pixiv
+    providerId: pixiv
+    name: Pixiv
+    category: image-search
+    tags: [image, illustration, 插画, pixiv]
+    triggers: [pixiv, 插画]
+    url: https://www.pixiv.net/search.php?word={q}
+    regions: [global]
+    legacyId: "image:3"
+    status: active
+    notes: Migrated from legacy engineList; URL updated to HTTPS.
+
+  - id: flickr
+    providerId: flickr
+    name: Flickr
+    category: image-stock
+    tags: [image, photo, stock, 图库]
+    triggers: [flickr, photo, 图库]
+    url: https://www.flickr.com/search/?text={q}
+    regions: [global]
+    legacyId: "image:4"
+    status: active
+    notes: Migrated from legacy engineList; query parameter changed from q to text.

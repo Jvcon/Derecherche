@@ -40,7 +40,7 @@ Generated files are committed and must not be edited by hand. CI should run `dat
 pnpm data:legacy-report
 ```
 
-Writes `docs/migration/legacy-engines.md` with migrated, merged, and skipped legacy engines. Migrated records live in `catalog/engines/legacy.yaml` and keep a `legacyId`.
+Writes `docs/migration/legacy-engines.md` with migrated, merged, and skipped legacy engines. Migrated records live in their category files under `catalog/engines/` and keep a `legacyId`.
 
 Validation checks:
 

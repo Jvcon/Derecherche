@@ -53,3 +53,54 @@ engines:
     regions: [cn]
     status: active
     notes: Search URL may change when CNKI redesigns its interface.
+
+  # Migrated from legacy/userscript/template.js.
+  # Keep legacyId for settings migration; see docs/migration/legacy-engines.md.
+
+  - id: baidu-xueshu
+    providerId: baidu
+    name: 百度学术
+    category: academic-search
+    tags: [scholar, paper, 学术, 论文]
+    triggers: [xueshu, 百度学术, 论文]
+    url: https://xueshu.baidu.com/s?wd={q}
+    regions: [cn]
+    legacyId: "scholar:1"
+    status: active
+    notes: Migrated from legacy engineList; URL updated to HTTPS.
+
+  - id: wanfang
+    providerId: wanfang
+    name: 万方数据
+    category: academic-papers
+    tags: [paper, 论文, 万方]
+    triggers: [wanfang, 万方, 论文]
+    url: https://s.wanfangdata.com.cn/paper?q={q}
+    regions: [cn]
+    legacyId: "scholar:3"
+    status: active
+    notes: Migrated from legacy engineList; URL updated to the current search route.
+
+  - id: springer
+    providerId: springer
+    name: Springer
+    category: academic-papers
+    tags: [paper, publisher, 论文, 出版]
+    triggers: [springer, 论文]
+    url: https://link.springer.com/search?query={q}
+    regions: [global]
+    legacyId: "scholar:7"
+    status: active
+    notes: Migrated from legacy engineList; URL updated to HTTPS.
+
+  - id: jstor
+    providerId: jstor
+    name: JSTOR
+    category: academic-papers
+    tags: [paper, archive, 论文, 文献]
+    triggers: [jstor, 论文]
+    url: https://www.jstor.org/action/doBasicSearch?Query={q}
+    regions: [global]
+    legacyId: "scholar:6"
+    status: active
+    notes: Migrated from legacy engineList; URL updated to the current basic-search route.

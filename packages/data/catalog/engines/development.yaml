@@ -61,3 +61,30 @@ engines:
     url: https://crates.io/search?q={q}
     regions: [global]
     status: active
+
+  # Migrated from legacy/userscript/template.js.
+  # Keep legacyId for settings migration; see docs/migration/legacy-engines.md.
+
+  - id: caniuse
+    providerId: caniuse
+    name: Can I Use
+    category: dev-docs
+    tags: [docs, web, compatibility, 兼容性]
+    triggers: [caniuse, 兼容性]
+    url: https://caniuse.com/?search={q}
+    regions: [global]
+    legacyId: "mine:1"
+    status: active
+    notes: Migrated from legacy engineList; moved from the personal bucket to development docs.
+
+  - id: w3school
+    providerId: w3school
+    name: W3School
+    category: dev-docs
+    tags: [docs, tutorial, web, 教程]
+    triggers: [w3school, 教程]
+    url: https://www.w3school.com.cn/search/search.asp?keyword={q}
+    regions: [cn]
+    legacyId: "mine:3"
+    status: active
+    notes: Migrated from legacy engineList; URL updated to the current search route.

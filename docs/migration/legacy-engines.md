@@ -128,7 +128,7 @@ The migration is curated rather than a blind port. Dead engines, policy-problema
 ## Notes
 
 - Existing catalog entries were not rewritten during this pass.
-- Migrated records are grouped in `packages/data/catalog/engines/legacy.yaml` for review.
+- Migrated records are integrated into their category files under `packages/data/catalog/engines/` and keep a `legacyId`.
 - URLs that were clearly retired were replaced with current endpoints; the original category and index are preserved in `legacyId`.
 - Optional `engineList_plus` packs (app stores, ebooks, net disks) remain out of scope until their URLs are reviewed.
 

@@ -31,3 +31,42 @@ engines:
     url: https://www.amazon.com/s?k={q}
     regions: [global]
     status: active
+
+  # Migrated from legacy/userscript/template.js.
+  # Keep legacyId for settings migration; see docs/migration/legacy-engines.md.
+
+  - id: suning
+    providerId: suning
+    name: 苏宁
+    category: shopping-general
+    tags: [shopping, 购物, suning, 苏宁]
+    triggers: [suning, 苏宁, 购物]
+    url: https://search.suning.com/{q}/
+    regions: [cn]
+    legacyId: "shopping:2"
+    status: active
+    notes: Migrated from legacy engineList; URL updated to HTTPS.
+
+  - id: tmall
+    providerId: tmall
+    name: 天猫
+    category: shopping-general
+    tags: [shopping, 购物, tmall, 天猫]
+    triggers: [tmall, 天猫, 购物]
+    url: https://list.tmall.com/search_product.htm?q={q}
+    regions: [cn]
+    legacyId: "shopping:4"
+    status: active
+    notes: Migrated from legacy engineList; URL updated to HTTPS.
+
+  - id: xianyu
+    providerId: xianyu
+    name: 闲鱼
+    category: shopping-secondhand
+    tags: [shopping, secondhand, 闲鱼, 二手]
+    triggers: [xianyu, 闲鱼, 二手]
+    url: https://www.goofish.com/search?q={q}
+    regions: [cn]
+    legacyId: "shopping:6"
+    status: active
+    notes: Migrated from legacy engineList; Xianyu now uses the goofish.com domain.

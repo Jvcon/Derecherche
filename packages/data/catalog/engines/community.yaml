@@ -21,3 +21,42 @@ engines:
     url: https://github.com/search?q={q}&type=issues
     regions: [global]
     status: active
+
+  # Migrated from legacy/userscript/template.js.
+  # Keep legacyId for settings migration; see docs/migration/legacy-engines.md.
+
+  - id: douban
+    providerId: douban
+    name: 豆瓣
+    category: community-general
+    tags: [community, social, 豆瓣, 书影音]
+    triggers: [douban, 豆瓣]
+    url: https://www.douban.com/search?q={q}
+    regions: [cn]
+    legacyId: "sociality:1"
+    status: active
+    notes: Migrated from legacy engineList; URL updated to HTTPS.
+
+  - id: tieba
+    providerId: baidu
+    name: 百度贴吧
+    category: community-general
+    tags: [community, forum, 贴吧, 论坛]
+    triggers: [tieba, 贴吧, 论坛]
+    url: https://tieba.baidu.com/f/search/res?ie=utf-8&qw={q}
+    regions: [cn]
+    legacyId: "sociality:2"
+    status: active
+    notes: Migrated from legacy engineList; changed from a forum URL to the search endpoint.
+
+  - id: weibo
+    providerId: weibo
+    name: 微博
+    category: community-general
+    tags: [community, social, 微博]
+    triggers: [weibo, 微博]
+    url: https://s.weibo.com/weibo?q={q}
+    regions: [cn]
+    legacyId: "sociality:4"
+    status: active
+    notes: Migrated from legacy engineList; URL updated to HTTPS.

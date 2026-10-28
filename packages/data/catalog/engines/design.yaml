@@ -31,3 +31,20 @@ engines:
     url: https://www.pinterest.com/search/pins/?q={q}
     regions: [global]
     status: active
+
+  # Migrated from legacy/userscript/template.js.
+  # Keep legacyId for settings migration; see docs/migration/legacy-engines.md.
+
+  - id: huaban
+    providerId: huaban
+    name: 花瓣
+    category: design-inspiration
+    tags: [design, inspiration, image, 花瓣, 灵感]
+    triggers: [huaban, 花瓣, 设计]
+    url: https://huaban.com/search?q={q}
+    regions: [cn]
+    legacyId: "image:5"
+    status: active
+    notes: Migrated from legacy engineList; placed under design inspiration rather than raw image search.
+
+  # translate / dictionary

@@ -11,3 +11,18 @@ engines:
     url: https://archive.org/search?query={q}
     regions: [global]
     status: active
+
+  # Migrated from legacy/userscript/template.js.
+  # Keep legacyId for settings migration; see docs/migration/legacy-engines.md.
+
+  - id: greasyfork
+    providerId: greasyfork
+    name: GreasyFork
+    category: tools-online
+    tags: [userscript, scripts, tools, 油猴]
+    triggers: [greasyfork, userscript, 油猴]
+    url: https://greasyfork.org/zh-CN/scripts?q={q}
+    regions: [global]
+    legacyId: "mine:4"
+    status: active
+    notes: Migrated from legacy engineList; moved to online tools.

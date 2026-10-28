@@ -61,3 +61,125 @@ engines:
     url: https://translate.google.com/?sl=auto&tl=zh-CN&text={q}&op=translate
     regions: [global]
     status: active
+
+  # Migrated from legacy/userscript/template.js.
+  # Keep legacyId for settings migration; see docs/migration/legacy-engines.md.
+
+  - id: baidu-translate
+    providerId: baidu
+    name: 百度翻译
+    category: knowledge-translate
+    tags: [translate, 翻译, baidu]
+    triggers: [baidu, 百度翻译, 翻译]
+    url: https://fanyi.baidu.com/#auto/zh/{q}
+    regions: [cn]
+    legacyId: "translate:1"
+    status: active
+    notes: Migrated from legacy engineList; uses the legacy hash route.
+
+  - id: youdao-dict
+    providerId: youdao
+    name: 有道词典
+    category: knowledge-dictionary
+    tags: [dictionary, translate, 词典, 有道]
+    triggers: [youdao, 有道, 词典]
+    url: https://dict.youdao.com/search?q={q}
+    regions: [cn]
+    legacyId: "translate:2"
+    status: active
+    notes: Migrated from legacy engineList; URL updated to HTTPS.
+
+  - id: bing-dict
+    providerId: bing
+    name: Bing 词典
+    category: knowledge-dictionary
+    tags: [dictionary, translate, 词典, bing]
+    triggers: [bing, 必应词典, 词典]
+    url: https://cn.bing.com/dict/search?q={q}
+    regions: [cn]
+    legacyId: "translate:3"
+    status: active
+    notes: Migrated from legacy engineList; URL updated to HTTPS.
+
+  - id: forvo
+    providerId: forvo
+    name: Forvo
+    category: knowledge-dictionary
+    tags: [pronunciation, dictionary, 发音, 词典]
+    triggers: [forvo, 发音]
+    url: https://zh.forvo.com/search/{q}
+    regions: [global]
+    legacyId: "translate:4"
+    status: active
+    notes: Migrated from legacy engineList; URL updated to HTTPS.
+
+  - id: zdic
+    providerId: zdic
+    name: 汉典
+    category: knowledge-dictionary
+    tags: [dictionary, chinese, 词典, 汉典]
+    triggers: [zdic, 汉典, 词典]
+    url: https://www.zdic.net/sousuo/?q={q}
+    regions: [cn]
+    legacyId: "translate:6"
+    status: active
+    notes: Migrated from legacy engineList; enabled despite being disabled in the old default list.
+
+  - id: quora
+    providerId: quora
+    name: Quora
+    category: knowledge-qa
+    tags: [qa, question, 问答]
+    triggers: [quora, qa]
+    url: https://www.quora.com/search?q={q}
+    regions: [global]
+    legacyId: "knowledge:9"
+    status: active
+
+  - id: moegirl
+    providerId: moegirl
+    name: 萌娘百科
+    category: knowledge-encyclopedia
+    tags: [wiki, anime, 百科, 萌娘]
+    triggers: [moegirl, 萌娘, 百科]
+    url: https://zh.moegirl.org.cn/index.php?search={q}
+    regions: [cn]
+    legacyId: "knowledge:6"
+    status: active
+    notes: Migrated from legacy engineList; URL updated to the current domain and search route.
+
+  - id: guokr
+    providerId: guokr
+    name: 果壳
+    category: knowledge-encyclopedia
+    tags: [science, knowledge, 科普, 果壳]
+    triggers: [guokr, 果壳, 科普]
+    url: https://www.guokr.com/search/all/?wd={q}
+    regions: [cn]
+    legacyId: "knowledge:7"
+    status: active
+    notes: Migrated from legacy engineList; URL updated to HTTPS.
+
+  - id: baidu-wenku
+    providerId: baidu
+    name: 百度文库
+    category: knowledge-howto
+    tags: [document, howto, 文库, 文档]
+    triggers: [wenku, 文库, 文档]
+    url: https://wenku.baidu.com/search?word={q}
+    regions: [cn]
+    legacyId: "knowledge:3"
+    status: active
+    notes: Migrated from legacy engineList; URL updated to HTTPS.
+
+  - id: docin
+    providerId: docin
+    name: 豆丁文档
+    category: knowledge-howto
+    tags: [document, howto, 文档, 豆丁]
+    triggers: [docin, 豆丁, 文档]
+    url: https://www.docin.com/search.do?searchcat=2&searchType_banner=p&nkey={q}
+    regions: [cn]
+    legacyId: "knowledge:4"
+    status: active
+    notes: Migrated from legacy engineList; enabled despite being disabled in the old default list.

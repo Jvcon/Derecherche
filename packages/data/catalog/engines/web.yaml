@@ -71,3 +71,88 @@ engines:
     url: https://www.bing.com/news/search?q={q}
     regions: [global]
     status: active
+
+  # Migrated from legacy/userscript/template.js.
+  # Keep legacyId for settings migration; see docs/migration/legacy-engines.md.
+
+  - id: so360-web
+    providerId: so360
+    name: 360 搜索
+    category: web-general
+    tags: [web, search, "360"]
+    triggers: ["360", so, 搜索]
+    url: https://www.so.com/s?q={q}
+    regions: [cn]
+    legacyId: "web:4"
+    status: active
+    notes: Migrated from legacy engineList; URL updated to the current HTTPS endpoint.
+
+  - id: sogou-web
+    providerId: sogou
+    name: 搜狗
+    category: web-general
+    tags: [web, search, sogou, 搜狗]
+    triggers: [sogou, 搜狗]
+    url: https://www.sogou.com/web?query={q}
+    regions: [cn]
+    legacyId: "web:6"
+    status: active
+    notes: Migrated from legacy engineList; enabled despite being disabled in the old default list.
+
+  - id: yahoo-web
+    providerId: yahoo
+    name: Yahoo
+    category: web-general
+    tags: [web, search, yahoo]
+    triggers: [yahoo]
+    url: https://search.yahoo.com/search?p={q}
+    regions: [global]
+    legacyId: "web:5"
+    status: active
+    notes: Migrated from legacy engineList; old search; path was normalized.
+
+  - id: baidu-news
+    providerId: baidu
+    name: 百度新闻
+    category: web-news
+    tags: [news, 新闻, baidu]
+    triggers: [baidu, 百度新闻, 新闻]
+    url: https://news.baidu.com/ns?word={q}&tn=news
+    regions: [cn]
+    legacyId: "news:1"
+    status: active
+    notes: Migrated from legacy engineList; URL updated to HTTPS.
+
+  - id: cnn
+    providerId: cnn
+    name: CNN
+    category: web-news
+    tags: [news, 新闻, cnn]
+    triggers: [cnn, news]
+    url: https://edition.cnn.com/search?q={q}
+    regions: [global]
+    legacyId: "news:6"
+    status: active
+
+  - id: bbc
+    providerId: bbc
+    name: BBC
+    category: web-news
+    tags: [news, 新闻, bbc]
+    triggers: [bbc, news]
+    url: https://www.bbc.co.uk/search?q={q}
+    regions: [global]
+    legacyId: "news:7"
+    status: active
+
+  - id: toutiao
+    providerId: toutiao
+    name: 今日头条
+    category: web-news
+    tags: [news, 新闻, 头条]
+    triggers: [toutiao, 头条, 新闻]
+    url: https://so.toutiao.com/search?keyword={q}
+    regions: [cn]
+    legacyId: "news:9"
+    status: active
+    notes: Migrated from legacy engineList; replaced the hard-coded 世界杯 query with {q}.
