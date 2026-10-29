@@ -345,6 +345,11 @@ for (const name of mountFixtures()) {
       assert.ok(handle.host.isConnected);
       assert.equal(handle.host.dataset.derechercheSite, name);
       assert.equal(handle.host.dataset.derechercheInsert, testCase.insert);
+      assert.equal(handle.host.dataset.derechercheStatus, "rendered");
+      assert.equal(
+        Number(handle.host.dataset.derechercheEngines) > 0,
+        true
+      );
       assert.equal(resolution.target?.selector, testCase.selector);
       assert.equal(resolution.target?.insert, testCase.insert);
       assert.equal(resolution.target?.kind, testCase.kind);
@@ -404,4 +409,35 @@ test("InlineBar supports prepend and append insertion", () => {
     handle.destroy();
     window.close();
   }
+});
+
+test("InlineBar renders without innerHTML sinks", () => {
+  const window = inlinePage();
+  const descriptor = Object.getOwnPropertyDescriptor(
+    window.Element.prototype,
+    "innerHTML"
+  );
+  Object.defineProperty(window.Element.prototype, "innerHTML", {
+    configurable: true,
+    get: descriptor.get,
+    set() {
+      throw new window.DOMException("innerHTML is blocked", "TypeError");
+    },
+  });
+
+  const handle = mountInlineBar({
+    catalog: inlineCatalog(),
+    sites: inlineCatalog().sites,
+    query: "github",
+    url: "https://www.google.com/search?q=github",
+    document: window.document,
+  });
+
+  assert.ok(handle);
+  assert.ok(handle.host.shadowRoot.querySelectorAll("button.engine").length > 0);
+  assert.ok(handle.host.shadowRoot.querySelector("button.more"));
+  handle.destroy();
+
+  Object.defineProperty(window.Element.prototype, "innerHTML", descriptor);
+  window.close();
 });

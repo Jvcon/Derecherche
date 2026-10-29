@@ -134,14 +134,6 @@ const INLINE_BAR_CSS = `
 }
 `;
 
-function escapeHtml(value: string): string {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;");
-}
-
 function resolveAnchorBlock(anchor: Element): Element {
   return anchor.closest("header, [role='banner']") ?? anchor.closest("form") ?? anchor;
 }
@@ -258,6 +250,18 @@ export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | nul
     return categoryId ?? site?.defaultCategory;
   }
 
+  function safeRender(): void {
+    try {
+      render();
+    } catch (error) {
+      shadow.unmount();
+      if (options.debug) {
+        console.error("[Derecherche] InlineBar render failed", error);
+      }
+      throw error;
+    }
+  }
+
   function render(): void {
     const category = currentCategory();
     const basePool = options.catalog.engines.filter((engine) =>
@@ -281,7 +285,7 @@ export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | nul
     );
 
     const shown = items.slice(0, limit);
-    inner.innerHTML = "";
+    inner.replaceChildren();
 
     for (const engine of shown) {
       const button = doc.createElement("button");
@@ -291,14 +295,26 @@ export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | nul
       button.title = engine.recommended
         ? `${engine.name} — recommended, click to search here, Ctrl+click for a new tab`
         : `${engine.name} — click to search here, Ctrl+click for a new tab`;
+
+      if (engine.recommended) {
+        const spark = doc.createElement("span");
+        spark.className = "spark";
+        spark.setAttribute("aria-hidden", "true");
+        spark.textContent = "✦";
+        button.append(spark);
+      }
+
       const providerMark =
         options.catalog.providers.find((provider) => provider.id === engine.providerId)
           ?.name ?? engine.name;
-      button.innerHTML = `${
-        engine.recommended ? '<span class="spark" aria-hidden="true">✦</span>' : ""
-      }<span class="mark" aria-hidden="true">${escapeHtml(
-        providerMark.slice(0, 1).toUpperCase()
-      )}</span><span>${escapeHtml(engine.name)}</span>`;
+      const mark = doc.createElement("span");
+      mark.className = "mark";
+      mark.setAttribute("aria-hidden", "true");
+      mark.textContent = providerMark.slice(0, 1).toUpperCase();
+
+      const name = doc.createElement("span");
+      name.textContent = engine.name;
+      button.append(mark, name);
       inner.append(button);
     }
 
@@ -316,6 +332,9 @@ export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | nul
     more.textContent = "More";
     more.title = "Open the full engine picker";
     inner.append(more);
+
+    shadow.host.dataset.derechercheStatus = "rendered";
+    shadow.host.dataset.derechercheEngines = String(shown.length);
   }
 
   function open(engine: Engine, mode: PaletteOpenMode): void {
@@ -374,7 +393,7 @@ export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | nul
   });
 
   insertHost(placement);
-  render();
+  safeRender();
 
   return {
     host: shadow.host,
@@ -389,7 +408,7 @@ export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | nul
       const nextPlacement = resolvePlacement();
       if (nextPlacement) placement = nextPlacement;
       if (placement) insertHost(placement);
-      render();
+      safeRender();
     },
     destroy() {
       shadow.unmount();

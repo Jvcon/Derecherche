@@ -125,6 +125,8 @@ Meanings:
 - `data-derecherche-site`: matched site adapter
 - `data-derecherche-mount`: resolved container id/class/tag
 - `data-derecherche-insert`: `before`, `after`, `prepend`, or `append`
+- `data-derecherche-status`: `rendered` after a successful render
+- `data-derecherche-engines`: number of rendered engine buttons
 
 If the InlineBar is missing:
 
