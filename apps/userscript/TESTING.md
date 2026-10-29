@@ -79,7 +79,7 @@ The script does not use `GM_registerMenuCommand`.
 | Install | Tampermonkey accepts the script | Pending manual |
 | Install | Violentmonkey accepts the script | Pending manual |
 | Install | qutebrowser loads the script | Pending manual |
-| Google | InlineBar appears below the tab bar | Playwright: real SERP mounted at `#rcnt` before, coverage 9/9; later runs hit HTTP 429 |
+| Google | InlineBar appears directly below the search bar, above the tabs | Playwright: real SERP mounts `#main` before, coverage 9/9; later runs hit HTTP 429 |
 | Bing | InlineBar appears below `#b_header` | Playwright pass (coverage 9/9); cn.bing.com falls back to anchor-after-`#sb_form` |
 | Baidu | InlineBar appears below the fixed `#head` | Live pass on a real SERP: bar top=71, `#s_tab` padding-top 0, tabs directly below the bar; offline fixture also passes (coverage 9/9) |
 | Query | InlineBar uses the current search query | Playwright pass (engine URL carries live-query) |
@@ -122,7 +122,7 @@ Checked 2026-10-29 from a datacenter IP:
 
 | Site | Result |
 |---|---|
-| google (`gbv=1`) | Real SERP mounted `#rcnt` before; coverage 9/9; docks at 73; later captcha/429 runs mount the shell. Click + query + frecency pass |
+| google (`gbv=1`) | Real SERP mounted `#main` before (directly below the search bar); coverage 9/9; docks at 73; later captcha/429 runs mount the shell. Click + query + frecency pass |
 | bing | Mounted `#b_header` after; coverage 9/9; docks at 0; click + query + frecency pass |
 | cn.bing | Mounted via anchor fallback after `#sb_form` (`#b_header` absent on served variant); coverage 9/9; click + query + frecency pass |
 | duckduckgo | Mounted `#header_wrapper` after; coverage 9/9; docks at 0; right AI panel inset `0/303` on that variant; click + query + frecency pass |

@@ -45,6 +45,8 @@ Use the URL match fields for **page identity**. Do not put DOM selectors in
 mount:
   anchor: ['#tsf', 'input[name="q"]']
   rules:
+    - container: '#main'
+      insert: before
     - container: '#rcnt'
       insert: before
     - container: '#search'
@@ -56,8 +58,16 @@ mount:
 ```
 
 Choose a container that starts below the search box and above the results. On
-Google, `#search` is now the result-column wrapper, so `#rcnt` before is the
-full-width row below the tab bar; `#search` remains a fallback for older DOMs.
+Google, `#main` before is a body-level full-width row directly below the search
+bar and above the tab row. `#rcnt` and `#search` remain fallbacks for variants
+without `#main`.
+
+Putting the bar *inside* `#searchform` is intentionally avoided. Google's
+`#searchform` is a 52px grid with `overflow: clip` inside a 72px fixed wrapper;
+appending a row makes it a narrow grid item and overflows the wrapper, so the
+bar overlaps the tab/results area and does not reserve layout space. The
+body-level row plus the scroll dock gives the same visual result without
+mutating Google's header grid.
 
 ### Selector lists
 

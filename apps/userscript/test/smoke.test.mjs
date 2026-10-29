@@ -51,7 +51,7 @@ test("userscript mounts the InlineBar on a Google result page", async () => {
 
   const host = window.document.querySelector("#derecherche-inline-bar");
   assert.ok(host);
-  assert.equal(host.nextElementSibling?.id, "search");
+  assert.equal(host.nextElementSibling?.id, "main");
   assert.equal(host.shadowRoot.querySelectorAll("button.engine").length, 6);
   assert.ok(host.shadowRoot.querySelector("button.more"));
   window.close();
@@ -73,7 +73,7 @@ test("userscript reuses one InlineBar across SPA query changes", async () => {
   const hosts = window.document.querySelectorAll("#derecherche-inline-bar");
   assert.equal(hosts.length, 1);
   assert.equal(hosts[0], first);
-  assert.equal(hosts[0].nextElementSibling?.id, "search");
+  assert.equal(hosts[0].nextElementSibling?.id, "main");
   window.close();
 });
 

@@ -3610,6 +3610,10 @@
         ],
         "rules": [
           {
+            "container": "#main",
+            "insert": "before"
+          },
+          {
             "container": "#rcnt",
             "insert": "before"
           },
