@@ -3,9 +3,9 @@
   "query": "rust async",
   "cases": [
     {
-      "name": "header",
+      "name": "header wrapper",
       "remove": [],
-      "selector": "#header",
+      "selector": "#header_wrapper",
       "insert": "after",
       "kind": "container"
     }

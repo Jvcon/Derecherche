@@ -93,6 +93,8 @@ The script does not use `GM_registerMenuCommand`.
 | Layout | Host page search header is not broken | Playwright pass (coverage 9/9 on bing, cn.bing, google, duckduckgo, wikipedia, github, youtube, bilibili) |
 | Layout | Fixed header does not cover the bar | Live Baidu pass (`offset=71`) and offline fixture pass |
 | Layout | Fixed-header compensation does not leave a gap | Live Baidu pass (`#s_tab` padding-top 0) |
+| Scroll | Bar docks below the header and stays visible | Playwright pass: Google 73, YouTube 56, Bilibili 64, Wikipedia 0, GitHub 48, Bing 0, DDG 0, Baidu 70 |
+| Scroll | Bar returns to flow at the top | Playwright pass (all docked sites) |
 | Layout | Side drawer does not cover the bar | Playwright pass (YouTube `inset=240/0`) |
 | Uninstall | Removing the script removes the bar after reload | Pending manual |
 
@@ -120,17 +122,17 @@ Checked 2026-10-29 from a datacenter IP:
 
 | Site | Result |
 |---|---|
-| google (`gbv=1`) | Real SERP mounted `#rcnt` before with coverage 9/9; later captcha/429 runs mount the shell. Click + query + frecency pass |
-| bing | Mounted `#b_header` after; coverage 9/9; click + query + frecency pass |
+| google (`gbv=1`) | Real SERP mounted `#rcnt` before; coverage 9/9; docks at 73; later captcha/429 runs mount the shell. Click + query + frecency pass |
+| bing | Mounted `#b_header` after; coverage 9/9; docks at 0; click + query + frecency pass |
 | cn.bing | Mounted via anchor fallback after `#sb_form` (`#b_header` absent on served variant); coverage 9/9; click + query + frecency pass |
-| duckduckgo | Mounted `header` after; coverage 9/9; click + query + frecency pass |
-| wikipedia | Mounted `header` after and relocated to its own row; coverage 9/9; click + query + frecency pass |
-| github | Mounted the header after; coverage 9/9; click + query + frecency pass |
-| youtube | Mounted `#masthead-container` after; left guide inset `240/0`; coverage 9/9; click + query + frecency pass |
-| bilibili | Mounted via anchor fallback after the search input row; coverage 9/9; click + query + frecency pass |
+| duckduckgo | Mounted `#header_wrapper` after; coverage 9/9; docks at 0; right AI panel inset `0/303` on that variant; click + query + frecency pass |
+| wikipedia | Mounted `header` after and relocated to its own row; coverage 9/9; docks at 0; click + query + frecency pass |
+| github | Mounted the header after; coverage 9/9; docks at 48; click + query + frecency pass |
+| youtube | Mounted `#masthead-container` after; left guide inset `240/0`; coverage 9/9; docks at 56; click + query + frecency pass |
+| bilibili | Mounted after `.search-header`; coverage 9/9; docks at 64; click + query + frecency pass |
 | google-scholar | Blocked: HTTP 403 "Sorry" bot page |
 | brave | Blocked: HTTP 429 captcha |
-| baidu | Live SERP mounted: bar top=71, `offset=71`, `#s_tab` padding-top=0, tabs start at 122. Other runs were blocked by 百度安全验证. Offline fixture passes with coverage 9/9 |
+| baidu | Live SERP mounted: bar top=71, `offset=71`, `#s_tab` padding-top=0, tabs start at 122; docks at 70 and returns to flow. Other runs were blocked by 百度安全验证. Offline fixture passes with coverage 9/9 |
 | zhihu | Blocked: HTTP 403 安全验证 |
 
 The four blocked hosts need a check from a residential IP or a manual
@@ -153,6 +155,7 @@ The Baidu fixture models the real fixed header and its `#s_tab` compensation:
 
 ```text
 bar top=71, fixed header bottom=70, offset=71, #s_tab padding-top=0, coverage=9/9
+docked at 70 while scrolled, coverage 9/9, restored to flow at the top
 ```
 
 ## Live adapter verification
@@ -195,9 +198,23 @@ Meanings:
 - `data-derecherche-offset`: transparent top padding used to clear a header
 - `data-derecherche-inset`: left/right inset used to clear a side panel
 - `data-derecherche-relocated`: `flex` when moved out of a flex/grid header row
+- `data-derecherche-docked`: `true` while the bar is fixed below the header
 
 `mount.trim` selectors are reset to `padding-top: 0` while the bar is mounted
 and restored when it is destroyed.
+
+## Scrolling behavior
+
+The InlineBar starts in normal flow. When its natural position reaches the
+bottom of the current fixed/sticky header, it switches to `position: fixed`
+just below that header, so it stays visible while scrolling. A hidden
+placeholder preserves the original flow space. Scrolling back above the dock
+point restores the in-flow row and removes the placeholder.
+
+The dock top is re-measured while scrolling, so pages that collapse or expand
+their header (Baidu) and pages that turn a static header into a fixed one
+(Google, Bilibili) keep the bar below the current header. Fixed side panels
+remain outside the bar through left/right insets.
 
 If the InlineBar is missing:
 
@@ -208,8 +225,8 @@ If the InlineBar is missing:
 
 ## Known limitations
 
-- The InlineBar is an in-page row. It scrolls away with the results rather than
-  floating or sticking to the viewport.
+- The InlineBar is an in-page row at rest and docks below the search header
+  while scrolling. The docked bar overlays page content by design.
 - SelectionBar is not included.
 - No settings drawer, engine overrides, custom engines, or import/export.
 - No background-tab open mode.

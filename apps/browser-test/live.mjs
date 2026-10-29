@@ -124,6 +124,8 @@ async function inspect(page) {
       offset: host.dataset.derechercheOffset || null,
       inset: host.dataset.derechercheInset || null,
       relocated: host.dataset.derechercheRelocated || null,
+      docked: host.dataset.derechercheDocked === "true",
+      position: cs.position,
       coverage: {
         hits,
         total: points.length,
@@ -183,6 +185,44 @@ async function testSite(name, url, expectedQuery, browser) {
 
     if (result.mounted) {
       await page.screenshot({ path: path.join(shotsDir, `${name}.png`) });
+
+      // Scrolling must dock the bar below the current page header instead of
+      // letting it disappear under the header. wheel() also covers pages that
+      // scroll an inner container.
+      await page.evaluate(() => window.scrollTo(0, 900)).catch(() => {});
+      await page.waitForTimeout(700);
+      if (
+        (await page.evaluate(() => Math.round(window.scrollY)).catch(() => 0)) <
+        100
+      ) {
+        await page.mouse.move(720, 500);
+        await page.mouse.wheel(0, 1100);
+        await page.waitForTimeout(900);
+      }
+      const scrolledInfo = await inspect(page);
+      result.scrolled = {
+        scrollY: await page
+          .evaluate(() => Math.round(window.scrollY))
+          .catch(() => null),
+        docked: scrolledInfo.docked,
+        position: scrolledInfo.position,
+        top: scrolledInfo.rect?.y ?? null,
+        coverage: scrolledInfo.coverage,
+        visible: scrolledInfo.visible,
+      };
+      await page.screenshot({
+        path: path.join(shotsDir, `${name}-scrolled.png`),
+      });
+
+      await page.evaluate(() => window.scrollTo(0, 0)).catch(() => {});
+      await page.waitForTimeout(700);
+      const restoredInfo = await inspect(page);
+      result.restored = {
+        docked: restoredInfo.docked,
+        top: restoredInfo.rect?.y ?? null,
+        coverage: restoredInfo.coverage,
+      };
+
       // Interaction: click first engine button, expect navigation to that
       // engine's results URL carrying the page's query.
       const before = page.url();
@@ -240,6 +280,11 @@ const browser = await chromium.launch({
   headless: !process.env.HEADFUL,
   slowMo: Number(process.env.SLOWMO || 0),
 });
+const coverageOk = (coverage) =>
+  coverage && coverage.hits === coverage.total;
+const coverageText = (coverage) =>
+  coverage ? `${coverage.hits}/${coverage.total}` : "-";
+
 const rows = [];
 for (const name of targets) {
   const [url, expectedQuery] = SITES[name];
@@ -247,24 +292,29 @@ for (const name of targets) {
   const r = await testSite(name, url, expectedQuery, browser);
   console.log(
     r.mounted
-      ? `MOUNTED site=${r.site} engines=${r.engines} visible=${r.visible} coverage=${r.coverage?.hits}/${r.coverage?.total} inset=${r.inset || "-"} offset=${r.offset || r.paddingTop} relocated=${r.relocated || "-"} click=${r.clickNavigated ? "navigated" : "FAILED"} queryInUrl=${r.queryInUrl}`
+      ? `MOUNTED site=${r.site} engines=${r.engines} visible=${r.visible} coverage=${r.coverage?.hits}/${r.coverage?.total} dock=${r.scrolled?.docked ? `fixed@${r.scrolled.top}` : "no"} scrollY=${r.scrolled?.scrollY ?? "-"} dockCoverage=${coverageText(r.scrolled?.coverage)} inset=${r.inset || "-"} offset=${r.offset || r.paddingTop} relocated=${r.relocated || "-"} click=${r.clickNavigated ? "navigated" : "FAILED"} queryInUrl=${r.queryInUrl}`
       : `NOT MOUNTED (http=${r.http} title=${JSON.stringify(r.title)} error=${r.error || "none"})`
   );
   rows.push(r);
 }
 await browser.close();
 
+const dockOk = (r) =>
+  r.scrolled?.docked
+    ? coverageOk(r.scrolled.coverage)
+    : (r.scrolled?.scrollY ?? 0) < 100;
+
 console.log("\n=== SUMMARY ===");
 for (const r of rows) {
   console.log(
-    `${r.mounted && r.visible && r.coverage && r.coverage.hits === r.coverage.total ? "PASS" : "FAIL"} ${r.site.padEnd(15)} http=${r.http ?? "-"} ` +
+    `${r.mounted && r.visible && coverageOk(r.coverage) && dockOk(r) ? "PASS" : "FAIL"} ${r.site.padEnd(15)} http=${r.http ?? "-"} ` +
       (r.mounted
-        ? `mount=${r.mount}/${r.insert} engines=${r.engines} visible=${r.visible} coverage=${r.coverage?.hits}/${r.coverage?.total} inset=${r.inset || "-"} offset=${r.offset || r.paddingTop} relocated=${r.relocated || "-"} click=${r.clickNavigated ? "OK " + (r.clickedUrl || "").slice(0, 60) : "FAIL " + r.clickError} queryInUrl=${r.queryInUrl} frecency=${(r.frecency || []).length ? "stored" : "none"} parent=${r.parentTag}`
+        ? `mount=${r.mount}/${r.insert} engines=${r.engines} visible=${r.visible} coverage=${r.coverage?.hits}/${r.coverage?.total} dock=${r.scrolled?.docked ? `fixed@${r.scrolled.top}` : "no"} scrollY=${r.scrolled?.scrollY ?? "-"} dockCoverage=${coverageText(r.scrolled?.coverage)} inset=${r.inset || "-"} offset=${r.offset || r.paddingTop} relocated=${r.relocated || "-"} click=${r.clickNavigated ? "OK " + (r.clickedUrl || "").slice(0, 60) : "FAIL " + r.clickError} queryInUrl=${r.queryInUrl} frecency=${(r.frecency || []).length ? "stored" : "none"} parent=${r.parentTag}`
         : `error=${r.error || (r.console.length ? "console errors" : "adapter did not mount")}`)
   );
   if (r.console && r.console.length) console.log(`   console: ${r.console.slice(0, 3).join(" | ")}`);
 }
 const ok = rows.filter(
-  (r) => r.mounted && r.visible && r.coverage && r.coverage.hits === r.coverage.total
+  (r) => r.mounted && r.visible && coverageOk(r.coverage) && dockOk(r)
 ).length;
 console.log(`\n${ok}/${rows.length} mounted, visible, and uncovered. Screenshots: ${shotsDir}`);

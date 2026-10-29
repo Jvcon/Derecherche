@@ -164,6 +164,16 @@ function isDocked(element: Element, view: Window): boolean {
   return false;
 }
 
+function isFloatingChrome(element: Element, view: Window): boolean {
+  let node: Element | null = element;
+  for (let depth = 0; node && depth < 10; depth += 1, node = node.parentElement) {
+    const style = view.getComputedStyle(node);
+    if (style.position === "fixed" || style.position === "sticky") return true;
+    if (style.position === "absolute" && style.zIndex !== "auto") return true;
+  }
+  return false;
+}
+
 function isFlexContainer(element: Element, view: Window): boolean {
   const display = view.getComputedStyle(element).display;
   return (
@@ -215,28 +225,42 @@ function dockedSideInset(
   side: "left" | "right"
 ): number {
   if (typeof document.elementFromPoint !== "function") return 0;
-  const x = side === "left" ? 2 : view.innerWidth - 3;
   const y = Math.min(
     Math.max(rect.top + rect.height / 2, 0),
     view.innerHeight - 1
   );
-  const hit = document.elementFromPoint(x, y);
-  if (!hit || hit === host || host.contains(hit)) return 0;
-  if (!isDocked(hit, view)) return 0;
+  const xs =
+    side === "left"
+      ? [2, 16, 48, 96]
+      : [view.innerWidth - 3, view.innerWidth - 16, view.innerWidth - 48, view.innerWidth - 96];
 
-  const other = hit.getBoundingClientRect();
-  if (other.height < 10 || other.width < 10) return 0;
-  if (other.width >= view.innerWidth * 0.9) return 0;
-  if (side === "left") {
-    if (rect.left >= other.right - 1) return 0;
-    return other.right > 0 && other.right < view.innerWidth * 0.6
-      ? Math.ceil(other.right)
-      : 0;
+  let inset = 0;
+  for (const x of xs) {
+    const hit = document.elementFromPoint(x, y);
+    if (!hit || hit === host || host.contains(hit)) continue;
+    if (!isFloatingChrome(hit, view)) continue;
+
+    const other = hit.getBoundingClientRect();
+    if (other.height < 10 || other.width < 10) continue;
+    if (other.width >= view.innerWidth * 0.9) continue;
+    if (other.top > view.innerHeight * 0.4) continue;
+    if (other.bottom <= rect.top || other.top >= rect.top + rect.height) {
+      continue;
+    }
+
+    if (side === "left") {
+      if (rect.left >= other.right - 1) continue;
+      if (other.left > view.innerWidth * 0.3) continue;
+      if (other.right <= 0 || other.right >= view.innerWidth * 0.5) continue;
+      inset = Math.max(inset, Math.ceil(other.right));
+    } else {
+      if (rect.right <= other.left + 1) continue;
+      if (other.left < view.innerWidth * 0.5) continue;
+      if (other.right < view.innerWidth * 0.75) continue;
+      inset = Math.max(inset, Math.ceil(view.innerWidth - other.left));
+    }
   }
-  if (rect.right <= other.left + 1) return 0;
-  return other.left > view.innerWidth * 0.4 && other.left < view.innerWidth
-    ? Math.ceil(view.innerWidth - other.left)
-    : 0;
+  return inset;
 }
 
 function applySideInsets(
@@ -351,6 +375,51 @@ function restoreTrim(trimmed: TrimmedElement[]): void {
   trimmed.length = 0;
 }
 
+/**
+ * Clear header/nav chrome that is a sibling of the immediate mount target.
+ * DuckDuckGo renders its AI header beside the main header, so the wrapper alone
+ * does not describe the full header height.
+ */
+function clearChromeOverlap(
+  document: Document,
+  host: HTMLElement,
+  bar: HTMLElement
+): void {
+  const view = document.defaultView;
+  if (!view) return;
+  const rect = bar.getBoundingClientRect();
+  if (rect.width <= 0 || rect.height <= 0) return;
+
+  let bottom = 0;
+  for (const element of document.querySelectorAll(
+    "header, [role='banner'], nav"
+  )) {
+    const style = view.getComputedStyle(element);
+    if (
+      style.display === "none" ||
+      style.visibility === "hidden" ||
+      Number(style.opacity) === 0
+    ) {
+      continue;
+    }
+    const other = element.getBoundingClientRect();
+    if (other.width < 1 || other.height < 1) continue;
+    if (other.height > view.innerHeight * 0.6) continue;
+    if (other.right <= rect.left || other.left >= rect.right) continue;
+    if (other.bottom <= rect.top || other.top >= rect.top + rect.height) {
+      continue;
+    }
+    if (other.top > view.innerHeight * 0.35) continue;
+    if (other.bottom > bottom) bottom = other.bottom;
+  }
+
+  const delta = Math.ceil(bottom - rect.top + 1);
+  if (delta <= 0) return;
+  const current = Number.parseFloat(host.style.paddingTop) || 0;
+  host.style.paddingTop = `${current + delta}px`;
+  host.dataset.derechercheOffset = String(current + delta);
+}
+
 function settleLayout(
   document: Document,
   host: HTMLElement,
@@ -372,60 +441,79 @@ function settleLayout(
   if (scrollY > 4) return;
 
   clearHeaderOverlap(document, host, bar, header);
+  clearChromeOverlap(document, host, bar);
   clearDockedOverlays(document, host, bar);
   applySideInsets(document, host, bar);
 }
 
 /**
- * Push the bar below a fixed or sticky search header.
+ * Return the bottom of the top-docked page chrome (fixed/sticky headers).
  *
- * Pages such as Baidu insert their header as a fixed overlay, so a bar placed
- * after it in the DOM starts at the top of the document and is painted behind
- * the header. Padding (rather than a margin) reserves the space without margin
- * collapsing and keeps the host in normal flow.
+ * Sampling at the very top of the viewport avoids treating ordinary page
+ * content as an obstruction. Full-height fixed sidebars are ignored; the bar
+ * handles those with a side inset instead.
+ */
+function topDockBottom(
+  document: Document,
+  host: HTMLElement,
+  bar: HTMLElement
+): number {
+  const view = document.defaultView;
+  if (
+    !view ||
+    typeof document.elementFromPoint !== "function" ||
+    typeof document.elementsFromPoint !== "function"
+  ) {
+    return 0;
+  }
+
+  const rect = bar.getBoundingClientRect();
+  if (rect.width <= 0) return 0;
+
+  const xs = [0.05, 0.5, 0.95].map((fraction) => {
+    const x = rect.left + rect.width * fraction;
+    return Math.min(Math.max(x, 0), view.innerWidth - 1);
+  });
+
+  let bottom = 0;
+  const seen = new Set<Element>();
+  for (const x of xs) {
+    for (const element of document.elementsFromPoint(x, 1)) {
+      if (
+        !element ||
+        element === host ||
+        host.contains(element) ||
+        seen.has(element)
+      ) {
+        continue;
+      }
+      seen.add(element);
+      if (!isDocked(element, view)) continue;
+
+      const other = element.getBoundingClientRect();
+      if (other.width < 10 || other.height < 10) continue;
+      if (other.height > view.innerHeight * 0.6) continue;
+      if (other.right <= rect.left || other.left >= rect.right) continue;
+      if (other.bottom > bottom) bottom = other.bottom;
+    }
+  }
+  return Math.ceil(bottom);
+}
+
+/**
+ * Push the bar below a fixed or sticky search header while it is in flow.
+ * Baidu's fixed `#head` is the original case; padding reserves the space
+ * without margin collapsing.
  */
 function clearDockedOverlays(
   document: Document,
   host: HTMLElement,
   bar: HTMLElement
 ): void {
-  const view = document.defaultView;
-  if (!view || typeof document.elementFromPoint !== "function") return;
-
-  const rect = bar.getBoundingClientRect();
-  if (rect.width <= 0 || rect.height <= 0) return;
-
-  const sampleX = [0.05, 0.5, 0.95].map((fraction) => {
-    const x = rect.left + rect.width * fraction;
-    return Math.min(Math.max(x, 0), view.innerWidth - 1);
-  });
-  const sampleY = [rect.top + 2, rect.top + rect.height / 2]
-    .filter((y) => y >= 0 && y < view.innerHeight)
-    .map((y) => Math.min(Math.max(y, 0), view.innerHeight - 1));
-
   for (let attempt = 0; attempt < 3; attempt += 1) {
-    let blocker: Element | null = null;
-    let blockerBottom = 0;
-
-    for (const x of sampleX) {
-      for (const y of sampleY) {
-        const hit = document.elementFromPoint(x, y);
-        if (!hit || hit === host || host.contains(hit) || hit.contains(host)) {
-          continue;
-        }
-        if (!isDocked(hit, view)) continue;
-        const bottom = hit.getBoundingClientRect().bottom;
-        if (bottom > blockerBottom) {
-          blocker = hit;
-          blockerBottom = bottom;
-        }
-      }
-    }
-
-    if (!blocker) break;
-    const delta = Math.ceil(
-      blocker.getBoundingClientRect().bottom - bar.getBoundingClientRect().top + 1
-    );
+    const barrier = topDockBottom(document, host, bar);
+    const top = bar.getBoundingClientRect().top;
+    const delta = Math.ceil(barrier - top + 1);
     if (delta <= 0) break;
 
     const current = Number.parseFloat(host.style.paddingTop) || 0;
@@ -436,6 +524,7 @@ function clearDockedOverlays(
 
 export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | null {
   const doc = options.document ?? document;
+  const view = doc.defaultView;
   const settings =
     options.settings ?? createDefaultSettings(options.catalog.catalogVersion);
   const sites = options.sites;
@@ -495,9 +584,15 @@ export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | nul
   let currentInsert: MountInsert = "after";
   let headerBlock: Element | null = null;
 
+  function headerFor(element: Element): Element | null {
+    const closest = element.closest("header, [role='banner']");
+    if (closest) return closest;
+    return element.querySelector("header, [role='banner']") ? element : null;
+  }
+
   function insertHost(placement: Placement): void {
     currentInsert = placement.insert;
-    headerBlock = placement.element.closest("header, [role='banner']");
+    headerBlock = headerFor(placement.element);
     delete shadow.host.dataset.derechercheRelocated;
     placement.element.insertAdjacentElement(
       insertMode(placement.insert),
@@ -535,6 +630,132 @@ export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | nul
   bar.append(inner);
   shadow.content.append(bar);
 
+  let docked = false;
+  let dockPlaceholder: HTMLElement | null = null;
+  let dockLeftOffset = 0;
+  let dockWidth = 0;
+  let dockPaddingTop = 0;
+  let dockFrame: number | undefined;
+  let dockFrameIsRaf = false;
+  const dockRefreshTimers: number[] = [];
+  let savedHostStyle: string | null = null;
+
+  function measureDockOffset(): number {
+    return topDockBottom(doc, shadow.host, bar);
+  }
+
+  function dock(): void {
+    if (!view || docked) return;
+    const hostRect = shadow.host.getBoundingClientRect();
+    if (hostRect.width <= 0 || hostRect.height <= 0) return;
+
+    savedHostStyle = shadow.host.style.cssText;
+    dockPaddingTop = Number.parseFloat(shadow.host.style.paddingTop) || 0;
+
+    const placeholder = doc.createElement("div");
+    placeholder.dataset.derecherchePlaceholder = "";
+    placeholder.setAttribute("aria-hidden", "true");
+    placeholder.style.cssText = `display:block;width:100%;height:${Math.ceil(
+      hostRect.height
+    )}px;margin:0;padding:0;border:0;visibility:hidden;pointer-events:none;`;
+    shadow.host.insertAdjacentElement("beforebegin", placeholder);
+    dockPlaceholder = placeholder;
+
+    const placeholderRect = placeholder.getBoundingClientRect();
+    dockLeftOffset = hostRect.left - placeholderRect.left;
+    dockWidth = hostRect.width;
+    const top = measureDockOffset();
+
+    shadow.host.style.position = "fixed";
+    shadow.host.style.top = `${top}px`;
+    shadow.host.style.left = `${Math.round(
+      placeholderRect.left + dockLeftOffset
+    )}px`;
+    shadow.host.style.width = `${Math.round(dockWidth)}px`;
+    shadow.host.style.margin = "0";
+    shadow.host.style.paddingTop = "0";
+    docked = true;
+    shadow.host.dataset.derechercheDocked = "true";
+  }
+
+  function updateDockedGeometry(): void {
+    if (!docked || !dockPlaceholder) return;
+    const placeholderRect = dockPlaceholder.getBoundingClientRect();
+    if (placeholderRect.width > 0) {
+      shadow.host.style.left = `${Math.round(
+        placeholderRect.left + dockLeftOffset
+      )}px`;
+      shadow.host.style.width = `${Math.round(
+        Math.min(dockWidth, placeholderRect.width)
+      )}px`;
+    }
+    shadow.host.style.top = `${measureDockOffset()}px`;
+  }
+
+  function undock(): void {
+    if (!docked) return;
+    dockPlaceholder?.remove();
+    dockPlaceholder = null;
+    docked = false;
+    delete shadow.host.dataset.derechercheDocked;
+
+    if (savedHostStyle !== null) {
+      shadow.host.style.cssText = savedHostStyle;
+      savedHostStyle = null;
+    }
+  }
+
+  function updateDock(): void {
+    if (!view || !shadow.host.isConnected) return;
+
+    if (docked) {
+      updateDockedGeometry();
+      const placeholderTop =
+        dockPlaceholder?.getBoundingClientRect().top ?? Number.NEGATIVE_INFINITY;
+      const naturalBarTop = placeholderTop + dockPaddingTop;
+      if (naturalBarTop > measureDockOffset() + 0.5) {
+        undock();
+      }
+      return;
+    }
+
+    const offset = measureDockOffset();
+    const hostTop = shadow.host.getBoundingClientRect().top;
+    if (view.scrollY <= 0 && hostTop >= 0) return;
+    if (hostTop < offset - 2) {
+      dock();
+    }
+  }
+
+  function requestDockUpdate(): void {
+    if (!view || dockFrame !== undefined) return;
+    if (typeof view.requestAnimationFrame === "function") {
+      dockFrameIsRaf = true;
+      dockFrame = view.requestAnimationFrame(() => {
+        dockFrame = undefined;
+        updateDock();
+      });
+    } else {
+      dockFrameIsRaf = false;
+      dockFrame = view.setTimeout(() => {
+        dockFrame = undefined;
+        updateDock();
+      }, 16);
+    }
+  }
+
+  function scheduleDockRefresh(): void {
+    requestDockUpdate();
+    if (!view) return;
+    for (const timer of dockRefreshTimers) view.clearTimeout(timer);
+    dockRefreshTimers.length = 0;
+    for (const delay of [120, 500, 1200]) {
+      dockRefreshTimers.push(view.setTimeout(updateDock, delay));
+    }
+  }
+
+  const onScroll = (): void => scheduleDockRefresh();
+
   function currentCategory(): string | undefined {
     return categoryId ?? site?.defaultCategory;
   }
@@ -542,15 +763,19 @@ export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | nul
   function safeRender(): void {
     try {
       render();
-      settleLayout(
-        doc,
-        shadow.host,
-        bar,
-        doc.defaultView?.scrollY ?? 0,
-        currentInsert,
-        headerBlock
-      );
-      applyTrim(doc, trims, trimmed);
+      if (docked) {
+        updateDockedGeometry();
+      } else {
+        settleLayout(
+          doc,
+          shadow.host,
+          bar,
+          doc.defaultView?.scrollY ?? 0,
+          currentInsert,
+          headerBlock
+        );
+        applyTrim(doc, trims, trimmed);
+      }
     } catch (error) {
       restoreTrim(trimmed);
       shadow.unmount();
@@ -694,13 +919,16 @@ export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | nul
   insertHost(placement);
   safeRender();
 
-  const view = doc.defaultView;
   const timers: number[] = [];
   let settleTimer: number | undefined;
   let resizeObserver: ResizeObserver | null = null;
 
   function settleNow(): void {
     if (!shadow.host.isConnected) return;
+    if (docked) {
+      updateDockedGeometry();
+      return;
+    }
     if (resizeObserver && headerBlock) resizeObserver.observe(headerBlock);
     settleLayout(
       doc,
@@ -710,6 +938,7 @@ export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | nul
       currentInsert,
       headerBlock
     );
+    applyTrim(doc, trims, trimmed);
   }
 
   function scheduleSettle(delay = 40): void {
@@ -721,13 +950,21 @@ export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | nul
     }, delay);
   }
 
-  const onResize = (): void => scheduleSettle();
+  const onResize = (): void => {
+    scheduleSettle();
+    scheduleDockRefresh();
+  };
 
   if (view) {
     for (const delay of [100, 400, 1200, 2500]) {
       timers.push(view.setTimeout(settleNow, delay));
     }
     view.addEventListener("resize", onResize);
+    view.addEventListener("scroll", onScroll, {
+      passive: true,
+      capture: true,
+    });
+    scheduleDockRefresh();
 
     if (typeof ResizeObserver === "function") {
       resizeObserver = new ResizeObserver(() => scheduleSettle(80));
@@ -743,10 +980,12 @@ export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | nul
       if (patch.url !== undefined) url = patch.url;
       if (patch.categoryId !== undefined) categoryId = patch.categoryId;
       if (!query) {
+        undock();
         restoreTrim(trimmed);
         shadow.unmount();
         return;
       }
+      if (docked) undock();
       const nextPlacement = resolvePlacement();
       if (nextPlacement) placement = nextPlacement;
       if (placement) insertHost(placement);
@@ -761,7 +1000,16 @@ export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | nul
         for (const timer of timers) view.clearTimeout(timer);
         if (settleTimer !== undefined) view.clearTimeout(settleTimer);
         view.removeEventListener("resize", onResize);
+        view.removeEventListener("scroll", onScroll, true);
+        if (dockFrame !== undefined) {
+          if (dockFrameIsRaf) view.cancelAnimationFrame(dockFrame);
+          else view.clearTimeout(dockFrame);
+          dockFrame = undefined;
+        }
+        for (const timer of dockRefreshTimers) view.clearTimeout(timer);
+        dockRefreshTimers.length = 0;
       }
+      undock();
       resizeObserver?.disconnect();
       restoreTrim(trimmed);
       shadow.unmount();

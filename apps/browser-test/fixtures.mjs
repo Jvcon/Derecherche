@@ -128,6 +128,57 @@ for (const name of names) {
       result.coverage.split("/")[0] === result.coverage.split("/")[1] &&
       (!result.trimPadding || result.trimPadding === "0px");
 
+    if (name === "baidu") {
+      await page.evaluate(() => window.scrollTo(0, 900));
+      await page.waitForTimeout(900);
+      const docked = await page.evaluate(() => {
+        const host = document.querySelector("#derecherche-inline-bar");
+        const bar = host?.shadowRoot?.querySelector(".bar");
+        const rect = (bar ?? host)?.getBoundingClientRect();
+        const points = [];
+        if (rect) {
+          for (const fy of [0.15, 0.5, 0.85]) {
+            for (const fx of [0.02, 0.5, 0.98]) {
+              const x = Math.min(
+                Math.max(rect.left + rect.width * fx, 0),
+                innerWidth - 1
+              );
+              const y = Math.min(
+                Math.max(rect.top + rect.height * fy, 0),
+                innerHeight - 1
+              );
+              points.push(document.elementFromPoint(x, y) === host);
+            }
+          }
+        }
+        return {
+          docked: host?.dataset.derechercheDocked === "true",
+          position: host ? getComputedStyle(host).position : null,
+          top: rect ? Math.round(rect.top) : null,
+          coverage: `${points.filter(Boolean).length}/${points.length}`,
+        };
+      });
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.waitForTimeout(900);
+      const restored = await page.evaluate(() => {
+        const host = document.querySelector("#derecherche-inline-bar");
+        const bar = host?.shadowRoot?.querySelector(".bar");
+        const rect = (bar ?? host)?.getBoundingClientRect();
+        return {
+          docked: host?.dataset.derechercheDocked === "true",
+          position: host ? getComputedStyle(host).position : null,
+          top: rect ? Math.round(rect.top) : null,
+        };
+      });
+      result.scrolled = docked;
+      result.restored = restored;
+      result.pass =
+        result.pass &&
+        docked.docked &&
+        docked.coverage === "9/9" &&
+        restored.docked === false;
+    }
+
     await page.screenshot({
       path: path.join(shotsDir, `fixture-${name}.png`),
     });
@@ -143,7 +194,10 @@ for (const name of names) {
       (result.mounted
         ? `mount=${result.mount}/${result.insert} coverage=${result.coverage} ` +
           `top=${result.rect.top} headerBottom=${result.headerBottom} covered=${result.coveredByHeader} ` +
-          `offset=${result.offset ?? "-"} inset=${result.inset ?? "-"} trim=${result.trimPadding ?? "-"}`
+          `offset=${result.offset ?? "-"} inset=${result.inset ?? "-"} trim=${result.trimPadding ?? "-"}` +
+          (result.scrolled
+            ? ` dock=${result.scrolled.docked ? `fixed@${result.scrolled.top}` : "no"} dockCoverage=${result.scrolled.coverage} restored=${result.restored?.docked ? "fixed" : "flow"}`
+            : "")
         : `error=${result.error || "not mounted"}`)
   );
 }

@@ -123,6 +123,11 @@ prevent the search header or a fixed sidebar from covering it.
 - **Side insets.** Fixed/sticky side panels are detected at the left and right
   edges. The bar receives a matching inset so it does not sit underneath a
   drawer (YouTube's guide).
+- **Dock on scroll.** The bar stays in normal flow until its natural top
+  reaches the current page-header bottom. It then becomes `position: fixed`
+  below that header and a hidden placeholder preserves the original flow
+  space. It follows header collapse/expand changes and returns to normal flow
+  when scrolled back above the dock point.
 - **Late layout.** Search headers often render after `DOMContentLoaded`. The
   InlineBar re-settles on `resize`, a `ResizeObserver`, and a short delayed
   schedule, so late headers and SPA changes are handled.
@@ -142,6 +147,8 @@ The host exposes the result for debugging:
 - `data-derecherche-inset`: left/right inset added to clear a side panel.
 - `data-derecherche-relocated`: `flex` when the host moved out of a flex/grid
   header row.
+- `data-derecherche-docked`: `true` while the bar is fixed below the page
+  header; the matching placeholder is `[data-derecherche-placeholder]`.
 
 ### `trim`
 
@@ -251,6 +258,7 @@ Inspect the host in DevTools:
   data-derecherche-insert="before"
   data-derecherche-status="rendered"
   data-derecherche-engines="6"
+  data-derecherche-docked="true"
 ></div>
 ```
 

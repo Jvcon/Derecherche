@@ -12,6 +12,8 @@ capabilities: [url, dom, html]
 mount:
   anchor: ['#header', 'input[name="q"]']
   rules:
+    - container: '#header_wrapper'
+      insert: after
     - container: '#header'
       insert: after
     - container: 'header'

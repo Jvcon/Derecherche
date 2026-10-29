@@ -3422,6 +3422,10 @@
         ],
         "rules": [
           {
+            "container": "#header_wrapper",
+            "insert": "after"
+          },
+          {
             "container": "#header",
             "insert": "after"
           },
