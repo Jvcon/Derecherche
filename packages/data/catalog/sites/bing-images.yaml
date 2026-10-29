@@ -13,7 +13,7 @@ selectors:
 defaultCategory: image-search
 capabilities: [url, dom, html]
 priority: 20
-notes: More specific than the host-only bing adapter.
+notes: More specific than the host-only bing adapter. Header selectors match live Bing HTML; verify on the images route.
 mount:
   anchor: ['#sb_form', '#sb_form_q', 'input[name="q"]']
   rules:

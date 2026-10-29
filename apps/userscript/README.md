@@ -16,6 +16,17 @@ The build:
 - targets ES2019;
 - prepends the userscript metadata block after minification.
 
+Test build:
+
+```bash
+pnpm build:userscript:test
+# apps/userscript/dist/derecherche-test.user.js
+```
+
+The test build is named `Derecherche (test)`, uses a timestamped version, and is
+not tracked by git. See [TESTING.md](TESTING.md) for the install and manual
+verification checklist.
+
 ## Runtime
 
 On a matched search-result page the script:

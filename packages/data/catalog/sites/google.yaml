@@ -11,7 +11,7 @@ selectors:
     - 'textarea[name="q"]'
 defaultCategory: web-general
 capabilities: [url, dom, html]
-notes: Google regional domains are matched by the wildcard host entry.
+notes: Google regional domains are matched by the wildcard host entry. Mount selectors still need a live-browser check.
 mount:
   anchor: ['#tsf', 'form[action*="/search"]', 'input[name="q"]']
   rules:

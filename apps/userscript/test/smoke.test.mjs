@@ -7,7 +7,10 @@ import { Window } from "happy-dom";
 import catalog from "@derecherche/data";
 
 const root = path.resolve(fileURLToPath(new URL("..", import.meta.url)));
-const bundlePath = path.join(root, "dist", "derecherche.user.js");
+const bundleName = process.env.DERECHERCHE_BUNDLE ?? "derecherche.user.js";
+const bundlePath = path.isAbsolute(bundleName)
+  ? bundleName
+  : path.join(root, "dist", bundleName);
 const code = fs.readFileSync(bundlePath, "utf8");
 
 function tick(window) {
@@ -27,7 +30,8 @@ function googleWindow() {
 
 test("userscript bundle has metadata and every adapter match host", () => {
   assert.ok(code.startsWith("// ==UserScript==\n"));
-  assert.ok(code.includes("// @grant        none"));
+  assert.ok(code.includes("// @grant        GM_getValue"));
+  assert.ok(code.includes("// @grant        GM_setValue"));
   assert.ok(code.includes("// @noframes"));
 
   for (const host of new Set(catalog.sites.flatMap((site) => site.hosts))) {
@@ -92,4 +96,52 @@ test("userscript mounts on Baidu and stays out of unmatched pages", async () => 
   await tick(other);
   assert.equal(other.document.querySelector("#derecherche-inline-bar"), null);
   other.close();
+});
+
+test("userscript persists frecency through GM storage", async () => {
+  const store = new Map();
+  let reads = 0;
+
+  function installGm(window) {
+    window.GM_getValue = (key, fallback) => {
+      reads += 1;
+      return store.has(key) ? store.get(key) : fallback;
+    };
+    window.GM_setValue = (key, value) => {
+      store.set(key, value);
+    };
+    window.open = () => null;
+  }
+
+  const first = googleWindow();
+  installGm(first);
+  first.eval(code);
+  await tick(first);
+
+  const host = first.document.querySelector("#derecherche-inline-bar");
+  const button = host.shadowRoot.querySelector("button.engine");
+  const engineId = button.dataset.engineId;
+  button.dispatchEvent(
+    new first.MouseEvent("click", {
+      bubbles: true,
+      composed: true,
+      ctrlKey: true,
+    })
+  );
+  await tick(first);
+
+  const raw = store.get("derecherche:frecency");
+  assert.ok(raw);
+  const entries = JSON.parse(raw);
+  assert.equal(entries[0].engineId, engineId);
+  assert.equal(entries[0].count, 1);
+  first.close();
+
+  const readsBefore = reads;
+  const second = googleWindow();
+  installGm(second);
+  second.eval(code);
+  await tick(second);
+  assert.ok(reads > readsBefore);
+  second.close();
 });

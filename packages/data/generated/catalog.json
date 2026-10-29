@@ -3196,7 +3196,8 @@
             "insert": "after"
           }
         ]
-      }
+      },
+      "notes": "Baidu desktop responses were blocked by security verification during the automated live check; verify the mount selectors in a real browser."
     },
     {
       "id": "bilibili",
@@ -3270,7 +3271,7 @@
         "html"
       ],
       "priority": 20,
-      "notes": "More specific than the host-only bing adapter.",
+      "notes": "More specific than the host-only bing adapter. Header selectors match live Bing HTML; verify on the images route.",
       "mount": {
         "anchor": [
           "#sb_form",
@@ -3340,7 +3341,8 @@
             "insert": "after"
           }
         ]
-      }
+      },
+      "notes": "Mount selectors were checked against live Bing result HTML on 2026-10-29."
     },
     {
       "id": "brave",
@@ -3588,7 +3590,7 @@
         "dom",
         "html"
       ],
-      "notes": "Google regional domains are matched by the wildcard host entry.",
+      "notes": "Google regional domains are matched by the wildcard host entry. Mount selectors still need a live-browser check.",
       "mount": {
         "anchor": [
           "#tsf",

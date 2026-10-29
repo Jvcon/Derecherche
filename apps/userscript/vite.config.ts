@@ -4,20 +4,29 @@ import { defineConfig } from "vite";
 
 const resolvePath = (path) => fileURLToPath(new URL(path, import.meta.url));
 
+const packageJson = JSON.parse(
+  fs.readFileSync(resolvePath("package.json"), "utf8")
+);
 const catalog = JSON.parse(
   fs.readFileSync(
     resolvePath("../../packages/data/generated/catalog.json"),
     "utf8"
   )
 );
+const testBuild = process.env.DERECHERCHE_BUILD === "test";
+const stamp = new Date().toISOString().slice(0, 16).replace(/[-:T]/g, "");
+const version = testBuild
+  ? `${packageJson.version}-test.${stamp}`
+  : packageJson.version;
+const scriptName = testBuild ? "Derecherche (test)" : "Derecherche";
 
 const hosts = [...new Set(catalog.sites.flatMap((site) => site.hosts))].sort();
 const matches = hosts.map((host) => `// @match        *://${host}/*`).join("\n");
 
 const metadata = `// ==UserScript==
-// @name         Derecherche
+// @name         ${scriptName}
 // @namespace    https://derecherche.dev/
-// @version      0.1.0
+// @version      ${version}
 // @description  Keyboard-first search routing across engines without leaving the result page.
 // @author       Jvcon
 // @license      GPL-3.0-only
@@ -26,7 +35,8 @@ const metadata = `// ==UserScript==
 ${matches}
 // @run-at       document-idle
 // @noframes
-// @grant        none
+// @grant        GM_getValue
+// @grant        GM_setValue
 // ==/UserScript==
 `;
 
@@ -39,7 +49,8 @@ export default defineConfig({
       entry: resolvePath("src/main.ts"),
       name: "Derecherche",
       formats: ["iife"],
-      fileName: () => "derecherche.user.js",
+      fileName: () =>
+        testBuild ? "derecherche-test.user.js" : "derecherche.user.js",
     },
   },
   plugins: [

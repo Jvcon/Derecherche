@@ -19,7 +19,8 @@
     "typecheck": "pnpm build:core && pnpm build:ui && pnpm --filter @derecherche/core typecheck && pnpm --filter @derecherche/ui typecheck && pnpm --filter @derecherche/playground typecheck && pnpm --filter @derecherche/userscript typecheck && tsc -p packages/data/tsconfig.json",
     "test": "node --test packages/data/test/catalog.test.mjs && pnpm --filter @derecherche/core test && pnpm --filter @derecherche/ui test && pnpm --filter @derecherche/userscript test",
     "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm data:build && pnpm build:core && pnpm build:ui && pnpm build:playground && pnpm --filter @derecherche/userscript build",
-    "build:userscript": "pnpm data:build && pnpm build:core && pnpm build:ui && pnpm --filter @derecherche/userscript build"
+    "build:userscript": "pnpm data:build && pnpm build:core && pnpm build:ui && pnpm --filter @derecherche/userscript build",
+    "build:userscript:test": "pnpm data:build && pnpm build:core && pnpm build:ui && pnpm --filter @derecherche/userscript build:test"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

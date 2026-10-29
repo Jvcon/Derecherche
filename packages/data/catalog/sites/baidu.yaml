@@ -19,3 +19,4 @@ mount:
       insert: before
     - anchor: ['#kw', 'input[name="wd"]']
       insert: after
+notes: Baidu desktop responses were blocked by security verification during the automated live check; verify the mount selectors in a real browser.

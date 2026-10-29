@@ -20,3 +20,4 @@ mount:
       insert: before
     - anchor: ['#sb_form', '#sb_form_q', 'input[name="q"]']
       insert: after
+notes: Mount selectors were checked against live Bing result HTML on 2026-10-29.

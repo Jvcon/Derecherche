@@ -11,7 +11,10 @@ declare const GM_setValue:
   | undefined;
 
 function readRaw(): string | null {
-  if (typeof GM_getValue === "function") {
+  if (
+    typeof GM_getValue === "function" &&
+    typeof GM_setValue === "function"
+  ) {
     const value = GM_getValue<string | null>(STORAGE_KEY, null);
     return typeof value === "string" ? value : null;
   }
@@ -23,7 +26,10 @@ function readRaw(): string | null {
 }
 
 function writeRaw(value: string): void {
-  if (typeof GM_setValue === "function") {
+  if (
+    typeof GM_getValue === "function" &&
+    typeof GM_setValue === "function"
+  ) {
     GM_setValue(STORAGE_KEY, value);
     return;
   }
