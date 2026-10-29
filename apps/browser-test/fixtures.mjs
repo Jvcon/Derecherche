@@ -113,6 +113,9 @@ for (const name of names) {
               : 0,
           coverage: `${points.filter(Boolean).length}/${points.length}`,
           inViewport: rect.top >= -1 && rect.bottom <= innerHeight + 1,
+          trimPadding: document.querySelector("#s_tab")
+            ? getComputedStyle(document.querySelector("#s_tab")).paddingTop
+            : null,
         };
       })
     );
@@ -122,7 +125,8 @@ for (const name of names) {
       result.status === "rendered" &&
       result.engines > 0 &&
       result.inViewport &&
-      result.coverage.split("/")[0] === result.coverage.split("/")[1];
+      result.coverage.split("/")[0] === result.coverage.split("/")[1] &&
+      (!result.trimPadding || result.trimPadding === "0px");
 
     await page.screenshot({
       path: path.join(shotsDir, `fixture-${name}.png`),
@@ -139,7 +143,7 @@ for (const name of names) {
       (result.mounted
         ? `mount=${result.mount}/${result.insert} coverage=${result.coverage} ` +
           `top=${result.rect.top} headerBottom=${result.headerBottom} covered=${result.coveredByHeader} ` +
-          `offset=${result.offset ?? "-"} inset=${result.inset ?? "-"}`
+          `offset=${result.offset ?? "-"} inset=${result.inset ?? "-"} trim=${result.trimPadding ?? "-"}`
         : `error=${result.error || "not mounted"}`)
   );
 }

@@ -14,6 +14,8 @@ notes: Selector is best-effort; verify on both search and video pages.
 mount:
   anchor: ['input[name="keyword"]', 'input[type="text"]']
   rules:
+    - container: '.search-header'
+      insert: after
     - container: '#biliMainHeader'
       insert: after
     - container: '.bili-header'

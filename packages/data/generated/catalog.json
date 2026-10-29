@@ -3179,6 +3179,9 @@
           "#kw",
           "input[name=\"wd\"]"
         ],
+        "trim": [
+          "#s_tab"
+        ],
         "rules": [
           {
             "container": "#head",
@@ -3228,6 +3231,10 @@
           "input[type=\"text\"]"
         ],
         "rules": [
+          {
+            "container": ".search-header",
+            "insert": "after"
+          },
           {
             "container": "#biliMainHeader",
             "insert": "after"

@@ -81,7 +81,7 @@ The script does not use `GM_registerMenuCommand`.
 | Install | qutebrowser loads the script | Pending manual |
 | Google | InlineBar appears below the tab bar | Playwright: real SERP mounted at `#rcnt` before, coverage 9/9; later runs hit HTTP 429 |
 | Bing | InlineBar appears below `#b_header` | Playwright pass (coverage 9/9); cn.bing.com falls back to anchor-after-`#sb_form` |
-| Baidu | InlineBar appears below the fixed `#head` | Live page blocked by 百度安全验证; offline fixed-header fixture passes (top=71, header bottom=70, coverage 9/9) |
+| Baidu | InlineBar appears below the fixed `#head` | Live pass on a real SERP: bar top=71, `#s_tab` padding-top 0, tabs directly below the bar; offline fixture also passes (coverage 9/9) |
 | Query | InlineBar uses the current search query | Playwright pass (engine URL carries live-query) |
 | Click | Plain click opens in the current tab | Playwright pass (11 sites incl. cross-engine navigation) |
 | Click | `Ctrl` / `Cmd` + click opens a new tab | Automated callback pass |
@@ -91,7 +91,8 @@ The script does not use `GM_registerMenuCommand`.
 | Storage | Frecency survives reload | Playwright pass (localStorage fallback writes on all mounted hosts) |
 | Debug | `?derecherche-debug=1` logs the adapter | Pending manual |
 | Layout | Host page search header is not broken | Playwright pass (coverage 9/9 on bing, cn.bing, google, duckduckgo, wikipedia, github, youtube, bilibili) |
-| Layout | Fixed header does not cover the bar | Offline fixture pass (Baidu `offset=71`) |
+| Layout | Fixed header does not cover the bar | Live Baidu pass (`offset=71`) and offline fixture pass |
+| Layout | Fixed-header compensation does not leave a gap | Live Baidu pass (`#s_tab` padding-top 0) |
 | Layout | Side drawer does not cover the bar | Playwright pass (YouTube `inset=240/0`) |
 | Uninstall | Removing the script removes the bar after reload | Pending manual |
 
@@ -129,7 +130,7 @@ Checked 2026-10-29 from a datacenter IP:
 | bilibili | Mounted via anchor fallback after the search input row; coverage 9/9; click + query + frecency pass |
 | google-scholar | Blocked: HTTP 403 "Sorry" bot page |
 | brave | Blocked: HTTP 429 captcha |
-| baidu | Blocked live by 百度安全验证; offline fixed-header fixture passes with `offset=71` and coverage 9/9 |
+| baidu | Live SERP mounted: bar top=71, `offset=71`, `#s_tab` padding-top=0, tabs start at 122. Other runs were blocked by 百度安全验证. Offline fixture passes with coverage 9/9 |
 | zhihu | Blocked: HTTP 403 安全验证 |
 
 The four blocked hosts need a check from a residential IP or a manual
@@ -148,10 +149,10 @@ bundle is injected, and the bar must render, stay in the viewport, and pass the
 same 3x3 coverage test. This has no network dependency and covers blocked
 sites. Current result: 13/13 fixtures pass.
 
-The Baidu fixture models the real fixed header:
+The Baidu fixture models the real fixed header and its `#s_tab` compensation:
 
 ```text
-bar top=71, fixed header bottom=70, offset=71, coverage=9/9
+bar top=71, fixed header bottom=70, offset=71, #s_tab padding-top=0, coverage=9/9
 ```
 
 ## Live adapter verification
@@ -194,6 +195,9 @@ Meanings:
 - `data-derecherche-offset`: transparent top padding used to clear a header
 - `data-derecherche-inset`: left/right inset used to clear a side panel
 - `data-derecherche-relocated`: `flex` when moved out of a flex/grid header row
+
+`mount.trim` selectors are reset to `padding-top: 0` while the bar is mounted
+and restored when it is destroyed.
 
 If the InlineBar is missing:
 

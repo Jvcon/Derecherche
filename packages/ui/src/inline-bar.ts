@@ -298,6 +298,59 @@ function clearHeaderOverlap(
   host.dataset.derechercheOffset = String(current + delta);
 }
 
+interface TrimmedElement {
+  element: HTMLElement;
+  paddingTop: string;
+  priority: string;
+}
+
+function trimSelectors(site: Site | undefined): string[] {
+  const value = site?.mount?.trim;
+  if (!value) return [];
+  return (Array.isArray(value) ? value : [value]).filter(
+    (selector) => typeof selector === "string" && selector.trim().length > 0
+  );
+}
+
+/**
+ * Clear page-level compensation for a fixed header. Baidu gives `#s_tab` a
+ * 65px top padding so its tabs clear `#head`; once the InlineBar occupies that
+ * space the padding becomes an empty gap. Adapters opt in with `mount.trim`.
+ */
+function applyTrim(
+  document: Document,
+  selectors: readonly string[],
+  trimmed: TrimmedElement[]
+): void {
+  for (const selector of selectors) {
+    const element = document.querySelector<HTMLElement>(selector);
+    if (!element || trimmed.some((entry) => entry.element === element)) {
+      continue;
+    }
+    trimmed.push({
+      element,
+      paddingTop: element.style.getPropertyValue("padding-top"),
+      priority: element.style.getPropertyPriority("padding-top"),
+    });
+    element.style.setProperty("padding-top", "0px", "important");
+  }
+}
+
+function restoreTrim(trimmed: TrimmedElement[]): void {
+  for (const entry of trimmed) {
+    if (entry.paddingTop) {
+      entry.element.style.setProperty(
+        "padding-top",
+        entry.paddingTop,
+        entry.priority
+      );
+    } else {
+      entry.element.style.removeProperty("padding-top");
+    }
+  }
+  trimmed.length = 0;
+}
+
 function settleLayout(
   document: Document,
   host: HTMLElement,
@@ -404,6 +457,7 @@ export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | nul
 
   if (!site) return null;
   const siteId = site.id;
+  const trims = trimSelectors(site);
 
   interface Placement {
     element: Element;
@@ -470,6 +524,8 @@ export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | nul
   shadow.host.style.width = "100%";
   shadow.host.style.zIndex = "10";
 
+  const trimmed: TrimmedElement[] = [];
+
   const bar = doc.createElement("div");
   bar.className = "bar";
   bar.setAttribute("role", "navigation");
@@ -494,7 +550,9 @@ export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | nul
         currentInsert,
         headerBlock
       );
+      applyTrim(doc, trims, trimmed);
     } catch (error) {
+      restoreTrim(trimmed);
       shadow.unmount();
       if (options.debug) {
         console.error("[Derecherche] InlineBar render failed", error);
@@ -685,6 +743,7 @@ export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | nul
       if (patch.url !== undefined) url = patch.url;
       if (patch.categoryId !== undefined) categoryId = patch.categoryId;
       if (!query) {
+        restoreTrim(trimmed);
         shadow.unmount();
         return;
       }
@@ -704,6 +763,7 @@ export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | nul
         view.removeEventListener("resize", onResize);
       }
       resizeObserver?.disconnect();
+      restoreTrim(trimmed);
       shadow.unmount();
     },
   };

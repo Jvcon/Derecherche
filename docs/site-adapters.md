@@ -114,7 +114,9 @@ prevent the search header or a fixed sidebar from covering it.
 - **Header clearance.** The bar measures the resolved header block and its
   visible descendants. If the bar overlaps the header (including overflowing
   search boxes), it reserves transparent space above itself with padding, so
-  the bar starts below the header without margin collapsing.
+  the bar starts below the header without margin collapsing. Adapters can also
+  declare `mount.trim` to remove a page's now-redundant top padding (Baidu's
+  `#s_tab`).
 - **Docked overlay clearance.** Fixed or sticky elements at the top of the
   viewport are measured with `elementFromPoint`. The bar is pushed below them.
   This is what keeps Baidu's `position: fixed` `#head` from covering the bar.
@@ -140,6 +142,24 @@ The host exposes the result for debugging:
 - `data-derecherche-inset`: left/right inset added to clear a side panel.
 - `data-derecherche-relocated`: `flex` when the host moved out of a flex/grid
   header row.
+
+### `trim`
+
+Some pages reserve space for a fixed header with padding on the first content
+row. Baidu gives `#s_tab` a 65px top padding so the tabs clear the fixed
+`#head`; once the InlineBar occupies that space, the padding becomes an empty
+gap. Declare the compensating elements and the InlineBar flattens their top
+padding while mounted:
+
+```yaml
+mount:
+  trim: ['#s_tab']
+```
+
+`trim` accepts a selector or an ordered selector list. The InlineBar applies
+`padding-top: 0 !important` inline and restores the previous inline value on
+destroy. Use it only for page-level compensation that the mount rule makes
+redundant; do not use it to restyle ordinary content.
 
 ## Adding a new adapter
 

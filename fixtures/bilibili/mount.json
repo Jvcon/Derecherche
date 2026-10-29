@@ -3,8 +3,17 @@
   "query": "rust",
   "cases": [
     {
-      "name": "site header",
+      "name": "search page header",
       "remove": [],
+      "selector": ".search-header",
+      "insert": "after",
+      "kind": "container"
+    },
+    {
+      "name": "site header fallback",
+      "remove": [
+        ".search-header"
+      ],
       "selector": "#biliMainHeader",
       "insert": "after",
       "kind": "container"

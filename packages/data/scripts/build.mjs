@@ -82,6 +82,7 @@ export interface SiteMount extends MountRule {
   offset?: number;
   required?: boolean;
   rules?: MountRule[];
+  trim?: MountSelector;
 }
 
 export interface IconRef {

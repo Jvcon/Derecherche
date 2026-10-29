@@ -110,6 +110,9 @@
         "required": {
           "type": "boolean"
         },
+        "trim": {
+          "$ref": "#/$defs/selectorList"
+        },
         "rules": {
           "type": "array",
           "minItems": 1,

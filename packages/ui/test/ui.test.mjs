@@ -471,3 +471,36 @@ test("InlineBar leaves a flex header row and takes its own row", () => {
   handle.destroy();
   window.close();
 });
+
+test("InlineBar trims adapter-declared fixed-header compensation", () => {
+  const window = new Window();
+  window.document.body.innerHTML = `
+    <div id="head" style="position:fixed;top:0;height:70px">
+      <form><input id="kw" name="wd" value="rust"></form>
+    </div>
+    <div id="s_tab" style="padding-top:65px">tabs</div>
+    <main id="content"></main>
+  `;
+  const catalog = inlineCatalog();
+  catalog.sites[0].mount = {
+    rules: [{ container: "#head", insert: "after" }],
+    trim: ["#s_tab"],
+  };
+
+  const handle = mountInlineBar({
+    catalog,
+    sites: catalog.sites,
+    query: "rust",
+    url: "https://www.google.com/search?q=rust",
+    document: window.document,
+  });
+
+  assert.ok(handle);
+  const tabs = window.document.querySelector("#s_tab");
+  assert.equal(tabs.style.paddingTop, "0px");
+  assert.equal(tabs.style.getPropertyPriority("padding-top"), "important");
+
+  handle.destroy();
+  assert.equal(tabs.style.paddingTop, "65px");
+  window.close();
+});

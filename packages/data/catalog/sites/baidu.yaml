@@ -12,6 +12,7 @@ defaultCategory: web-general
 capabilities: [url, dom, html]
 mount:
   anchor: ['#kw', 'input[name="wd"]']
+  trim: ['#s_tab']
   rules:
     - container: '#head'
       insert: after
