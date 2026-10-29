@@ -45,6 +45,8 @@ Use the URL match fields for **page identity**. Do not put DOM selectors in
 mount:
   anchor: ['#tsf', 'input[name="q"]']
   rules:
+    - container: '#rcnt'
+      insert: before
     - container: '#search'
       insert: before
     - container: '#gb'
@@ -52,6 +54,10 @@ mount:
     - anchor: ['#tsf', 'form[action*="/search"]', 'input[name="q"]']
       insert: after
 ```
+
+Choose a container that starts below the search box and above the results. On
+Google, `#search` is now the result-column wrapper, so `#rcnt` before is the
+full-width row below the tab bar; `#search` remains a fallback for older DOMs.
 
 ### Selector lists
 
@@ -94,6 +100,46 @@ mount:
     - container: '#search'
       insert: before
 ```
+
+## Layout safeguards
+
+The resolver chooses the insertion point, but the InlineBar also checks the
+rendered layout before settling. It stays in normal document flow; these steps
+prevent the search header or a fixed sidebar from covering it.
+
+- **Flex/grid header relocation.** If the resolved target's parent is a flex or
+  grid container, the host is moved after the outer flex/grid wrapper. This
+  keeps the bar on its own row instead of becoming another item in the header
+  row (Wikipedia's Vector header, for example).
+- **Header clearance.** The bar measures the resolved header block and its
+  visible descendants. If the bar overlaps the header (including overflowing
+  search boxes), it reserves transparent space above itself with padding, so
+  the bar starts below the header without margin collapsing.
+- **Docked overlay clearance.** Fixed or sticky elements at the top of the
+  viewport are measured with `elementFromPoint`. The bar is pushed below them.
+  This is what keeps Baidu's `position: fixed` `#head` from covering the bar.
+- **Side insets.** Fixed/sticky side panels are detected at the left and right
+  edges. The bar receives a matching inset so it does not sit underneath a
+  drawer (YouTube's guide).
+- **Late layout.** Search headers often render after `DOMContentLoaded`. The
+  InlineBar re-settles on `resize`, a `ResizeObserver`, and a short delayed
+  schedule, so late headers and SPA changes are handled.
+
+The host exposes the result for debugging:
+
+```html
+<div
+  id="derecherche-inline-bar"
+  data-derecherche-offset="71"
+  data-derecherche-inset="240/0"
+  data-derecherche-relocated="flex"
+></div>
+```
+
+- `data-derecherche-offset`: transparent top padding added to clear a header.
+- `data-derecherche-inset`: left/right inset added to clear a side panel.
+- `data-derecherche-relocated`: `flex` when the host moved out of a flex/grid
+  header row.
 
 ## Adding a new adapter
 
@@ -181,12 +227,30 @@ Inspect the host in DevTools:
 <div
   id="derecherche-inline-bar"
   data-derecherche-site="google"
-  data-derecherche-mount="search"
+  data-derecherche-mount="rcnt"
   data-derecherche-insert="before"
+  data-derecherche-status="rendered"
+  data-derecherche-engines="6"
 ></div>
 ```
 
-These attributes record the adapter, resolved target, and insert direction.
+These attributes record the adapter, resolved target, insert direction, render
+status, and engine count. The layout attributes from the previous section are
+added after the visibility pass.
+
+### 4. Offline Playwright layout test
+
+```bash
+cd apps/browser-test
+node fixtures.mjs
+```
+
+The script serves every `fixtures/<site>/mount.html` at its real adapter URL,
+injects the built userscript, and checks that the bar renders, stays in the
+viewport, and passes a 3x3 `elementFromPoint` coverage test. It also reports
+the header bottom and any overlap. This is deterministic and does not need
+network access, so it can verify fixed-header cases such as Baidu even when the
+live site returns a verification page.
 
 ## Contract fixtures are not live proof
 

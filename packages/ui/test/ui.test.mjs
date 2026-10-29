@@ -441,3 +441,33 @@ test("InlineBar renders without innerHTML sinks", () => {
   Object.defineProperty(window.Element.prototype, "innerHTML", descriptor);
   window.close();
 });
+
+test("InlineBar leaves a flex header row and takes its own row", () => {
+  const window = new Window();
+  window.document.body.innerHTML = `
+    <div id="header-container" style="display:flex">
+      <header id="header"><form><input name="q" value="rust"></form></header>
+      <nav id="nav">nav</nav>
+    </div>
+    <main id="results"></main>
+  `;
+  const catalog = inlineCatalog();
+  catalog.sites[0].mount = {
+    rules: [{ container: "header", insert: "after" }],
+  };
+
+  const handle = mountInlineBar({
+    catalog,
+    sites: catalog.sites,
+    query: "rust",
+    url: "https://www.google.com/search?q=rust",
+    document: window.document,
+  });
+
+  assert.ok(handle);
+  assert.equal(handle.host.parentElement, window.document.body);
+  assert.equal(handle.host.previousElementSibling?.id, "header-container");
+  assert.equal(handle.host.dataset.derechercheRelocated, "flex");
+  handle.destroy();
+  window.close();
+});

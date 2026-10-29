@@ -155,6 +155,232 @@ function removeExisting(document: Document): void {
   document.getElementById(HOST_ID)?.remove();
 }
 
+function isDocked(element: Element, view: Window): boolean {
+  let node: Element | null = element;
+  for (let depth = 0; node && depth < 10; depth += 1, node = node.parentElement) {
+    const position = view.getComputedStyle(node).position;
+    if (position === "fixed" || position === "sticky") return true;
+  }
+  return false;
+}
+
+function isFlexContainer(element: Element, view: Window): boolean {
+  const display = view.getComputedStyle(element).display;
+  return (
+    display === "flex" ||
+    display === "inline-flex" ||
+    display === "grid" ||
+    display === "inline-grid"
+  );
+}
+
+/**
+ * A bar inserted after an element that lives inside a flex/grid header becomes
+ * a flex item on the same row. Move it after the outer flex/grid wrapper so it
+ * takes its own full-width row.
+ */
+function relocateOutOfFlex(
+  document: Document,
+  host: HTMLElement,
+  insert: MountInsert
+): void {
+  if (insert !== "before" && insert !== "after") return;
+  const view = document.defaultView;
+  const parent = host.parentElement;
+  if (!view || !parent || parent === document.body) return;
+  if (!isFlexContainer(parent, view)) return;
+
+  let block: Element = parent;
+  while (
+    block.parentElement &&
+    block.parentElement !== document.body &&
+    isFlexContainer(block.parentElement, view)
+  ) {
+    block = block.parentElement;
+  }
+
+  if (!block.parentElement) return;
+  block.insertAdjacentElement(
+    insert === "before" ? "beforebegin" : "afterend",
+    host
+  );
+  host.dataset.derechercheRelocated = "flex";
+}
+
+function dockedSideInset(
+  document: Document,
+  host: HTMLElement,
+  rect: DOMRect,
+  view: Window,
+  side: "left" | "right"
+): number {
+  if (typeof document.elementFromPoint !== "function") return 0;
+  const x = side === "left" ? 2 : view.innerWidth - 3;
+  const y = Math.min(
+    Math.max(rect.top + rect.height / 2, 0),
+    view.innerHeight - 1
+  );
+  const hit = document.elementFromPoint(x, y);
+  if (!hit || hit === host || host.contains(hit)) return 0;
+  if (!isDocked(hit, view)) return 0;
+
+  const other = hit.getBoundingClientRect();
+  if (other.height < 10 || other.width < 10) return 0;
+  if (other.width >= view.innerWidth * 0.9) return 0;
+  if (side === "left") {
+    if (rect.left >= other.right - 1) return 0;
+    return other.right > 0 && other.right < view.innerWidth * 0.6
+      ? Math.ceil(other.right)
+      : 0;
+  }
+  if (rect.right <= other.left + 1) return 0;
+  return other.left > view.innerWidth * 0.4 && other.left < view.innerWidth
+    ? Math.ceil(view.innerWidth - other.left)
+    : 0;
+}
+
+function applySideInsets(
+  document: Document,
+  host: HTMLElement,
+  bar: HTMLElement
+): void {
+  const view = document.defaultView;
+  if (!view) return;
+  const rect = bar.getBoundingClientRect();
+  if (rect.width <= 0 || rect.height <= 0) return;
+
+  const left = dockedSideInset(document, host, rect, view, "left");
+  const right = dockedSideInset(document, host, rect, view, "right");
+  if (left <= 0 && right <= 0) return;
+
+  if (left > 0) host.style.marginLeft = `${left}px`;
+  if (right > 0) host.style.marginRight = `${right}px`;
+  host.style.width = "auto";
+  host.dataset.derechercheInset = `${left}/${right}`;
+}
+
+function clearHeaderOverlap(
+  document: Document,
+  host: HTMLElement,
+  bar: HTMLElement,
+  header: Element | null
+): void {
+  const view = document.defaultView;
+  if (!view || !header) return;
+  const rect = bar.getBoundingClientRect();
+  if (rect.width <= 0 || rect.height <= 0) return;
+
+  let bottom = 0;
+  for (const element of [header, ...header.querySelectorAll("*")]) {
+    const style = view.getComputedStyle(element);
+    if (
+      style.display === "none" ||
+      style.visibility === "hidden" ||
+      Number(style.opacity) === 0
+    ) {
+      continue;
+    }
+    const other = element.getBoundingClientRect();
+    if (other.width < 1 || other.height < 1) continue;
+    const overlap =
+      Math.min(rect.right, other.right) - Math.max(rect.left, other.left);
+    if (overlap <= 0) continue;
+    if (other.top > rect.top + rect.height || other.bottom <= rect.top) {
+      continue;
+    }
+    if (other.bottom > bottom) bottom = other.bottom;
+  }
+
+  const delta = Math.ceil(bottom - rect.top + 1);
+  if (delta <= 0) return;
+  const current = Number.parseFloat(host.style.paddingTop) || 0;
+  host.style.paddingTop = `${current + delta}px`;
+  host.dataset.derechercheOffset = String(current + delta);
+}
+
+function settleLayout(
+  document: Document,
+  host: HTMLElement,
+  bar: HTMLElement,
+  scrollY: number,
+  insert: MountInsert,
+  header: Element | null
+): void {
+  if (scrollY <= 4) {
+    host.style.paddingTop = "";
+    host.style.marginLeft = "";
+    host.style.marginRight = "";
+    host.style.width = "100%";
+    delete host.dataset.derechercheOffset;
+    delete host.dataset.derechercheInset;
+  }
+
+  relocateOutOfFlex(document, host, insert);
+  if (scrollY > 4) return;
+
+  clearHeaderOverlap(document, host, bar, header);
+  clearDockedOverlays(document, host, bar);
+  applySideInsets(document, host, bar);
+}
+
+/**
+ * Push the bar below a fixed or sticky search header.
+ *
+ * Pages such as Baidu insert their header as a fixed overlay, so a bar placed
+ * after it in the DOM starts at the top of the document and is painted behind
+ * the header. Padding (rather than a margin) reserves the space without margin
+ * collapsing and keeps the host in normal flow.
+ */
+function clearDockedOverlays(
+  document: Document,
+  host: HTMLElement,
+  bar: HTMLElement
+): void {
+  const view = document.defaultView;
+  if (!view || typeof document.elementFromPoint !== "function") return;
+
+  const rect = bar.getBoundingClientRect();
+  if (rect.width <= 0 || rect.height <= 0) return;
+
+  const sampleX = [0.05, 0.5, 0.95].map((fraction) => {
+    const x = rect.left + rect.width * fraction;
+    return Math.min(Math.max(x, 0), view.innerWidth - 1);
+  });
+  const sampleY = [rect.top + 2, rect.top + rect.height / 2]
+    .filter((y) => y >= 0 && y < view.innerHeight)
+    .map((y) => Math.min(Math.max(y, 0), view.innerHeight - 1));
+
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    let blocker: Element | null = null;
+    let blockerBottom = 0;
+
+    for (const x of sampleX) {
+      for (const y of sampleY) {
+        const hit = document.elementFromPoint(x, y);
+        if (!hit || hit === host || host.contains(hit) || hit.contains(host)) {
+          continue;
+        }
+        if (!isDocked(hit, view)) continue;
+        const bottom = hit.getBoundingClientRect().bottom;
+        if (bottom > blockerBottom) {
+          blocker = hit;
+          blockerBottom = bottom;
+        }
+      }
+    }
+
+    if (!blocker) break;
+    const delta = Math.ceil(
+      blocker.getBoundingClientRect().bottom - bar.getBoundingClientRect().top + 1
+    );
+    if (delta <= 0) break;
+
+    const current = Number.parseFloat(host.style.paddingTop) || 0;
+    host.style.paddingTop = `${current + delta}px`;
+    host.dataset.derechercheOffset = String(current + delta);
+  }
+}
+
 export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | null {
   const doc = options.document ?? document;
   const settings =
@@ -212,7 +438,13 @@ export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | nul
     };
   }
 
+  let currentInsert: MountInsert = "after";
+  let headerBlock: Element | null = null;
+
   function insertHost(placement: Placement): void {
+    currentInsert = placement.insert;
+    headerBlock = placement.element.closest("header, [role='banner']");
+    delete shadow.host.dataset.derechercheRelocated;
     placement.element.insertAdjacentElement(
       insertMode(placement.insert),
       shadow.host
@@ -233,9 +465,10 @@ export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | nul
   removeExisting(doc);
 
   const shadow = createShadowHost({ id: HOST_ID, document: doc, css: INLINE_BAR_CSS });
-  shadow.host.style.position = "static";
+  shadow.host.style.position = "relative";
   shadow.host.style.display = "block";
   shadow.host.style.width = "100%";
+  shadow.host.style.zIndex = "10";
 
   const bar = doc.createElement("div");
   bar.className = "bar";
@@ -253,6 +486,14 @@ export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | nul
   function safeRender(): void {
     try {
       render();
+      settleLayout(
+        doc,
+        shadow.host,
+        bar,
+        doc.defaultView?.scrollY ?? 0,
+        currentInsert,
+        headerBlock
+      );
     } catch (error) {
       shadow.unmount();
       if (options.debug) {
@@ -395,6 +636,48 @@ export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | nul
   insertHost(placement);
   safeRender();
 
+  const view = doc.defaultView;
+  const timers: number[] = [];
+  let settleTimer: number | undefined;
+  let resizeObserver: ResizeObserver | null = null;
+
+  function settleNow(): void {
+    if (!shadow.host.isConnected) return;
+    if (resizeObserver && headerBlock) resizeObserver.observe(headerBlock);
+    settleLayout(
+      doc,
+      shadow.host,
+      bar,
+      view?.scrollY ?? 0,
+      currentInsert,
+      headerBlock
+    );
+  }
+
+  function scheduleSettle(delay = 40): void {
+    if (!view) return;
+    if (settleTimer !== undefined) view.clearTimeout(settleTimer);
+    settleTimer = view.setTimeout(() => {
+      settleTimer = undefined;
+      settleNow();
+    }, delay);
+  }
+
+  const onResize = (): void => scheduleSettle();
+
+  if (view) {
+    for (const delay of [100, 400, 1200, 2500]) {
+      timers.push(view.setTimeout(settleNow, delay));
+    }
+    view.addEventListener("resize", onResize);
+
+    if (typeof ResizeObserver === "function") {
+      resizeObserver = new ResizeObserver(() => scheduleSettle(80));
+      resizeObserver.observe(doc.documentElement);
+      if (doc.body) resizeObserver.observe(doc.body);
+    }
+  }
+
   return {
     host: shadow.host,
     update(patch = {}) {
@@ -409,8 +692,18 @@ export function mountInlineBar(options: InlineBarOptions): InlineBarHandle | nul
       if (nextPlacement) placement = nextPlacement;
       if (placement) insertHost(placement);
       safeRender();
+      if (view) {
+        timers.push(view.setTimeout(settleNow, 150));
+        timers.push(view.setTimeout(settleNow, 1200));
+      }
     },
     destroy() {
+      if (view) {
+        for (const timer of timers) view.clearTimeout(timer);
+        if (settleTimer !== undefined) view.clearTimeout(settleTimer);
+        view.removeEventListener("resize", onResize);
+      }
+      resizeObserver?.disconnect();
       shadow.unmount();
     },
   };

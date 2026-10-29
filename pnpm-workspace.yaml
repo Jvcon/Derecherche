@@ -1,5 +1,6 @@
 packages:
   - "packages/*"
   - "apps/*"
+  - "!apps/browser-test"
 allowBuilds:
   esbuild: true

@@ -79,19 +79,80 @@ The script does not use `GM_registerMenuCommand`.
 | Install | Tampermonkey accepts the script | Pending manual |
 | Install | Violentmonkey accepts the script | Pending manual |
 | Install | qutebrowser loads the script | Pending manual |
-| Google | InlineBar appears below the search header | Pending live DOM |
-| Bing | InlineBar appears below `#b_header` | Live selectors verified; browser pending |
-| Baidu | InlineBar appears below `#head` | Pending live DOM |
-| Query | InlineBar uses the current search query | Automated pass |
-| Click | Plain click opens in the current tab | Automated callback pass |
+| Google | InlineBar appears below the tab bar | Playwright: real SERP mounted at `#rcnt` before, coverage 9/9; later runs hit HTTP 429 |
+| Bing | InlineBar appears below `#b_header` | Playwright pass (coverage 9/9); cn.bing.com falls back to anchor-after-`#sb_form` |
+| Baidu | InlineBar appears below the fixed `#head` | Live page blocked by 百度安全验证; offline fixed-header fixture passes (top=71, header bottom=70, coverage 9/9) |
+| Query | InlineBar uses the current search query | Playwright pass (engine URL carries live-query) |
+| Click | Plain click opens in the current tab | Playwright pass (11 sites incl. cross-engine navigation) |
 | Click | `Ctrl` / `Cmd` + click opens a new tab | Automated callback pass |
 | Click | Middle click opens a new tab | Automated callback pass |
 | More | Palette opens with query and category | Automated callback pass |
 | SPA | New query reuses one InlineBar | Automated pass |
-| Storage | Frecency survives reload | Pending manual |
+| Storage | Frecency survives reload | Playwright pass (localStorage fallback writes on all mounted hosts) |
 | Debug | `?derecherche-debug=1` logs the adapter | Pending manual |
-| Layout | Host page search header is not broken | Pending manual |
+| Layout | Host page search header is not broken | Playwright pass (coverage 9/9 on bing, cn.bing, google, duckduckgo, wikipedia, github, youtube, bilibili) |
+| Layout | Fixed header does not cover the bar | Offline fixture pass (Baidu `offset=71`) |
+| Layout | Side drawer does not cover the bar | Playwright pass (YouTube `inset=240/0`) |
 | Uninstall | Removing the script removes the bar after reload | Pending manual |
+
+## Live browser test (Playwright)
+
+`apps/browser-test/live.mjs` evaluates the built bundle at document-idle
+(like a userscript manager; GM_* absent, so the localStorage fallback is
+exercised) on real result pages. CSP headers are stripped in transit because
+page CSPs block `eval`, which real userscript managers are exempt from.
+
+```bash
+cd apps/browser-test && node live.mjs           # all sites
+node live.mjs bing github                        # subset
+HEADFUL=1 node live.mjs google                   # visual debug
+```
+
+Verified per site: adapter match, mount container/insert rule, shadow-root
+engine buttons, `status=rendered`, visibility geometry, a 3x3
+`elementFromPoint` coverage test, first-engine click navigation, query carried
+into the engine URL, and frecency persistence. Coverage is reported as
+`hits/points`; `9/9` means no header, sidebar, or page content covered any part
+of the bar.
+
+Checked 2026-10-29 from a datacenter IP:
+
+| Site | Result |
+|---|---|
+| google (`gbv=1`) | Real SERP mounted `#rcnt` before with coverage 9/9; later captcha/429 runs mount the shell. Click + query + frecency pass |
+| bing | Mounted `#b_header` after; coverage 9/9; click + query + frecency pass |
+| cn.bing | Mounted via anchor fallback after `#sb_form` (`#b_header` absent on served variant); coverage 9/9; click + query + frecency pass |
+| duckduckgo | Mounted `header` after; coverage 9/9; click + query + frecency pass |
+| wikipedia | Mounted `header` after and relocated to its own row; coverage 9/9; click + query + frecency pass |
+| github | Mounted the header after; coverage 9/9; click + query + frecency pass |
+| youtube | Mounted `#masthead-container` after; left guide inset `240/0`; coverage 9/9; click + query + frecency pass |
+| bilibili | Mounted via anchor fallback after the search input row; coverage 9/9; click + query + frecency pass |
+| google-scholar | Blocked: HTTP 403 "Sorry" bot page |
+| brave | Blocked: HTTP 429 captcha |
+| baidu | Blocked live by 百度安全验证; offline fixed-header fixture passes with `offset=71` and coverage 9/9 |
+| zhihu | Blocked: HTTP 403 安全验证 |
+
+The four blocked hosts need a check from a residential IP or a manual
+browser; the bot-wall responses never reach a real SERP, so adapter
+selectors there remain fixture-verified only.
+
+### Offline fixture layout test
+
+```bash
+cd apps/browser-test
+node fixtures.mjs
+```
+
+Every `fixtures/<site>/mount.html` is served at its real adapter URL, the test
+bundle is injected, and the bar must render, stay in the viewport, and pass the
+same 3x3 coverage test. This has no network dependency and covers blocked
+sites. Current result: 13/13 fixtures pass.
+
+The Baidu fixture models the real fixed header:
+
+```text
+bar top=71, fixed header bottom=70, offset=71, coverage=9/9
+```
 
 ## Live adapter verification
 
@@ -115,8 +176,11 @@ Add `?derecherche-debug=1` to a result URL. In DevTools, inspect:
 <div
   id="derecherche-inline-bar"
   data-derecherche-site="google"
-  data-derecherche-mount="search"
+  data-derecherche-mount="rcnt"
   data-derecherche-insert="before"
+  data-derecherche-status="rendered"
+  data-derecherche-engines="6"
+  data-derecherche-offset="0"
 ></div>
 ```
 
@@ -127,6 +191,9 @@ Meanings:
 - `data-derecherche-insert`: `before`, `after`, `prepend`, or `append`
 - `data-derecherche-status`: `rendered` after a successful render
 - `data-derecherche-engines`: number of rendered engine buttons
+- `data-derecherche-offset`: transparent top padding used to clear a header
+- `data-derecherche-inset`: left/right inset used to clear a side panel
+- `data-derecherche-relocated`: `flex` when moved out of a flex/grid header row
 
 If the InlineBar is missing:
 
@@ -137,6 +204,8 @@ If the InlineBar is missing:
 
 ## Known limitations
 
+- The InlineBar is an in-page row. It scrolls away with the results rather than
+  floating or sticking to the viewport.
 - SelectionBar is not included.
 - No settings drawer, engine overrides, custom engines, or import/export.
 - No background-tab open mode.

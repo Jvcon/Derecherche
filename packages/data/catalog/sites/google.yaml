@@ -11,10 +11,12 @@ selectors:
     - 'textarea[name="q"]'
 defaultCategory: web-general
 capabilities: [url, dom, html]
-notes: Google regional domains are matched by the wildcard host entry. Mount selectors still need a live-browser check.
+notes: Google regional domains are matched by the wildcard host entry. #rcnt before places the bar below the tab bar; #search is the fallback.
 mount:
   anchor: ['#tsf', 'form[action*="/search"]', 'input[name="q"]']
   rules:
+    - container: '#rcnt'
+      insert: before
     - container: '#search'
       insert: before
     - container: '#gb'

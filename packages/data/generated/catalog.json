@@ -3590,7 +3590,7 @@
         "dom",
         "html"
       ],
-      "notes": "Google regional domains are matched by the wildcard host entry. Mount selectors still need a live-browser check.",
+      "notes": "Google regional domains are matched by the wildcard host entry.",
       "mount": {
         "anchor": [
           "#tsf",
@@ -3598,6 +3598,10 @@
           "input[name=\"q\"]"
         ],
         "rules": [
+          {
+            "container": "#rcnt",
+            "insert": "before"
+          },
           {
             "container": "#search",
             "insert": "before"

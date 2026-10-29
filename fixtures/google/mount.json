@@ -3,8 +3,17 @@
   "query": "rust async",
   "cases": [
     {
-      "name": "results wrapper",
+      "name": "results grid",
       "remove": [],
+      "selector": "#rcnt",
+      "insert": "before",
+      "kind": "container"
+    },
+    {
+      "name": "results wrapper fallback",
+      "remove": [
+        "#rcnt"
+      ],
       "selector": "#search",
       "insert": "before",
       "kind": "container"
@@ -12,6 +21,7 @@
     {
       "name": "top bar fallback",
       "remove": [
+        "#rcnt",
         "#search"
       ],
       "selector": "#gb",

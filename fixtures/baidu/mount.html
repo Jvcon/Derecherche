@@ -1,6 +1,26 @@
 <!doctype html>
-<html lang="en">
-<head><meta charset="utf-8"><title>mount fixture: baidu</title></head>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>mount fixture: baidu</title>
+<style>
+  body { margin: 0; font-family: sans-serif; }
+  #head {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 301;
+    height: 70px;
+    padding: 0 16px;
+    background: #fff;
+    box-sizing: border-box;
+  }
+  #head form { display: flex; align-items: center; height: 70px; }
+  #head input { width: 480px; height: 36px; }
+  #content_left { margin-top: 90px; padding: 16px; }
+</style>
+</head>
 <body>
 <div id="head"><form><input id="kw" name="wd" value="rust async"></form></div>
 <div id="content_left"><div class="result">result</div></div>
